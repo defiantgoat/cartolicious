@@ -1,0 +1,51 @@
+{
+  "name": "cartolicious",
+  "version": "1.0.0",
+  "description": "Cartolicious. A cartographic art tool",
+  "main": "index.js",
+  "repository": "https://github.com/defiantgoat/cartolicious.git",
+  "author": "defiantgoat <defiantgoat@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint '*/**/*.{ts,tsx}'",
+    "test": "DEBUG_PRINT_LIMIT=20000 jest --runInBand --detectOpenHandles --config jest.config.json",
+    "deploy": "rm -rf dist && webpack --mode production",
+    "develop": "webpack serve --mode development --open --hot",
+    "view-coverage-report": "open coverage/lcov-report/index.html"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^11.2.6",
+    "@testing-library/react-hooks": "^5.1.2",
+    "@types/jest": "^26.0.22",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.3",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "css-loader": "^5.2.4",
+    "eslint": "^7.25.0",
+    "eslint-plugin-react": "^7.23.2",
+    "html-loader": "^2.1.2",
+    "html-webpack-plugin": "^5.3.1",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^26.6.3",
+    "source-map-loader": "^2.0.1",
+    "style-loader": "^2.0.0",
+    "ts-jest": "^26.5.5",
+    "ts-loader": "^8.2.0",
+    "typescript": "^4.2.4",
+    "webpack": "^5.35.1",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.9.1",
+    "ol": "^6.5.0",
+    "pbf": "^3.2.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0"
+  }
+}
