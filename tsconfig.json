@@ -10,13 +10,8 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "strictNullChecks": true,
-    "allowJs": true,
+    "allowJs": true
   },
-  "include": [
-    "./src"
-  ],
-  "exclude": [
-    "node_modules",
-    "build"
-  ]
+  "include": ["./src"],
+  "exclude": ["node_modules", "build"]
 }

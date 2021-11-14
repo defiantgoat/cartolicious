@@ -1,2 +1,1 @@
-export const APP_NAME = 'Cartolicious';
-
+export const APP_NAME = "Cartolicious";
