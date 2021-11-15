@@ -8,6 +8,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     display: "flex",
     padding: ".75rem",
+    flexDirection: "row",
+    justifyContent: "space-between"
   },
   title: {
     fontFamily: "rig-shaded-bold-extrude, sans-serif",

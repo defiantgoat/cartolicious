@@ -6,6 +6,7 @@ export type CartoliciousStroke =
   | [];
 // CartoliciousStyle -> [CartoliciousFill, CartoliciousStroke, visble]
 export type CartoliciousStyle = [CartoliciousFill, CartoliciousStroke, 0 | 1];
+export type CartoliciousStyles = Map<string, CartoliciousStyle>;
 
 export interface ReduxActionProps {
   type: string;
@@ -14,8 +15,5 @@ export interface ReduxActionProps {
 
 export interface ReduxStateConfigProps {
   background: [number, number, number, number];
-  cartolicious_styles: Map<
-    string,
-    CartoliciousStyle
-  >;
+  cartolicious_styles: Map<string, CartoliciousStyle>;
 }
