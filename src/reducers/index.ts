@@ -21,7 +21,7 @@ const rootReducer = (
         background: payload,
       };
 
-    case SET_CARTOLICIOUS_STYLES: 
+    case SET_CARTOLICIOUS_STYLES:
       return {
         ...state,
         cartolicious_styles: payload,

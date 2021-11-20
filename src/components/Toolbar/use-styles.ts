@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     padding: ".75rem",
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   title: {
     fontFamily: "rig-shaded-bold-extrude, sans-serif",

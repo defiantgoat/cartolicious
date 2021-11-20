@@ -1,11 +1,24 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, {useState} from "react";
+import { useDispatch, useSelector } from "react-redux";
 import useStyles from "./use-styles";
 import { APP_NAME } from "../../config";
 import { Button } from "@material-ui/core";
 import { generateRandomCartoliciousStyles } from "../../cartolicious/styles";
-import {randomRGBAGenerator} from "../../cartolicious/utils";
-import {setCaroliciousStyles, setBackground} from "../../actions";
+import { randomRGBAGenerator } from "../../cartolicious/utils";
+import { setCaroliciousStyles, setBackground } from "../../actions";
+
+const SaveButton: React.FC = () => {
+
+  const handleSave = () => {
+    console.log('save the colors')
+  }
+  // const currentColors = useSelector((state) => state.ca)
+  return (
+    <Button color="primary" variant="outlined" onClick={handleSave}>
+      Save
+    </Button>
+  );
+};
 
 const Toolbar: React.FC = () => {
   const dispatch = useDispatch();
@@ -18,10 +31,15 @@ const Toolbar: React.FC = () => {
     dispatch(setBackground(newBackground));
   };
 
+
+
   return (
     <div className={classes.toolbar}>
       <h2 className={classes.title}>{APP_NAME}</h2>
-      <Button color="primary" variant="outlined" onClick={handleRecolor}>Recolor</Button>
+      <Button color="primary" variant="outlined" onClick={handleRecolor}>
+        Recolor
+      </Button>
+      <SaveButton />
     </div>
   );
 };

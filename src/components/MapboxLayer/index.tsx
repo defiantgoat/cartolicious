@@ -54,6 +54,9 @@ const MapboxLayer: React.FC = () => {
       return stylesRef.current[featureLabel];
     }
 
+    if (!cartoliciousStyleMap.get(featureLabel)) {
+      console.log(featureLabel);
+    }
     const featureStyle =
       cartoliciousStyleMap.get(featureLabel) ||
       cartoliciousStyleMap.get("default");
