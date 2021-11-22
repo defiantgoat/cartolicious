@@ -4,6 +4,7 @@ const useStyles = makeStyles((theme) => ({
   mapContainer: {
     flexGrow: 1,
     backgroundColor: theme.palette.common.white,
+    position: "relative",
   },
 }));
 

@@ -1,29 +1,50 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import OLMap from "ol/Map";
 import OLView from "ol/View";
-import OLTileGrid from "ol/tilegrid/TileGrid";
-import OSM from "ol/source/OSM";
-import TileLayer from "ol/layer/Tile";
 import useStyles from "./use-styles";
 import { ReduxStateConfigProps } from "../../interfaces";
-import { MAP_CONFIG } from "../../config";
+import { MAP_CONFIG, ENDPOINTS } from "../../config";
 import MapContainerContext from "../MapContainerContext";
+import { setCaroliciousStyles, setBackground, setBusy } from "../../actions";
+
 import "ol/ol.css";
 
 interface MapContainerProps {
   children?: React.ReactNode;
 }
 
-const MapContainer: React.FC<MapContainerProps> = ({
-  children,
-}: MapContainerProps) => {
+const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
+  const dispatch = useDispatch();
   const { mapContainer } = useStyles();
   const [r, g, b, a] = useSelector(
     (state: ReduxStateConfigProps) => state.background
   );
 
   const [olMap, setOlMap] = useState(null as OLMap | null);
+
+  const fetchStyles = async () => {
+    dispatch(setBusy(true));
+    try {
+      const res = await fetch(ENDPOINTS.GET_STYLES);
+      const { data, errors } = await res.json();
+      if (data.length > 0) {
+        const [newStyles, background] = data;
+        const newStyleMap = new Map();
+        Object.entries(newStyles).forEach(([key, value]) =>
+          newStyleMap.set(key, value)
+        );
+        dispatch(setCaroliciousStyles(newStyleMap));
+        dispatch(setBackground(background));
+      }
+      if (errors.length > 0) {
+        console.log(errors);
+      }
+    } catch (e) {
+    } finally {
+      dispatch(setBusy(false));
+    }
+  };
 
   useLayoutEffect(() => {
     const view = new OLView({
@@ -44,6 +65,10 @@ const MapContainer: React.FC<MapContainerProps> = ({
     return () => {
       setOlMap(null);
     };
+  }, []);
+
+  useEffect(() => {
+    fetchStyles();
   }, []);
 
   return (

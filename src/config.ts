@@ -6,3 +6,7 @@ export const MAP_CONFIG = {
   DEFAULT_ZOOM: 12,
   DEFAULT_CENTER: [-8573959.232998796, 4705918.436640128],
 };
+
+export const ENDPOINTS = {
+  GET_STYLES: "http://localhost:3000/api/styles",
+};

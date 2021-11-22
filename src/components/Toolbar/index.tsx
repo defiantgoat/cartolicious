@@ -1,18 +1,24 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useStyles from "./use-styles";
 import { APP_NAME } from "../../config";
 import { Button } from "@material-ui/core";
-import { generateRandomCartoliciousStyles } from "../../cartolicious/styles";
-import { randomRGBAGenerator } from "../../cartolicious/utils";
 import { setCaroliciousStyles, setBackground } from "../../actions";
+import { ReduxStateConfigProps } from "../../interfaces";
+import { ENDPOINTS } from "../../config";
 
 const SaveButton: React.FC = () => {
+  const currentStyles = useSelector(
+    (state: ReduxStateConfigProps) => state.cartolicious_styles
+  );
 
   const handleSave = () => {
-    console.log('save the colors')
-  }
-  // const currentColors = useSelector((state) => state.ca)
+    if (currentStyles) {
+      const styleObj = Object.fromEntries(currentStyles);
+      console.log(styleObj);
+    }
+  };
+
   return (
     <Button color="primary" variant="outlined" onClick={handleSave}>
       Save
@@ -23,23 +29,45 @@ const SaveButton: React.FC = () => {
 const Toolbar: React.FC = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
+  const [loading, setLoading] = useState(false);
 
-  const handleRecolor = () => {
-    const newColors = generateRandomCartoliciousStyles();
-    const newBackground = randomRGBAGenerator();
-    dispatch(setCaroliciousStyles(newColors));
-    dispatch(setBackground(newBackground));
+  const fetchStyles = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(ENDPOINTS.GET_STYLES);
+      const { data, errors } = await res.json();
+      if (data.length > 0) {
+        const [newStyles, background] = data;
+        const newStyleMap = new Map();
+        Object.entries(newStyles).forEach(([key, value]) =>
+          newStyleMap.set(key, value)
+        );
+        dispatch(setCaroliciousStyles(newStyleMap));
+        dispatch(setBackground(background));
+      }
+      if (errors.length > 0) {
+        console.log(errors);
+      }
+    } catch (e) {
+    } finally {
+      setLoading(false);
+    }
   };
 
-
+  const handleRecolor = () => {
+    fetchStyles();
+  };
 
   return (
     <div className={classes.toolbar}>
       <h2 className={classes.title}>{APP_NAME}</h2>
-      <Button color="primary" variant="outlined" onClick={handleRecolor}>
-        Recolor
-      </Button>
-      <SaveButton />
+      <div className={classes.buttonContainer}>
+        {loading && <div style={{ color: "white" }}>Loading</div>}
+        <Button color="primary" variant="outlined" onClick={handleRecolor}>
+          Recolor
+        </Button>
+        <SaveButton />
+      </div>
     </div>
   );
 };

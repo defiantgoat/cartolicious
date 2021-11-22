@@ -15,5 +15,6 @@ export interface ReduxActionProps {
 
 export interface ReduxStateConfigProps {
   background: [number, number, number, number];
-  cartolicious_styles: Map<string, CartoliciousStyle>;
+  cartolicious_styles: Map<string, CartoliciousStyle> | null;
+  busy: boolean;
 }

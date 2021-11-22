@@ -1,11 +1,15 @@
-import { SET_BACKGROUND, SET_CARTOLICIOUS_STYLES } from "../constants";
+import {
+  SET_BACKGROUND,
+  SET_CARTOLICIOUS_STYLES,
+  SET_BUSY,
+} from "../constants";
 import { ReduxActionProps, ReduxStateConfigProps } from "../interfaces";
 import { randomRGBAGenerator } from "../cartolicious/utils";
-import { generateRandomCartoliciousStyles } from "../cartolicious/styles";
 
 export const initialState: ReduxStateConfigProps = {
   background: randomRGBAGenerator(),
-  cartolicious_styles: generateRandomCartoliciousStyles(),
+  cartolicious_styles: null,
+  busy: false,
 };
 
 const rootReducer = (
@@ -25,6 +29,11 @@ const rootReducer = (
       return {
         ...state,
         cartolicious_styles: payload,
+      };
+    case SET_BUSY:
+      return {
+        ...state,
+        busy: payload,
       };
     default:
       return state;

@@ -1,14 +1,7 @@
-import React, {
-  useContext,
-  useEffect,
-  useRef,
-  useMemo,
-  useState,
-  useCallback,
-} from "react";
+import React, { useContext, useEffect, useRef, useCallback } from "react";
 import OLVectorTileLayer from "ol/layer/VectorTile";
 import OLVectorTile from "ol/source/VectorTile";
-import { Fill, Stroke, Style, Text } from "ol/style.js";
+import { Fill, Stroke, Style } from "ol/style.js";
 import MVT from "ol/format/MVT.js";
 import { createXYZ, extentFromProjection } from "ol/tilegrid";
 import { MAPBOX_TOKEN } from "../../keys";
@@ -54,9 +47,10 @@ const MapboxLayer: React.FC = () => {
       return stylesRef.current[featureLabel];
     }
 
-    if (!cartoliciousStyleMap.get(featureLabel)) {
-      console.log(featureLabel);
-    }
+    // if (!cartoliciousStyleMap.get(featureLabel)) {
+    //   console.log(featureLabel);
+    // }
+
     const featureStyle =
       cartoliciousStyleMap.get(featureLabel) ||
       cartoliciousStyleMap.get("default");
@@ -96,11 +90,11 @@ const MapboxLayer: React.FC = () => {
 
     stylesRef.current[featureLabel] = style;
 
-    return null;
+    return style;
   };
 
   const setStyles = useCallback(() => {
-    if (layer.current) {
+    if (layer.current && cartolicious) {
       layer.current.setStyle((feature) =>
         mapboxStyleFunction(feature, cartolicious)
       );
@@ -108,7 +102,7 @@ const MapboxLayer: React.FC = () => {
   }, [cartolicious]);
 
   useEffect(() => {
-    if (layer.current) {
+    if (layer.current && cartolicious) {
       stylesRef.current = {};
       setStyles();
     }
@@ -151,9 +145,6 @@ const MapboxLayer: React.FC = () => {
       });
 
       map.addLayer(layer.current);
-      if (layer.current) {
-        setStyles();
-      }
     }
 
     return () => {

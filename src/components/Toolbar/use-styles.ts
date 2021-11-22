@@ -17,6 +17,12 @@ const useStyles = makeStyles((theme) => ({
     fontStyle: "normal",
     color: "gold",
   },
+  buttonContainer: {
+    flexShrink: 1,
+    display: "flex",
+    flexDirection: "row",
+    gap: "1rem",
+  },
 }));
 
 export default useStyles;
