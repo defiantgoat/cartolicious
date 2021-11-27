@@ -26,7 +26,9 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
   const fetchStyles = async () => {
     dispatch(setBusy(true));
     try {
-      const res = await fetch(ENDPOINTS.GET_STYLES(TEMP_CARTOLICIOUS_API_BAKED_TOKEN));
+      const res = await fetch(
+        ENDPOINTS.GET_STYLES(TEMP_CARTOLICIOUS_API_BAKED_TOKEN)
+      );
       const { data, errors } = await res.json();
       if (data.length > 0) {
         const [newStyles, background] = data;

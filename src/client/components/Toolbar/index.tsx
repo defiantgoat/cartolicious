@@ -6,7 +6,7 @@ import { Button } from "@material-ui/core";
 import { setCaroliciousStyles, setBackground } from "../../actions";
 import { ReduxStateConfigProps } from "../../interfaces";
 import { ENDPOINTS } from "../../config";
-import {TEMP_CARTOLICIOUS_API_BAKED_TOKEN} from "../../keys";
+import { TEMP_CARTOLICIOUS_API_BAKED_TOKEN } from "../../keys";
 
 const SaveButton: React.FC = () => {
   const currentStyles = useSelector(
@@ -35,7 +35,9 @@ const Toolbar: React.FC = () => {
   const fetchStyles = async () => {
     setLoading(true);
     try {
-      const res = await fetch(ENDPOINTS.GET_STYLES(TEMP_CARTOLICIOUS_API_BAKED_TOKEN));
+      const res = await fetch(
+        ENDPOINTS.GET_STYLES(TEMP_CARTOLICIOUS_API_BAKED_TOKEN)
+      );
       const { data, errors } = await res.json();
       if (data.length > 0) {
         const [newStyles, background] = data;
