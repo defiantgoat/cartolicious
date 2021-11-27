@@ -1,4 +1,5 @@
 export const APP_NAME = "Cartolicious";
+export const VERSION = "1.0.0";
 
 export const MAP_CONFIG = {
   MIN_ZOOM: 9,
@@ -8,5 +9,5 @@ export const MAP_CONFIG = {
 };
 
 export const ENDPOINTS = {
-  GET_STYLES: "http://localhost:3000/api/styles",
+  GET_STYLES: (token: string) => `http://api.cartolicious.com/v1/styles?token=${token}`,
 };

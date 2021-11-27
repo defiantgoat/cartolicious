@@ -1,14 +1,14 @@
 "use strict";
 const path = require("path");
+const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   devtool: "inline-source-map",
-  entry: "./src/index.tsx",
-
+  entry: "./src/client/index.tsx",
   output: {
     filename: "index_bundle.js",
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "dist_prod"),
   },
 
   devtool: "source-map",
@@ -22,15 +22,7 @@ module.exports = {
       {
         test: /\.ts(x?)$/,
         exclude: /node_modules/,
-        use: [
-          {
-            loader: "ts-loader",
-          },
-        ],
-      },
-      {
-        test: /\.css$/,
-        use: ["style-loader", "css-loader"],
+        use: [{ loader: "ts-loader" }],
       },
       {
         enforce: "pre",
@@ -38,12 +30,16 @@ module.exports = {
         loader: "source-map-loader",
       },
       {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],
+      },
+      {
         test: /\.html$/,
-        use: [
-          {
-            loader: "html-loader",
-          },
-        ],
+        use: [{ loader: "html-loader" }],
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: ["file-loader"],
       },
     ],
   },
@@ -51,7 +47,8 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       filename: "index.html",
-      template: "src/index.html",
+      template: "src/client/index.html",
+      excludeChunks: ["server"],
     }),
   ],
 };

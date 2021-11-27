@@ -1,9 +1,16 @@
 {
+  "setupFiles": [
+    "jest-canvas-mock"
+  ],
   "transform": {
-    ".(ts|tsx)": "ts-jest"
+    "^.+\\.(ts|tsx)?$": "ts-jest",
+    "^.+\\.(js|jsx)?$": ["babel-jest", {"rootMode": "upward"}]
   },
   "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-  "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
+  "transformIgnorePatterns": [
+    "node_modules/(?!(ol)/)"
+  ],
+  "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"],
   "moduleNameMapper": {
     ".+\\.(css|scss)$": "identity-obj-proxy"
   },
@@ -11,14 +18,17 @@
   "coverageDirectory": "./coverage",
   "collectCoverageFrom": [
     "src/**/*.(ts|tsx|js)",
-    "!src/index.tsx",
-    "!src/tests/*"
+    "!src/client/index.tsx",
+    "!src/server/server-dev.ts",
+    "!src/server/tests/*",
+    "!src/client/tests/*",
+    "!src/client/workers/*"
   ],
   "coverageThreshold": {
     "global": {
-      "branches": 95,
-      "functions": 100,
-      "lines": 95
+      "branches": 90,
+      "functions": 90,
+      "lines": 90
     }
   },
   "globals": {

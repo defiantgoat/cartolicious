@@ -7,7 +7,7 @@ import { ReduxStateConfigProps } from "../../interfaces";
 import { MAP_CONFIG, ENDPOINTS } from "../../config";
 import MapContainerContext from "../MapContainerContext";
 import { setCaroliciousStyles, setBackground, setBusy } from "../../actions";
-
+import { TEMP_CARTOLICIOUS_API_BAKED_TOKEN } from "../../keys";
 import "ol/ol.css";
 
 interface MapContainerProps {
@@ -26,7 +26,7 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
   const fetchStyles = async () => {
     dispatch(setBusy(true));
     try {
-      const res = await fetch(ENDPOINTS.GET_STYLES);
+      const res = await fetch(ENDPOINTS.GET_STYLES(TEMP_CARTOLICIOUS_API_BAKED_TOKEN));
       const { data, errors } = await res.json();
       if (data.length > 0) {
         const [newStyles, background] = data;

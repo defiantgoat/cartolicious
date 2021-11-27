@@ -1,5 +1,8 @@
 node_modules
 dist
 coverage
-src/keys.ts
+src/client/keys.ts
 .DS_Store
+dist_dev
+dist_prod
+Dockerrun.aws.json
