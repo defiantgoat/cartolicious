@@ -1,4 +1,4 @@
-# cartolicious
+# cartolicious v1
 
 A cartographic art tool
 
