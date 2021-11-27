@@ -4,10 +4,9 @@ import {
   SET_BUSY,
 } from "../constants";
 import { ReduxActionProps, ReduxStateConfigProps } from "../interfaces";
-import { randomRGBAGenerator } from "../cartolicious/utils";
 
 export const initialState: ReduxStateConfigProps = {
-  background: randomRGBAGenerator(),
+  background: [0, 0, 0, 1],
   cartolicious_styles: null,
   busy: false,
 };
