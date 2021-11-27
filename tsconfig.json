@@ -1,4 +1,4 @@
-{
+{    
   "compilerOptions": {
     "module": "commonjs",
     "target": "es6",
@@ -10,8 +10,19 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "strictNullChecks": true,
-    "allowJs": true
+    "removeComments": true,
+    "typeRoots": [
+      "src/types",
+      "./node_modules/@types"
+    ]
   },
-  "include": ["./src"],
-  "exclude": ["node_modules", "build"]
+  "include": [
+    "src/**/*.ts",
+    "src/server/server-prod.ts"
+  ],
+  "exclude": [
+      "node_modules",
+      "**/*.spec.ts",
+      "**/*.test.ts"
+  ]
 }

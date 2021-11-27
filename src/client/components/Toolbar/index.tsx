@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useStyles from "./use-styles";
-import { APP_NAME } from "../../config";
+import { APP_NAME, VERSION } from "../../config";
 import { Button } from "@material-ui/core";
 import { setCaroliciousStyles, setBackground } from "../../actions";
 import { ReduxStateConfigProps } from "../../interfaces";
 import { ENDPOINTS } from "../../config";
+import { TEMP_CARTOLICIOUS_API_BAKED_TOKEN } from "../../keys";
 
 const SaveButton: React.FC = () => {
   const currentStyles = useSelector(
@@ -14,8 +15,8 @@ const SaveButton: React.FC = () => {
 
   const handleSave = () => {
     if (currentStyles) {
-      const styleObj = Object.fromEntries(currentStyles);
-      console.log(styleObj);
+      // const styleObj = Object.fromEntries(currentStyles);
+      console.log(currentStyles);
     }
   };
 
@@ -34,7 +35,9 @@ const Toolbar: React.FC = () => {
   const fetchStyles = async () => {
     setLoading(true);
     try {
-      const res = await fetch(ENDPOINTS.GET_STYLES);
+      const res = await fetch(
+        ENDPOINTS.GET_STYLES(TEMP_CARTOLICIOUS_API_BAKED_TOKEN)
+      );
       const { data, errors } = await res.json();
       if (data.length > 0) {
         const [newStyles, background] = data;
@@ -66,7 +69,7 @@ const Toolbar: React.FC = () => {
         <Button color="primary" variant="outlined" onClick={handleRecolor}>
           Recolor
         </Button>
-        <SaveButton />
+        {/* <SaveButton /> */}
       </div>
     </div>
   );

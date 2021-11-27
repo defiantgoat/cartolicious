@@ -1,6 +1,10 @@
 # Ignore artifacts:
 coverage
-dist
 node_modules
 *.json
 *.html
+dist_dev
+dist_prod
+webpack.*
+babel.*
+*.md
