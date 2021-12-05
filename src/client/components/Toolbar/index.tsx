@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import useStyles from "./use-styles";
 import { APP_NAME, VERSION } from "../../config";
 import { Button } from "@material-ui/core";
+import LoginButton from "../LoginButton";
+import LogoutButton from "../LogoutButton";
 import { setCaroliciousStyles, setBackground } from "../../actions";
 import { ReduxStateConfigProps } from "../../interfaces";
 import { ENDPOINTS } from "../../config";
@@ -70,6 +72,8 @@ const Toolbar: React.FC = () => {
           Recolor
         </Button>
         {/* <SaveButton /> */}
+        <LoginButton />
+        <LogoutButton />
       </div>
     </div>
   );

@@ -6,13 +6,22 @@ import store from "./store";
 import theme from "./lib/theme";
 
 import App from "./components/App";
+import { Auth0Provider } from "@auth0/auth0-react";
 
 render(
-  <Provider store={store}>
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
-  </Provider>,
+  <Auth0Provider
+    domain="dev-785wn7ma.us.auth0.com"
+    clientId="s6F3LbFaqZrZMYD3vb1JFirj8792vyYC"
+    redirectUri={window.location.origin}
+    audience="https://api.cartolicious.com/"
+    scope="read:current_user get:styles"
+  >
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    </Provider>
+  </Auth0Provider>,
   document.getElementById("root")
 );
 
