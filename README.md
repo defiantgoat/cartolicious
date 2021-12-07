@@ -1,6 +1,4 @@
-# cartolicious v1
-
-A cartographic art tool
+# Cartolicious - See the world differently
 
 https://app.cartolicious.com
 
