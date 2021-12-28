@@ -14,11 +14,15 @@ interface MapContainerProps {
   children?: React.ReactNode;
 }
 
+
 const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
   const dispatch = useDispatch();
   const { mapContainer } = useStyles();
   const [r, g, b, a] = useSelector(
     (state: ReduxStateConfigProps) => state.background
+  );
+  const token = useSelector(
+    (state: ReduxStateConfigProps) => state.user.token
   );
 
   const [olMap, setOlMap] = useState(null as OLMap | null);
@@ -27,7 +31,11 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
     dispatch(setBusy(true));
     try {
       const res = await fetch(
-        ENDPOINTS.GET_STYLES(TEMP_CARTOLICIOUS_API_BAKED_TOKEN)
+        ENDPOINTS.GET_STYLES, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       const { data, errors } = await res.json();
       if (data.length > 0) {
@@ -48,6 +56,12 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
     }
   };
 
+  useEffect(() => {
+    if (token > "") {
+      fetchStyles();
+    }
+  }, [token])
+
   useLayoutEffect(() => {
     const view = new OLView({
       center: MAP_CONFIG.DEFAULT_CENTER,
@@ -67,10 +81,6 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
     return () => {
       setOlMap(null);
     };
-  }, []);
-
-  useEffect(() => {
-    fetchStyles();
   }, []);
 
   return (

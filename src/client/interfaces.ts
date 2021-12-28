@@ -10,11 +10,16 @@ export type CartoliciousStyles = Map<string, CartoliciousStyle>;
 
 export interface ReduxActionProps {
   type: string;
-  payload: Record<string, unknown>;
+  payload: any;
 }
 
 export interface ReduxStateConfigProps {
   background: [number, number, number, number];
   cartolicious_styles: Map<string, CartoliciousStyle> | null;
   busy: boolean;
+  user: {
+    loggedIn: boolean;
+    token: string;
+    details: any;
+  }
 }

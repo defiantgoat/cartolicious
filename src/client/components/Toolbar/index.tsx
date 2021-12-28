@@ -33,12 +33,19 @@ const Toolbar: React.FC = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
+  const token = useSelector(
+    (state: ReduxStateConfigProps) => state.user.token
+  );
 
   const fetchStyles = async () => {
     setLoading(true);
     try {
       const res = await fetch(
-        ENDPOINTS.GET_STYLES(TEMP_CARTOLICIOUS_API_BAKED_TOKEN)
+        ENDPOINTS.GET_STYLES, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       const { data, errors } = await res.json();
       if (data.length > 0) {

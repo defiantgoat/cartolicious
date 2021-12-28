@@ -9,6 +9,6 @@ export const MAP_CONFIG = {
 };
 
 export const ENDPOINTS = {
-  GET_STYLES: (token: string) =>
-    `https://api.cartolicious.com/v1/styles?token=${token}`,
+  GET_STYLES: "http://localhost:3001/v1/styles",
+  USER: "http://localhost:3001/users"
 };

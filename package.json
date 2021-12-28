@@ -26,6 +26,7 @@
     "crypto-js": "^4.0.0",
     "express": "^4.17.1",
     "jwt-decode": "^3.1.2",
+    "normalize.css": "^8.0.1",
     "oidc-client": "^1.10.1",
     "ol": "^6.5.0",
     "pbf": "^3.2.1",
