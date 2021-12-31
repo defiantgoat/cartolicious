@@ -7,13 +7,11 @@ import { ReduxStateConfigProps } from "../../interfaces";
 import { MAP_CONFIG, ENDPOINTS } from "../../config";
 import MapContainerContext from "../MapContainerContext";
 import { setCaroliciousStyles, setBackground, setBusy } from "../../actions";
-import { TEMP_CARTOLICIOUS_API_BAKED_TOKEN } from "../../keys";
 import "ol/ol.css";
 
 interface MapContainerProps {
   children?: React.ReactNode;
 }
-
 
 const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
   const dispatch = useDispatch();
@@ -21,22 +19,18 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
   const [r, g, b, a] = useSelector(
     (state: ReduxStateConfigProps) => state.background
   );
-  const token = useSelector(
-    (state: ReduxStateConfigProps) => state.user.token
-  );
+  const token = useSelector((state: ReduxStateConfigProps) => state.user.token);
 
   const [olMap, setOlMap] = useState(null as OLMap | null);
 
   const fetchStyles = async () => {
     dispatch(setBusy(true));
     try {
-      const res = await fetch(
-        ENDPOINTS.GET_STYLES, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await fetch(ENDPOINTS.STYLES, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const { data, errors } = await res.json();
       if (data.length > 0) {
         const [newStyles, background] = data;
@@ -60,7 +54,7 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
     if (token > "") {
       fetchStyles();
     }
-  }, [token])
+  }, [token]);
 
   useLayoutEffect(() => {
     const view = new OLView({

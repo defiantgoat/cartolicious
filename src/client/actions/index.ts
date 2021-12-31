@@ -4,7 +4,9 @@ import {
   SET_CARTOLICIOUS_STYLES,
   SET_LOGGED_OUT,
   SET_USER_DATA,
-  SET_TOKEN
+  SET_TOKEN,
+  SET_USER_ID,
+  SET_USER_CONTENT
 } from "../constants";
 import { ReduxActionProps } from "../interfaces";
 
@@ -21,13 +23,21 @@ export const setBusy = (payload: any): ReduxActionProps => {
 };
 
 export const setUser = (payload: any): ReduxActionProps => {
-  return { type: SET_USER_DATA, payload}
+  return { type: SET_USER_DATA, payload };
 };
 
 export const setToken = (payload: string): ReduxActionProps => {
-  return { type: SET_TOKEN, payload}
+  return { type: SET_TOKEN, payload };
 };
 
 export const logOut = (): ReduxActionProps => {
-  return { type: SET_LOGGED_OUT, payload: null}
+  return { type: SET_LOGGED_OUT, payload: null };
 };
+
+export const setUserId = (payload: any): ReduxActionProps => {
+  return { type: SET_USER_ID, payload };
+};
+
+export const setUserContent = (payload: {styles: any[], curations: any[]}): ReduxActionProps => {
+  return { type: SET_USER_CONTENT, payload };
+}

@@ -4,3 +4,5 @@ export const SET_BUSY = "SET_BUSY";
 export const SET_LOGGED_OUT = "SET_LOGGED_OUT";
 export const SET_USER_DATA = "SET_USER_DATA";
 export const SET_TOKEN = "SET_TOKEN";
+export const SET_USER_ID = "SET_USER_ID";
+export const SET_USER_CONTENT = "SET_USER_CONTENT";

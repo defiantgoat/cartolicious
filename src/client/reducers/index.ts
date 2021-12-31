@@ -4,7 +4,9 @@ import {
   SET_BUSY,
   SET_LOGGED_OUT,
   SET_USER_DATA,
-  SET_TOKEN
+  SET_TOKEN,
+  SET_USER_ID,
+  SET_USER_CONTENT
 } from "../constants";
 import { ReduxActionProps, ReduxStateConfigProps } from "../interfaces";
 
@@ -13,10 +15,13 @@ export const initialState: ReduxStateConfigProps = {
   cartolicious_styles: null,
   busy: false,
   user: {
+    id: -1,
     loggedIn: false,
     details: null,
-    token: ""
-  }
+    token: "",
+    styles: [],
+    curations: []
+  },
 };
 
 const rootReducer = (
@@ -42,28 +47,52 @@ const rootReducer = (
         ...state,
         busy: payload,
       };
-    case SET_USER_DATA: 
-      return {
-        ...state,
-        user: payload
-      };
-    case SET_LOGGED_OUT: 
+    case SET_USER_DATA:
       return {
         ...state,
         user: {
+          ...state.user,
+          ...payload,
+        } 
+      };
+    case SET_USER_ID:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          id: payload,
+        },
+      };
+    case SET_USER_CONTENT:
+      const {styles, curations} = payload;
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          styles,
+          curations
+        },
+      };
+    case SET_LOGGED_OUT:
+      return {
+        ...state,
+        user: {
+          id: -1,
           loggedIn: false,
-          token: '',
-          details: null
-        }
+          token: "",
+          details: null,
+          styles: [],
+          curations: []
+        },
       };
     case SET_TOKEN: {
       return {
         ...state,
         user: {
           ...state.user,
-          token: payload
-        }
-      }
+          token: payload,
+        },
+      };
     }
     default:
       return state;

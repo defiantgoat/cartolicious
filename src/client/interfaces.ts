@@ -18,8 +18,11 @@ export interface ReduxStateConfigProps {
   cartolicious_styles: Map<string, CartoliciousStyle> | null;
   busy: boolean;
   user: {
+    id: number;
     loggedIn: boolean;
     token: string;
     details: any;
-  }
+    styles: any[];
+    curations: any[];
+  };
 }

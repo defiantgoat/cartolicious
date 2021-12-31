@@ -5,20 +5,45 @@ import { APP_NAME, VERSION } from "../../config";
 import { Button } from "@material-ui/core";
 import LoginButton from "../LoginButton";
 import LogoutButton from "../LogoutButton";
+import UserButton from "../UserButton";
 import { setCaroliciousStyles, setBackground } from "../../actions";
 import { ReduxStateConfigProps } from "../../interfaces";
 import { ENDPOINTS } from "../../config";
-import { TEMP_CARTOLICIOUS_API_BAKED_TOKEN } from "../../keys";
+import {objectFromMap} from "../../lib/utils";
 
 const SaveButton: React.FC = () => {
+  const { token, loggedIn, id } = useSelector(
+    (state: ReduxStateConfigProps) => state.user
+  );
   const currentStyles = useSelector(
     (state: ReduxStateConfigProps) => state.cartolicious_styles
   );
+  const currentBackground = useSelector(
+    (state: ReduxStateConfigProps) => state.background
+  );
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (currentStyles) {
-      // const styleObj = Object.fromEntries(currentStyles);
-      console.log(currentStyles);
+      const styles = objectFromMap(currentStyles);
+      console.log(styles);
+      const saveStyle = await fetch(ENDPOINTS.STYLES, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          user_id: id,
+          styles: {
+            ...styles,
+            background: currentBackground
+          }
+        }),
+      });
+
+      const { status, data, errors } = await saveStyle.json();
+
+      console.log(status, data, errors);
     }
   };
 
@@ -33,20 +58,18 @@ const Toolbar: React.FC = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
-  const token = useSelector(
-    (state: ReduxStateConfigProps) => state.user.token
+  const { token, loggedIn } = useSelector(
+    (state: ReduxStateConfigProps) => state.user
   );
 
   const fetchStyles = async () => {
     setLoading(true);
     try {
-      const res = await fetch(
-        ENDPOINTS.GET_STYLES, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await fetch(ENDPOINTS.STYLES, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const { data, errors } = await res.json();
       if (data.length > 0) {
         const [newStyles, background] = data;
@@ -78,9 +101,13 @@ const Toolbar: React.FC = () => {
         <Button color="primary" variant="outlined" onClick={handleRecolor}>
           Recolor
         </Button>
-        {/* <SaveButton /> */}
-        <LoginButton />
-        <LogoutButton />
+        { loggedIn && 
+          <>
+            <SaveButton />
+            <LogoutButton />
+          </>
+        }        
+        <UserButton />
       </div>
     </div>
   );
