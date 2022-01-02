@@ -4,7 +4,6 @@ import useStyles from "./use-styles";
 import LoginButton from "../LoginButton";
 import { ReduxStateConfigProps } from "../../interfaces";
 
-
 const UserButton: React.FC = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -14,15 +13,15 @@ const UserButton: React.FC = () => {
 
   return (
     <div className={classes.userButton}>
-      {
-        !loggedIn
-        ? <LoginButton />
-        : <>
-            <div className={classes.profileContainer}><img className={classes.profilePicture} src={details["picture"]} /></div>
-          </>
-      }
-      
-
+      {!loggedIn ? (
+        <LoginButton />
+      ) : (
+        <>
+          <div className={classes.profileContainer}>
+            <img className={classes.profilePicture} src={details["picture"]} />
+          </div>
+        </>
+      )}
     </div>
   );
 };

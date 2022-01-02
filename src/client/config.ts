@@ -11,4 +11,5 @@ export const MAP_CONFIG = {
 export const ENDPOINTS = {
   STYLES: "http://localhost:3001/v1/styles",
   USER: "http://localhost:3001/v1/users",
+  CURATIONS: "http://localhost:3001/v1/curations",
 };

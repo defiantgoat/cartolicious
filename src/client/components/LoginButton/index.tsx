@@ -7,7 +7,11 @@ const LoginButton = () => {
 
   const handleLogin = () => loginWithRedirect();
 
-  return <Button color="primary" variant="outlined" onClick={handleLogin}>Log In</Button>;
+  return (
+    <Button color="primary" variant="outlined" onClick={handleLogin}>
+      Log In
+    </Button>
+  );
 };
 
 export default LoginButton;

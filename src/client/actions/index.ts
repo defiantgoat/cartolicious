@@ -6,7 +6,7 @@ import {
   SET_USER_DATA,
   SET_TOKEN,
   SET_USER_ID,
-  SET_USER_CONTENT
+  SET_USER_CONTENT,
 } from "../constants";
 import { ReduxActionProps } from "../interfaces";
 
@@ -38,6 +38,9 @@ export const setUserId = (payload: any): ReduxActionProps => {
   return { type: SET_USER_ID, payload };
 };
 
-export const setUserContent = (payload: {styles: any[], curations: any[]}): ReduxActionProps => {
+export const setUserContent = (payload: {
+  styles: any[];
+  curations: any[];
+}): ReduxActionProps => {
   return { type: SET_USER_CONTENT, payload };
-}
+};

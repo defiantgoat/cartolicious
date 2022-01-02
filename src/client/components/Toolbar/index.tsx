@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useStyles from "./use-styles";
 import { APP_NAME, VERSION } from "../../config";
@@ -9,7 +9,8 @@ import UserButton from "../UserButton";
 import { setCaroliciousStyles, setBackground } from "../../actions";
 import { ReduxStateConfigProps } from "../../interfaces";
 import { ENDPOINTS } from "../../config";
-import {objectFromMap} from "../../lib/utils";
+import { objectFromMap } from "../../lib/utils";
+import MapContainerContext from "../MapContainerContext";
 
 const SaveButton: React.FC = () => {
   const { token, loggedIn, id } = useSelector(
@@ -36,8 +37,8 @@ const SaveButton: React.FC = () => {
           user_id: id,
           styles: {
             ...styles,
-            background: currentBackground
-          }
+            background: currentBackground,
+          },
         }),
       });
 
@@ -50,6 +51,59 @@ const SaveButton: React.FC = () => {
   return (
     <Button color="primary" variant="outlined" onClick={handleSave}>
       Save
+    </Button>
+  );
+};
+
+const SaveCuration: React.FC = () => {
+  const map = useContext(MapContainerContext);
+
+  const { token, loggedIn, id } = useSelector(
+    (state: ReduxStateConfigProps) => state.user
+  );
+  const currentStyles = useSelector(
+    (state: ReduxStateConfigProps) => state.cartolicious_styles
+  );
+  const currentBackground = useSelector(
+    (state: ReduxStateConfigProps) => state.background
+  );
+
+  const handleSave = async () => {
+    console.log(currentStyles, map)
+    if (currentStyles && map) {
+      const styles = objectFromMap(currentStyles);
+      const [long, lat] = map.getView().getCenter();
+      const zoom = map.getView().getZoom();
+      const saveCuration = await fetch(ENDPOINTS.CURATIONS, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          user_id: id,
+          style_id: null,
+          lat,
+          long,
+          zoom,
+          name: null,
+          shared: true,
+          styles: {
+            ...styles,
+            background: currentBackground,
+          },
+        }),
+      });
+
+      const { status, data, errors } = await saveCuration.json();
+
+      console.log(status, data, errors);
+    }
+  };
+
+  return (
+    <Button color="primary" variant="outlined" onClick={handleSave}>
+      Save Curation
     </Button>
   );
 };
@@ -101,12 +155,13 @@ const Toolbar: React.FC = () => {
         <Button color="primary" variant="outlined" onClick={handleRecolor}>
           Recolor
         </Button>
-        { loggedIn && 
+        {loggedIn && (
           <>
             <SaveButton />
+            <SaveCuration />
             <LogoutButton />
           </>
-        }        
+        )}
         <UserButton />
       </div>
     </div>

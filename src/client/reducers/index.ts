@@ -6,7 +6,7 @@ import {
   SET_USER_DATA,
   SET_TOKEN,
   SET_USER_ID,
-  SET_USER_CONTENT
+  SET_USER_CONTENT,
 } from "../constants";
 import { ReduxActionProps, ReduxStateConfigProps } from "../interfaces";
 
@@ -20,7 +20,7 @@ export const initialState: ReduxStateConfigProps = {
     details: null,
     token: "",
     styles: [],
-    curations: []
+    curations: [],
   },
 };
 
@@ -53,7 +53,7 @@ const rootReducer = (
         user: {
           ...state.user,
           ...payload,
-        } 
+        },
       };
     case SET_USER_ID:
       return {
@@ -64,13 +64,13 @@ const rootReducer = (
         },
       };
     case SET_USER_CONTENT:
-      const {styles, curations} = payload;
+      const { styles, curations } = payload;
       return {
         ...state,
         user: {
           ...state.user,
           styles,
-          curations
+          curations,
         },
       };
     case SET_LOGGED_OUT:
@@ -82,7 +82,7 @@ const rootReducer = (
           token: "",
           details: null,
           styles: [],
-          curations: []
+          curations: [],
         },
       };
     case SET_TOKEN: {

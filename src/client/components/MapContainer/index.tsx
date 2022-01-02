@@ -3,11 +3,15 @@ import { useSelector, useDispatch } from "react-redux";
 import OLMap from "ol/Map";
 import OLView from "ol/View";
 import useStyles from "./use-styles";
+import OLProjection from 'ol/proj/Projection';
 import { ReduxStateConfigProps } from "../../interfaces";
 import { MAP_CONFIG, ENDPOINTS } from "../../config";
 import MapContainerContext from "../MapContainerContext";
 import { setCaroliciousStyles, setBackground, setBusy } from "../../actions";
+import Toolbar from "../Toolbar";
 import "ol/ol.css";
+import { mapFromObject } from "../../lib/utils";
+
 
 interface MapContainerProps {
   children?: React.ReactNode;
@@ -19,9 +23,53 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
   const [r, g, b, a] = useSelector(
     (state: ReduxStateConfigProps) => state.background
   );
-  const token = useSelector((state: ReduxStateConfigProps) => state.user.token);
+  const { id, token, styles, curations, loggedIn } = useSelector(
+    (state: ReduxStateConfigProps) => state.user
+  );
 
   const [olMap, setOlMap] = useState(null as OLMap | null);
+
+  const loadStyle = async (id: string) => {
+    try {
+      const loadedStyle = await fetch(`${ENDPOINTS.STYLES}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const { data } = await loadedStyle.json();
+      const [style] = data;
+      const { background } = style;
+      const styleMap = mapFromObject(style);
+      dispatch(setCaroliciousStyles(styleMap));
+      dispatch(setBackground(background || [0, 0, 0, 1]));
+    } catch (e) {
+    } finally {
+    }
+  };
+
+  const loadCuration = async (id: string) => {
+    try {
+      const loadedStyle = await fetch(`${ENDPOINTS.CURATIONS}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const { data } = await loadedStyle.json();
+      console.log(data);
+      const [curation] = data;
+      const {lat, long, style: {json}, zoom} = curation;
+      const { background } = json;
+      const styleMap = mapFromObject(json);
+      olMap!.getView().setCenter([long, lat]);
+      olMap!.getView().setZoom(zoom);
+      dispatch(setCaroliciousStyles(styleMap));
+      dispatch(setBackground(background || [0, 0, 0, 1]));
+    } catch (e) {
+    } finally {
+    }
+  };
 
   const fetchStyles = async () => {
     dispatch(setBusy(true));
@@ -62,7 +110,7 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
       zoom: MAP_CONFIG.DEFAULT_ZOOM,
       maxZoom: MAP_CONFIG.MAX_ZOOM,
       minZoom: MAP_CONFIG.MIN_ZOOM,
-      constrainResolution: true,
+      constrainResolution: true
     });
 
     const map = new OLMap({
@@ -79,6 +127,7 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
 
   return (
     <MapContainerContext.Provider value={olMap}>
+      <Toolbar />
       <div
         id="map"
         className={mapContainer}
@@ -86,6 +135,21 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
       >
         {olMap && children}
       </div>
+      {
+        <div style={{ height: "50px" }}>
+          {styles.map(({ id }, i) => (
+            <button key={`style-${i}`} onClick={() => loadStyle(id)}>
+              {id}
+            </button>
+          ))}
+          <br />
+          {curations.map(({ id }, i) => (
+            <button key={`curation-${i}`} onClick={() => loadCuration(id)}>
+              {`C-${id}`}
+            </button>
+          ))}
+        </div>
+      }
     </MapContainerContext.Provider>
   );
 };
