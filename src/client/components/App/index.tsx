@@ -5,14 +5,7 @@ import MapContainer from "../MapContainer";
 import MapboxLayer from "../MapboxLayer";
 import { ENDPOINTS } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
-import {
-  setUser,
-  setToken,
-  setUserId,
-  setUserContent,
-  setCaroliciousStyles,
-  setBackground,
-} from "../../actions";
+import { setUser, setToken, setUserId, setUserContent } from "../../actions";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const App: React.FC = () => {
@@ -23,8 +16,7 @@ const App: React.FC = () => {
     (state: ReduxStateConfigProps) => state.user
   );
 
-  const { user, isAuthenticated, isLoading, getAccessTokenSilently } =
-    useAuth0();
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
   const getUserMetadata = async () => {
     const domain = "api.cartolicious.com/";
@@ -84,14 +76,11 @@ const App: React.FC = () => {
 
   const getUserContent = async () => {
     try {
-      const userContent = await fetch(
-        `${ENDPOINTS.USER}/${id}/content`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const userContent = await fetch(`${ENDPOINTS.USER}/${id}/content`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const { data } = await userContent.json();
       const [styles, curations] = data;
@@ -124,7 +113,6 @@ const App: React.FC = () => {
 
   return (
     <div className={classes.app}>
-      {/* <Toolbar /> */}
       <MapContainer>
         {busy && <div className={classes.busyIndicator}>Loading</div>}
         <MapboxLayer />

@@ -3,15 +3,14 @@ import { useSelector, useDispatch } from "react-redux";
 import OLMap from "ol/Map";
 import OLView from "ol/View";
 import useStyles from "./use-styles";
-import OLProjection from 'ol/proj/Projection';
+import OLProjection from "ol/proj/Projection";
 import { ReduxStateConfigProps } from "../../interfaces";
 import { MAP_CONFIG, ENDPOINTS } from "../../config";
-import MapContainerContext from "../MapContainerContext";
+import MapContext from "../MapContext";
 import { setCaroliciousStyles, setBackground, setBusy } from "../../actions";
 import Toolbar from "../Toolbar";
 import "ol/ol.css";
 import { mapFromObject } from "../../lib/utils";
-
 
 interface MapContainerProps {
   children?: React.ReactNode;
@@ -59,7 +58,12 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
       const { data } = await loadedStyle.json();
       console.log(data);
       const [curation] = data;
-      const {lat, long, style: {json}, zoom} = curation;
+      const {
+        lat,
+        long,
+        style: { json },
+        zoom,
+      } = curation;
       const { background } = json;
       const styleMap = mapFromObject(json);
       olMap!.getView().setCenter([long, lat]);
@@ -110,7 +114,7 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
       zoom: MAP_CONFIG.DEFAULT_ZOOM,
       maxZoom: MAP_CONFIG.MAX_ZOOM,
       minZoom: MAP_CONFIG.MIN_ZOOM,
-      constrainResolution: true
+      constrainResolution: true,
     });
 
     const map = new OLMap({
@@ -126,7 +130,7 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
   }, []);
 
   return (
-    <MapContainerContext.Provider value={olMap}>
+    <MapContext.Provider value={olMap}>
       <Toolbar />
       <div
         id="map"
@@ -150,7 +154,7 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
           ))}
         </div>
       }
-    </MapContainerContext.Provider>
+    </MapContext.Provider>
   );
 };
 

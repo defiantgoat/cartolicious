@@ -10,7 +10,8 @@ import { setCaroliciousStyles, setBackground } from "../../actions";
 import { ReduxStateConfigProps } from "../../interfaces";
 import { ENDPOINTS } from "../../config";
 import { objectFromMap } from "../../lib/utils";
-import MapContainerContext from "../MapContainerContext";
+import MapContext from "../MapContext";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const SaveButton: React.FC = () => {
   const { token, loggedIn, id } = useSelector(
@@ -56,7 +57,7 @@ const SaveButton: React.FC = () => {
 };
 
 const SaveCuration: React.FC = () => {
-  const map = useContext(MapContainerContext);
+  const map = useContext(MapContext);
 
   const { token, loggedIn, id } = useSelector(
     (state: ReduxStateConfigProps) => state.user
@@ -69,7 +70,6 @@ const SaveCuration: React.FC = () => {
   );
 
   const handleSave = async () => {
-    console.log(currentStyles, map)
     if (currentStyles && map) {
       const styles = objectFromMap(currentStyles);
       const [long, lat] = map.getView().getCenter();
@@ -115,6 +115,8 @@ const Toolbar: React.FC = () => {
   const { token, loggedIn } = useSelector(
     (state: ReduxStateConfigProps) => state.user
   );
+
+  const { isLoading } = useAuth0();
 
   const fetchStyles = async () => {
     setLoading(true);
@@ -162,7 +164,7 @@ const Toolbar: React.FC = () => {
             <LogoutButton />
           </>
         )}
-        <UserButton />
+        {isLoading ? <div style={{ color: "gold" }}>LLLL</div> : <UserButton />}
       </div>
     </div>
   );
