@@ -7,6 +7,7 @@ const useStyles = makeStyles((theme) => ({
     flexBasis: "300px",
     backgroundColor: "#222",
     height: "100%",
+    borderLeft: "3px solid #000"
   },
   sidebarContent: {
     display: "flex",
@@ -31,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     color: theme.palette.primary.main,
     backgroundColor: "#000",
-    borderTop: "2px solid #333",
   },
 }));
 

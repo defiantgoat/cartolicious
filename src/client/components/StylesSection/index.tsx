@@ -1,11 +1,13 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Button, Select } from "@material-ui/core";
+import { Button, Select, FormControl } from "@material-ui/core";
 import { ENDPOINTS } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
 import { setCaroliciousStyles, setBackground } from "../../actions";
 import SidebarSection from "../SidebarSection";
 import { mapFromObject, objectFromMap } from "../../lib/utils";
+import { CartoliciousInput } from "../../lib/theme";
+
 
 const SaveStyleButton: React.FC = () => {
   const { token, id } = useSelector(
@@ -74,7 +76,6 @@ const StylesSection: React.FC = () => {
     return options;
   };
 
-
   const loadStyle = async (id: string) => {
     try {
       const loadedStyle = await fetch(`${ENDPOINTS.STYLES}/${id}`, {
@@ -106,10 +107,14 @@ const StylesSection: React.FC = () => {
 
   return (
     <SidebarSection header="Your Styles">
-      <SaveStyleButton />
-      <Select native value={currentStyle} onChange={handleStyleSelect}>
+            {styles.length > 0 && (
+        <FormControl variant="outlined">
+      <Select native value={currentStyle} onChange={handleStyleSelect} input={<CartoliciousInput />}>
         {createOptions()}
       </Select>
+        </FormControl>
+      )}
+      <SaveStyleButton />
     </SidebarSection>
   );
 };

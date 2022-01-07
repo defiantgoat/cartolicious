@@ -8,13 +8,13 @@ const useStyles = makeStyles((theme) => ({
     gap: "1rem",
     backgroundColor: "#222",
     padding: "1rem 1.5rem",
+    borderBottom: "3px solid #000",
     "& h2": {
       color: "gold",
       fontFamily: "rig-shaded-bold-face, sans-serif",
       fontWeight: 700,
       fontStyle: "normal",
       fontSize: "1em",
-      borderBottom: "1px solid #555",
     },
   },
 }));
