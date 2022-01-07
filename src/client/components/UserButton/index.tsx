@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import useStyles from "./use-styles";
 import LoginButton from "../LoginButton";
 import { ReduxStateConfigProps } from "../../interfaces";
+import Menu from "@material-ui/icons/Menu";
+import ToolbarButton from "../ToolbarButton";
 
 const UserButton: React.FC = () => {
   const dispatch = useDispatch();
@@ -17,9 +19,9 @@ const UserButton: React.FC = () => {
         <LoginButton />
       ) : (
         <>
-          <div className={classes.profileContainer}>
-            <img className={classes.profilePicture} src={details["picture"]} />
-          </div>
+          <ToolbarButton onClickHandler={() => console.log("open")}>
+            <Menu />
+          </ToolbarButton>
         </>
       )}
     </div>

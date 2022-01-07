@@ -7,6 +7,7 @@ import {
   SET_TOKEN,
   SET_USER_ID,
   SET_USER_CONTENT,
+  TOGGLE_SIDEBAR,
 } from "../constants";
 import { ReduxActionProps, ReduxStateConfigProps } from "../interfaces";
 
@@ -14,6 +15,9 @@ export const initialState: ReduxStateConfigProps = {
   background: [0, 0, 0, 1],
   cartolicious_styles: null,
   busy: false,
+  style_id: null,
+  curation_id: null,
+  sidebar_open: false,
   user: {
     id: -1,
     loggedIn: false,
@@ -36,7 +40,12 @@ const rootReducer = (
         ...state,
         background: payload,
       };
-
+    case TOGGLE_SIDEBAR:
+      const status = state.sidebar_open;
+      return {
+        ...state,
+        sidebar_open: !status,
+      };
     case SET_CARTOLICIOUS_STYLES:
       return {
         ...state,
@@ -54,6 +63,7 @@ const rootReducer = (
           ...state.user,
           ...payload,
         },
+        sidebar_open: true,
       };
     case SET_USER_ID:
       return {
@@ -84,6 +94,7 @@ const rootReducer = (
           styles: [],
           curations: [],
         },
+        sidebar_open: false,
       };
     case SET_TOKEN: {
       return {
