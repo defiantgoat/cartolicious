@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
     flexShrink: 0,
     gap: "1rem",
     backgroundColor: "#222",
-    padding: "1rem",
+    padding: "1rem 1.5rem",
     "& h2": {
       color: "gold",
       fontFamily: "rig-shaded-bold-face, sans-serif",

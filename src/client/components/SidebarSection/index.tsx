@@ -6,7 +6,10 @@ interface SidebarSectionProps {
   children?: React.ReactNode;
 }
 
-const SidebarSection: React.FC<SidebarSectionProps> = ({header, children}) => {
+const SidebarSection: React.FC<SidebarSectionProps> = ({
+  header,
+  children,
+}) => {
   const classes = useStyles();
 
   return (

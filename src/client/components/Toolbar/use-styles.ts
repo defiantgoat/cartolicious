@@ -8,12 +8,12 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    flexBasis: "2rem",
+    flexBasis: "65px",
   },
   titleContainer: {
     display: "flex",
     flexGrow: 1,
-    padding: ".55rem",
+    padding: "0 .55rem",
     alignItems: "center",
   },
   title: {
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   buttonContainer: {
     display: "flex",
     flexGrow: 1,
-    padding: ".55rem",
+    padding: "0 .55rem",
     alignItems: "center",
   },
 }));

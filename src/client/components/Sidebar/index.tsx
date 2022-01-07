@@ -5,11 +5,11 @@ import useStyles from "./use-styles";
 import MapContext from "../MapContext";
 import LogoutButton from "../LogoutButton";
 import LoginButton from "../LoginButton";
+import SidebarSection from "../SidebarSection";
 import { ENDPOINTS } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
 import { setCaroliciousStyles, setBackground } from "../../actions";
 import { mapFromObject, objectFromMap } from "../../lib/utils";
-import SidebarSection from "../SidebarSection";
 
 const SaveButton: React.FC = () => {
   const { token, loggedIn, id } = useSelector(
@@ -177,19 +177,17 @@ const Sidebar: React.FC = () => {
                 </button>
               ))}
             </SidebarSection>
-            <div className={classes.sectionContent}>
-              <h2>Your Curations</h2>
+            <SidebarSection header="Your Curations">
               <SaveCuration />
               {curations.map(({ id }, i) => (
                 <button key={`curation-${i}`} onClick={() => loadCuration(id)}>
                   {`C-${id}`}
                 </button>
               ))}
-            </div>
-            <div className={classes.sectionContent}>
-              <h2>Edit Style</h2>
+            </SidebarSection>
+            <SidebarSection header="Edit Style">
               dropddown here
-            </div>
+            </SidebarSection>
           </>
         )}
       </div>
