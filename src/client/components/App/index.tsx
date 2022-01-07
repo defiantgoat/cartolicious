@@ -10,13 +10,7 @@ import Toolbar from "../Toolbar";
 import Sidebar from "../Sidebar";
 import { MAP_CONFIG, ENDPOINTS } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
-import {
-  setUser,
-  setToken,
-  setUserId,
-  setUserContent,
-  toggleSidebar,
-} from "../../actions";
+import { setUser, setToken, setUserId, setUserContent } from "../../actions";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const App: React.FC = () => {

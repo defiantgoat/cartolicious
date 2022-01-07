@@ -1,7 +1,5 @@
-import { withStyles, createStyles, createTheme } from "@material-ui/core/styles";
+import { makeStyles, withStyles, createStyles } from "@material-ui/core/styles";
 import { InputBase } from "@material-ui/core";
-import palette from "./palette";
-
 
 export const CartoliciousInput = withStyles((theme) =>
   createStyles({
@@ -13,11 +11,11 @@ export const CartoliciousInput = withStyles((theme) =>
     input: {
       borderRadius: 4,
       position: 'relative',
-      backgroundColor: theme.palette.primary.main,
-      borderWidth: 0,
+      backgroundColor: theme.palette.primary.dark,
+      border: '1px solid #ced4da',
       fontSize: 16,
       padding: '10px 26px 10px 12px',
-      // transition: theme.transitions.create(['border-color', 'box-shadow']),
+      transition: theme.transitions.create(['border-color', 'box-shadow']),
       // Use the system font instead of the default Roboto font.
       fontFamily: [
         '-apple-system',
@@ -32,27 +30,18 @@ export const CartoliciousInput = withStyles((theme) =>
         '"Segoe UI Symbol"',
       ].join(','),
       '&:focus': {
-        borderColor: theme.palette.primary.main,
-        // boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
-        color: theme.palette.primary.main
+        borderRadius: 4,
+        borderColor: '#80bdff',
+        boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
       },
     },
   }),
 )(InputBase);
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: palette.warm.primary.hex,
-      dark: palette.warm.tertiary.hex,
-    },
-    secondary: {
-      main: palette.warm.secondary.hex,
-    },
-    action: {
-      hover: "rgba(255,255,255,.8)",
-    },
+const useStyles = makeStyles((theme) => ({
+  selectControl: {
+    borderColor: "blue"
   },
-});
+}));
 
-export default theme;
+export default useStyles;
