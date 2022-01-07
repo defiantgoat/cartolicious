@@ -1,112 +1,17 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useStyles from "./use-styles";
-import { APP_NAME, VERSION } from "../../config";
-import { Button } from "@material-ui/core";
-import LoginButton from "../LoginButton";
-import LogoutButton from "../LogoutButton";
+import { APP_NAME } from "../../config";
+import { Button, IconButton } from "@material-ui/core";
 import UserButton from "../UserButton";
 import { setCaroliciousStyles, setBackground } from "../../actions";
 import { ReduxStateConfigProps } from "../../interfaces";
 import { ENDPOINTS } from "../../config";
-import { objectFromMap } from "../../lib/utils";
-import MapContext from "../MapContext";
 import { useAuth0 } from "@auth0/auth0-react";
-
-const SaveButton: React.FC = () => {
-  const { token, loggedIn, id } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
-  );
-  const currentStyles = useSelector(
-    (state: ReduxStateConfigProps) => state.cartolicious_styles
-  );
-  const currentBackground = useSelector(
-    (state: ReduxStateConfigProps) => state.background
-  );
-
-  const handleSave = async () => {
-    if (currentStyles) {
-      const styles = objectFromMap(currentStyles);
-      console.log(styles);
-      const saveStyle = await fetch(ENDPOINTS.STYLES, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({
-          user_id: id,
-          styles: {
-            ...styles,
-            background: currentBackground,
-          },
-        }),
-      });
-
-      const { status, data, errors } = await saveStyle.json();
-
-      console.log(status, data, errors);
-    }
-  };
-
-  return (
-    <Button color="primary" variant="outlined" onClick={handleSave}>
-      Save
-    </Button>
-  );
-};
-
-const SaveCuration: React.FC = () => {
-  const map = useContext(MapContext);
-
-  const { token, loggedIn, id } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
-  );
-  const currentStyles = useSelector(
-    (state: ReduxStateConfigProps) => state.cartolicious_styles
-  );
-  const currentBackground = useSelector(
-    (state: ReduxStateConfigProps) => state.background
-  );
-
-  const handleSave = async () => {
-    if (currentStyles && map) {
-      const styles = objectFromMap(currentStyles);
-      const [long, lat] = map.getView().getCenter();
-      const zoom = map.getView().getZoom();
-      const saveCuration = await fetch(ENDPOINTS.CURATIONS, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({
-          user_id: id,
-          style_id: null,
-          lat,
-          long,
-          zoom,
-          name: null,
-          shared: true,
-          styles: {
-            ...styles,
-            background: currentBackground,
-          },
-        }),
-      });
-
-      const { status, data, errors } = await saveCuration.json();
-
-      console.log(status, data, errors);
-    }
-  };
-
-  return (
-    <Button color="primary" variant="outlined" onClick={handleSave}>
-      Save Curation
-    </Button>
-  );
-};
+import BrushIcon from "@material-ui/icons/BrushSharp";
+import ToolbarButton from "../ToolbarButton";
+import MenuButton from "../MenuButton";
+import { CircularProgress } from "@material-ui/core";
 
 const Toolbar: React.FC = () => {
   const dispatch = useDispatch();
@@ -114,6 +19,9 @@ const Toolbar: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const { token, loggedIn } = useSelector(
     (state: ReduxStateConfigProps) => state.user
+  );
+  const sidebarOpen = useSelector(
+    (state: ReduxStateConfigProps) => state.sidebar_open
   );
 
   const { isLoading } = useAuth0();
@@ -151,20 +59,24 @@ const Toolbar: React.FC = () => {
 
   return (
     <div className={classes.toolbar}>
-      <h2 className={classes.title}>{APP_NAME}</h2>
-      <div className={classes.buttonContainer}>
+      <div className={classes.titleContainer}>
+        <h2 className={classes.title}>{APP_NAME}</h2>
+      </div>
+
+      <div className={classes.buttonsContainer}>
         {loading && <div style={{ color: "white" }}>Loading</div>}
-        <Button color="primary" variant="outlined" onClick={handleRecolor}>
-          Recolor
-        </Button>
-        {loggedIn && (
-          <>
-            <SaveButton />
-            <SaveCuration />
-            <LogoutButton />
-          </>
-        )}
-        {isLoading ? <div style={{ color: "gold" }}>LLLL</div> : <UserButton />}
+        <div className={classes.buttonContainer}>
+          <ToolbarButton onClickHandler={handleRecolor}>
+            <BrushIcon />
+          </ToolbarButton>
+        </div>
+
+        <div
+          className={classes.buttonContainer}
+          style={{ backgroundColor: sidebarOpen ? "#222" : "transparent" }}
+        >
+          {isLoading ? <CircularProgress color="primary" /> : <MenuButton />}
+        </div>
       </div>
     </div>
   );
