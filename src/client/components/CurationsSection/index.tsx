@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Button } from "@material-ui/core";
+import { Button, Select } from "@material-ui/core";
 import MapContext from "../MapContext";
 import { ENDPOINTS } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
@@ -63,9 +63,38 @@ const SaveCuration: React.FC = () => {
 const CurationsSection: React.FC = () => {
   const dispatch = useDispatch();
   const map = useContext(MapContext);
+
+  const [currentCuration, setCurrentCuration] = useState(-1);
+
   const { token, curations } = useSelector(
     (state: ReduxStateConfigProps) => state.user
   );
+
+  const createOptions = (): JSX.Element[] => {
+    const options = [
+      <option value={-1}>Select a Curation</option>,
+    ] as JSX.Element[];
+
+    curations.forEach(({ id, name }, i) =>
+      options.push(
+        <option key={`curation-${i}`} value={id}>
+          {name}
+        </option>
+      )
+    );
+
+    return options;
+  };
+
+  const handleCurationSelect = ({ target: { value } }) => {
+    setCurrentCuration(value);
+  };
+
+  useEffect(() => {
+    if (currentCuration > -1) {
+      loadCuration(`${currentCuration}`);
+    }
+  }, [currentCuration]);
 
   const loadCuration = async (id: string) => {
     try {
@@ -76,7 +105,6 @@ const CurationsSection: React.FC = () => {
       });
 
       const { data } = await loadedStyle.json();
-      console.log(data);
       const [curation] = data;
       const {
         lat,
@@ -98,11 +126,9 @@ const CurationsSection: React.FC = () => {
   return (
     <SidebarSection header="Your Curations">
       <SaveCuration />
-      {curations.map(({ id }, i) => (
-        <button key={`curation-${i}`} onClick={() => loadCuration(id)}>
-          {`C-${id}`}
-        </button>
-      ))}
+      <Select native value={currentCuration} onChange={handleCurationSelect}>
+        {createOptions()}
+      </Select>
     </SidebarSection>
   );
 };

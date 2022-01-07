@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Button } from "@material-ui/core";
+import { Button, Select } from "@material-ui/core";
 import { ENDPOINTS } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
 import { setCaroliciousStyles, setBackground } from "../../actions";
@@ -52,9 +52,28 @@ const SaveStyleButton: React.FC = () => {
 
 const StylesSection: React.FC = () => {
   const dispatch = useDispatch();
+  const [currentStyle, setCurrentStyle] = useState(-1);
+
   const { token, styles } = useSelector(
     (state: ReduxStateConfigProps) => state.user
   );
+
+  const createOptions = (): JSX.Element[] => {
+    const options = [
+      <option value={-1}>Select a Style</option>,
+    ] as JSX.Element[];
+
+    styles.forEach(({ id }, i) =>
+      options.push(
+        <option key={`style-${i}`} value={id}>
+          {`Style ${id}`}
+        </option>
+      )
+    );
+
+    return options;
+  };
+
 
   const loadStyle = async (id: string) => {
     try {
@@ -75,14 +94,22 @@ const StylesSection: React.FC = () => {
     }
   };
 
+  const handleStyleSelect = ({ target: { value } }) => {
+    setCurrentStyle(value);
+  };
+
+  useEffect(() => {
+    if (currentStyle > -1) {
+      loadStyle(`${currentStyle}`);
+    }
+  }, [currentStyle]);
+
   return (
     <SidebarSection header="Your Styles">
       <SaveStyleButton />
-      {styles.map(({ id }, i) => (
-        <button key={`style-${i}`} onClick={() => loadStyle(id)}>
-          {id}
-        </button>
-      ))}
+      <Select native value={currentStyle} onChange={handleStyleSelect}>
+        {createOptions()}
+      </Select>
     </SidebarSection>
   );
 };
