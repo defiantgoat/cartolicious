@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row",
     flexGrow: 1,
-    height: "calc(100% - 65px)"
+    height: "calc(100% - 65px)",
   },
   busyIndicator: {
     zIndex: 100,
