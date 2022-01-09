@@ -6,6 +6,7 @@ import LoginButton from "../LoginButton";
 import SidebarSection from "../SidebarSection";
 import CurationsSection from "../CurationsSection";
 import StylesSection from "../StylesSection";
+import EditStyleSection from "../EditStyleSection";
 import { ReduxStateConfigProps } from "../../interfaces";
 
 const Sidebar: React.FC = () => {
@@ -22,9 +23,9 @@ const Sidebar: React.FC = () => {
           <LoginButton />
         ) : (
           <>
+            <EditStyleSection />
             <StylesSection />
             <CurationsSection />
-            <SidebarSection header="Edit Style">dropddown here</SidebarSection>
           </>
         )}
       </div>

@@ -7,7 +7,6 @@ import { ReduxStateConfigProps } from "../../interfaces";
 import { setCaroliciousStyles, setBackground } from "../../actions";
 import SidebarSection from "../SidebarSection";
 import { mapFromObject, objectFromMap } from "../../lib/utils";
-import useStyles from "./use-styles";
 import { CartoliciousInput } from "../../lib/theme";
 
 const SaveCuration: React.FC = () => {
@@ -65,7 +64,6 @@ const SaveCuration: React.FC = () => {
 const CurationsSection: React.FC = () => {
   const dispatch = useDispatch();
   const map = useContext(MapContext);
-  const classes = useStyles();
 
   const [currentCuration, setCurrentCuration] = useState(-1);
 
@@ -129,7 +127,7 @@ const CurationsSection: React.FC = () => {
   return (
     <SidebarSection header="Your Curations">
       {curations.length > 0 && (
-        <FormControl variant="outlined" className={classes.selectControl}>
+        <FormControl variant="outlined">
           <Select
             native
             value={currentCuration}

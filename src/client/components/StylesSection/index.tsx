@@ -8,7 +8,6 @@ import SidebarSection from "../SidebarSection";
 import { mapFromObject, objectFromMap } from "../../lib/utils";
 import { CartoliciousInput } from "../../lib/theme";
 
-
 const SaveStyleButton: React.FC = () => {
   const { token, id } = useSelector(
     (state: ReduxStateConfigProps) => state.user
@@ -107,11 +106,16 @@ const StylesSection: React.FC = () => {
 
   return (
     <SidebarSection header="Your Styles">
-            {styles.length > 0 && (
+      {styles.length > 0 && (
         <FormControl variant="outlined">
-      <Select native value={currentStyle} onChange={handleStyleSelect} input={<CartoliciousInput />}>
-        {createOptions()}
-      </Select>
+          <Select
+            native
+            value={currentStyle}
+            onChange={handleStyleSelect}
+            input={<CartoliciousInput />}
+          >
+            {createOptions()}
+          </Select>
         </FormControl>
       )}
       <SaveStyleButton />

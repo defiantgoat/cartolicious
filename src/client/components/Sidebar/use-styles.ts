@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
     flexBasis: "300px",
     backgroundColor: "#222",
     height: "100%",
-    borderLeft: "3px solid #000"
+    borderLeft: "3px solid #000",
   },
   sidebarContent: {
     display: "flex",
