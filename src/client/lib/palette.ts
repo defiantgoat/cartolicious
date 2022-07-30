@@ -8,6 +8,10 @@ const palette = {
       hex: "#000000",
       rgb: [0, 0, 0],
     },
+    tertiary: {
+      hex: "#8b0000",
+      rgb: [139, 0, 0],
+    },
     white: {
       hex: "#ffffff",
       rgb: [255, 255, 255],

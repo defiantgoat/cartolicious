@@ -2,6 +2,12 @@ import {
   SET_BACKGROUND,
   SET_CARTOLICIOUS_STYLES,
   SET_BUSY,
+  SET_LOGGED_OUT,
+  SET_USER_DATA,
+  SET_TOKEN,
+  SET_USER_ID,
+  SET_USER_CONTENT,
+  TOGGLE_SIDEBAR,
 } from "../constants";
 import { ReduxActionProps, ReduxStateConfigProps } from "../interfaces";
 
@@ -9,6 +15,17 @@ export const initialState: ReduxStateConfigProps = {
   background: [0, 0, 0, 1],
   cartolicious_styles: null,
   busy: false,
+  style_id: null,
+  curation_id: null,
+  sidebar_open: false,
+  user: {
+    id: -1,
+    loggedIn: false,
+    details: null,
+    token: "",
+    styles: [],
+    curations: [],
+  },
 };
 
 const rootReducer = (
@@ -23,7 +40,12 @@ const rootReducer = (
         ...state,
         background: payload,
       };
-
+    case TOGGLE_SIDEBAR:
+      const status = state.sidebar_open;
+      return {
+        ...state,
+        sidebar_open: !status,
+      };
     case SET_CARTOLICIOUS_STYLES:
       return {
         ...state,
@@ -34,6 +56,55 @@ const rootReducer = (
         ...state,
         busy: payload,
       };
+    case SET_USER_DATA:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          ...payload,
+        },
+        sidebar_open: true,
+      };
+    case SET_USER_ID:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          id: payload,
+        },
+      };
+    case SET_USER_CONTENT:
+      const { styles, curations } = payload;
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          styles,
+          curations,
+        },
+      };
+    case SET_LOGGED_OUT:
+      return {
+        ...state,
+        user: {
+          id: -1,
+          loggedIn: false,
+          token: "",
+          details: null,
+          styles: [],
+          curations: [],
+        },
+        sidebar_open: false,
+      };
+    case SET_TOKEN: {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          token: payload,
+        },
+      };
+    }
     default:
       return state;
   }

@@ -20,11 +20,13 @@
     "view-coverage-report": "open coverage/lcov-report/index.html"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^1.8.0",
     "@material-ui/core": "^4.11.3",
-    "@material-ui/icons": "^4.9.1",
+    "@material-ui/icons": "^4.11.2",
     "crypto-js": "^4.0.0",
     "express": "^4.17.1",
     "jwt-decode": "^3.1.2",
+    "normalize.css": "^8.0.1",
     "oidc-client": "^1.10.1",
     "ol": "^6.5.0",
     "pbf": "^3.2.1",

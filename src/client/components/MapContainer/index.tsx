@@ -1,13 +1,10 @@
-import React, { useLayoutEffect, useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import OLMap from "ol/Map";
-import OLView from "ol/View";
-import useStyles from "./use-styles";
 import { ReduxStateConfigProps } from "../../interfaces";
-import { MAP_CONFIG, ENDPOINTS } from "../../config";
-import MapContainerContext from "../MapContainerContext";
+import MapContext from "../MapContext";
+import { ENDPOINTS } from "../../config";
 import { setCaroliciousStyles, setBackground, setBusy } from "../../actions";
-import { TEMP_CARTOLICIOUS_API_BAKED_TOKEN } from "../../keys";
+import useStyles from "./use-styles";
 import "ol/ol.css";
 
 interface MapContainerProps {
@@ -16,19 +13,21 @@ interface MapContainerProps {
 
 const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
   const dispatch = useDispatch();
+  const map = useContext(MapContext);
   const { mapContainer } = useStyles();
   const [r, g, b, a] = useSelector(
     (state: ReduxStateConfigProps) => state.background
   );
-
-  const [olMap, setOlMap] = useState(null as OLMap | null);
+  const { token } = useSelector((state: ReduxStateConfigProps) => state.user);
 
   const fetchStyles = async () => {
     dispatch(setBusy(true));
     try {
-      const res = await fetch(
-        ENDPOINTS.GET_STYLES(TEMP_CARTOLICIOUS_API_BAKED_TOKEN)
-      );
+      const res = await fetch(ENDPOINTS.STYLES, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const { data, errors } = await res.json();
       if (data.length > 0) {
         const [newStyles, background] = data;
@@ -48,41 +47,20 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
     }
   };
 
-  useLayoutEffect(() => {
-    const view = new OLView({
-      center: MAP_CONFIG.DEFAULT_CENTER,
-      zoom: MAP_CONFIG.DEFAULT_ZOOM,
-      maxZoom: MAP_CONFIG.MAX_ZOOM,
-      minZoom: MAP_CONFIG.MIN_ZOOM,
-      constrainResolution: true,
-    });
-
-    const map = new OLMap({
-      view,
-      target: "map",
-    });
-
-    setOlMap(map);
-
-    return () => {
-      setOlMap(null);
-    };
-  }, []);
-
   useEffect(() => {
     fetchStyles();
   }, []);
 
   return (
-    <MapContainerContext.Provider value={olMap}>
+    <>
       <div
         id="map"
         className={mapContainer}
         style={{ backgroundColor: `rgba(${r}, ${g}, ${b}, ${a})` }}
       >
-        {olMap && children}
+        {map && children}
       </div>
-    </MapContainerContext.Provider>
+    </>
   );
 };
 
