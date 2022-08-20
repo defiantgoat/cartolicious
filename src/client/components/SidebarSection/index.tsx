@@ -4,11 +4,13 @@ import useStyles from "./use-styles";
 interface SidebarSectionProps {
   header?: string;
   children?: React.ReactNode;
+  buttons?: JSX.Element[];
 }
 
 const SidebarSection: React.FC<SidebarSectionProps> = ({
   header,
   children,
+  buttons,
 }) => {
   const classes = useStyles();
 
@@ -16,6 +18,7 @@ const SidebarSection: React.FC<SidebarSectionProps> = ({
     <div className={classes.sidebarSection}>
       {header && <h2>{header}</h2>}
       {children}
+      <div className={classes.sectionButtons}>{buttons}</div>
     </div>
   );
 };

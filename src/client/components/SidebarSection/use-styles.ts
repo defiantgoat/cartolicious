@@ -17,6 +17,10 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "1em",
     },
   },
+  sectionButtons: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
 }));
 
 export default useStyles;

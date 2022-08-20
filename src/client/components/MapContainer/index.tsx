@@ -4,6 +4,7 @@ import { ReduxStateConfigProps } from "../../interfaces";
 import MapContext from "../MapContext";
 import { ENDPOINTS } from "../../config";
 import { setCaroliciousStyles, setBackground, setBusy } from "../../actions";
+import useQueryString from "../../hooks/useQueryString";
 import useStyles from "./use-styles";
 import "ol/ol.css";
 

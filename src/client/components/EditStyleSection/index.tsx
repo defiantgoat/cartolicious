@@ -12,11 +12,19 @@ import SidebarSection from "../SidebarSection";
 import { mapFromObject, objectFromMap } from "../../lib/utils";
 import { CartoliciousInput } from "../../lib/theme";
 
-
-const StyleDisplay: React.FC<{style: CartoliciousFill | CartoliciousStroke}> = ({style}) => {
-  const [r, g, b, alpha] = style;
-  return <div style={{backgroundColor: `rgba(${r}, ${g}, ${b}, ${alpha})`, width: '1rem', height: '1rem'}}></div>
-}
+const StyleDisplay: React.FC<{ style: CartoliciousFill | CartoliciousStroke }> =
+  ({ style }) => {
+    const [r, g, b, alpha] = style;
+    return (
+      <div
+        style={{
+          backgroundColor: `rgba(${r}, ${g}, ${b}, ${alpha})`,
+          width: "1rem",
+          height: "1rem",
+        }}
+      ></div>
+    );
+  };
 
 const EditStyleSection: React.FC = () => {
   const dispatch = useDispatch();
@@ -28,7 +36,7 @@ const EditStyleSection: React.FC = () => {
   const [currentAttributeStroke, setCurrentAttributeStroke] = useState(
     [] as CartoliciousStroke // [r, g, b, alpha, visible, width]
   );
-  const [currentAttributeVisible, setCurrentAttributeVisible] = useState(0)
+  const [currentAttributeVisible, setCurrentAttributeVisible] = useState(0);
 
   const cartolicious = useSelector(
     (state: ReduxStateConfigProps) => state.cartolicious_styles
@@ -36,7 +44,9 @@ const EditStyleSection: React.FC = () => {
 
   const createOptions = (): JSX.Element[] => {
     const options = [
-      <option value={-1}>Select an Attribute</option>,
+      <option value={-1} key="select-an-attribute">
+        Select an Attribute
+      </option>,
     ] as JSX.Element[];
 
     if (cartolicious) {
@@ -62,7 +72,6 @@ const EditStyleSection: React.FC = () => {
     const newMap = new Map();
     cartolicious?.forEach((value, key) => newMap.set(key, value));
 
-
     const updatedCartoliciousStyle = cartolicious?.get(currentStyle);
     if (updatedCartoliciousStyle) {
       updatedCartoliciousStyle[0] = newFill;
@@ -71,7 +80,6 @@ const EditStyleSection: React.FC = () => {
     newMap.set(currentStyle, updatedCartoliciousStyle);
 
     dispatch(setCaroliciousStyles(newMap));
-
   };
 
   const handleStrokeAttributeChange = ({ target: { checked } }) => {
@@ -79,7 +87,7 @@ const EditStyleSection: React.FC = () => {
     newStroke[4] = checked ? 1 : 0;
     setCurrentAttributeStroke(newStroke);
 
-        // Need to do this in a separate call as it delays the checkbox change.
+    // Need to do this in a separate call as it delays the checkbox change.
     // or show some kind of change indicator, may need to use a webworker to do the map copy.
     const newMap = new Map();
     cartolicious?.forEach((value, key) => newMap.set(key, value));
@@ -95,7 +103,7 @@ const EditStyleSection: React.FC = () => {
   };
 
   const handleStyleSelect = ({ target: { value } }) => {
-    console.log(value)
+    console.log(value);
     setCurrentStyle(value);
     if (cartolicious) {
       const [fill, stroke, visible] = cartolicious.get(value) || [[], [], 0];
@@ -112,7 +120,7 @@ const EditStyleSection: React.FC = () => {
   // }, [currentStyle]);
 
   const currentFillVisible = useMemo(() => {
-    console.log("fill changed", currentAttributeFill[4])
+    console.log("fill changed", currentAttributeFill[4]);
     if (!currentAttributeFill || currentAttributeFill[4] === undefined) {
       return false;
     }
@@ -124,7 +132,7 @@ const EditStyleSection: React.FC = () => {
       return false;
     }
     return currentAttributeStroke[4] > 0;
-  }, [currentAttributeStroke])
+  }, [currentAttributeStroke]);
 
   return (
     <SidebarSection header="Edit Style">
@@ -140,12 +148,23 @@ const EditStyleSection: React.FC = () => {
           </Select>
         </FormControl>
       )}
-      
-      {
-        currentAttributeFill.length > 0 && 
-        <div style={{color: "honeydew", display: "flex", flexDirection: "row", gap: ".5rem", alignItems: "center"}}>
+
+      {currentAttributeFill.length > 0 && (
+        <div
+          style={{
+            color: "honeydew",
+            display: "flex",
+            flexDirection: "row",
+            gap: ".5rem",
+            alignItems: "center",
+          }}
+        >
           <span>
-            <Checkbox color="primary" checked={currentFillVisible} onChange={handleFillAttributeChange} />
+            <Checkbox
+              color="primary"
+              checked={currentFillVisible}
+              onChange={handleFillAttributeChange}
+            />
           </span>
           <span>
             <StyleDisplay style={currentAttributeFill} />
@@ -153,12 +172,23 @@ const EditStyleSection: React.FC = () => {
           <span>Fill</span>
           <span>{JSON.stringify(currentAttributeFill)}</span>
         </div>
-      }
-      {
-        currentAttributeStroke.length > 0 && 
-        <div style={{color: "honeydew", display: "flex", flexDirection: "row", gap: ".5rem", alignItems: "center"}}>
+      )}
+      {currentAttributeStroke.length > 0 && (
+        <div
+          style={{
+            color: "honeydew",
+            display: "flex",
+            flexDirection: "row",
+            gap: ".5rem",
+            alignItems: "center",
+          }}
+        >
           <span>
-            <Checkbox color="primary" checked={currentStrokeVisible} onChange={handleStrokeAttributeChange} />
+            <Checkbox
+              color="primary"
+              checked={currentStrokeVisible}
+              onChange={handleStrokeAttributeChange}
+            />
           </span>
           <span>
             <StyleDisplay style={currentAttributeStroke} />
@@ -166,7 +196,7 @@ const EditStyleSection: React.FC = () => {
           <span>Stroke</span>
           <span>{JSON.stringify(currentAttributeStroke)}</span>
         </div>
-      }
+      )}
       {/* <SaveStyleButton /> */}
     </SidebarSection>
   );

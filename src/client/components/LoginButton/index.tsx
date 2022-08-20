@@ -8,9 +8,12 @@ const LoginButton = () => {
   const handleLogin = () => loginWithRedirect();
 
   return (
-    <Button color="primary" variant="outlined" onClick={handleLogin}>
+    <div style={{padding: "1rem 1.2rem", display: "flex"}}>
+
+    <Button color="primary" style={{flex: 1}} variant="outlined" onClick={handleLogin}>
       Log In
     </Button>
+    </div>
   );
 };
 

@@ -13,6 +13,14 @@ export interface ReduxActionProps {
   payload: any;
 }
 
+export interface Curation {
+  id: number;
+  name: string;
+  style:{
+    id: number
+  };
+}
+
 export interface ReduxStateConfigProps {
   background: [number, number, number, number];
   cartolicious_styles: Map<string, CartoliciousStyle> | null;
@@ -20,12 +28,14 @@ export interface ReduxStateConfigProps {
   style_id: number | null;
   curation_id: number | null;
   sidebar_open: boolean;
+  styles_dialog_open: boolean;
+  curations_dialog_open: boolean;
   user: {
     id: number;
     loggedIn: boolean;
     token: string;
     details: any;
     styles: any[];
-    curations: any[];
+    curations: Curation[];
   };
 }

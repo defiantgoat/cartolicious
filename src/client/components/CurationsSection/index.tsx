@@ -1,16 +1,43 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Button, Select, FormControl } from "@material-ui/core";
+import {
+  Button,
+  Select,
+  FormControl,
+  IconButton,
+  Dialog,
+} from "@material-ui/core";
+import EditRounded from "@material-ui/icons/EditRounded";
 import MapContext from "../MapContext";
 import { ENDPOINTS } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
-import { setCaroliciousStyles, setBackground } from "../../actions";
+import {
+  setCaroliciousStyles,
+  setBackground,
+  toggleCurationsDialog,
+} from "../../actions";
 import SidebarSection from "../SidebarSection";
 import { mapFromObject, objectFromMap } from "../../lib/utils";
 import { CartoliciousInput } from "../../lib/theme";
+import useCartoliciousApi from "../../hooks/useCartoliciousApi";
+
+const EditCurationsButton: React.FC = () => {
+  const dispatch = useDispatch();
+  const handleClick = () => dispatch(toggleCurationsDialog());
+  return (
+    <IconButton
+      color="primary"
+      title="Edit Your Curations"
+      onClick={handleClick}
+    >
+      <EditRounded />
+    </IconButton>
+  );
+};
 
 const SaveCuration: React.FC = () => {
   const map = useContext(MapContext);
+  const {saveCuration} = useCartoliciousApi();
 
   const { token, id } = useSelector(
     (state: ReduxStateConfigProps) => state.user
@@ -27,30 +54,9 @@ const SaveCuration: React.FC = () => {
       const styles = objectFromMap(currentStyles);
       const [long, lat] = map.getView().getCenter();
       const zoom = map.getView().getZoom();
-      const saveCuration = await fetch(ENDPOINTS.CURATIONS, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({
-          user_id: id,
-          style_id: null,
-          lat,
-          long,
-          zoom,
-          name: null,
-          shared: true,
-          styles: {
-            ...styles,
-            background: currentBackground,
-          },
-        }),
-      });
 
-      const { status, data, errors } = await saveCuration.json();
-
-      console.log(status, data, errors);
+      const {status, errors, data} = await saveCuration({styles, background: currentBackground, long, lat, zoom});
+      console.log(status, errors, data);
     }
   };
 
@@ -64,6 +70,7 @@ const SaveCuration: React.FC = () => {
 const CurationsSection: React.FC = () => {
   const dispatch = useDispatch();
   const map = useContext(MapContext);
+  const {loadCuration} = useCartoliciousApi();
 
   const [currentCuration, setCurrentCuration] = useState(-1);
 
@@ -73,7 +80,9 @@ const CurationsSection: React.FC = () => {
 
   const createOptions = (): JSX.Element[] => {
     const options = [
-      <option value={-1}>Select a Curation</option>,
+      <option key="select-a-curation" value={-1}>
+        Select a Curation
+      </option>,
     ] as JSX.Element[];
 
     curations.forEach(({ id, name }, i) =>
@@ -97,35 +106,14 @@ const CurationsSection: React.FC = () => {
     }
   }, [currentCuration]);
 
-  const loadCuration = async (id: string) => {
-    try {
-      const loadedStyle = await fetch(`${ENDPOINTS.CURATIONS}/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const { data } = await loadedStyle.json();
-      const [curation] = data;
-      const {
-        lat,
-        long,
-        style: { json },
-        zoom,
-      } = curation;
-      const { background } = json;
-      const styleMap = mapFromObject(json);
-      map?.getView().setCenter([long, lat]);
-      map?.getView().setZoom(zoom);
-      dispatch(setCaroliciousStyles(styleMap));
-      dispatch(setBackground(background || [0, 0, 0, 1]));
-    } catch (e) {
-    } finally {
-    }
-  };
-
   return (
-    <SidebarSection header="Your Curations">
+    <SidebarSection
+      header="Your Curations"
+      buttons={[
+        <SaveCuration key="save-curations-button" />,
+        <EditCurationsButton key="edit-curations-button" />,
+      ]}
+    >
       {curations.length > 0 && (
         <FormControl variant="outlined">
           <Select
@@ -138,7 +126,6 @@ const CurationsSection: React.FC = () => {
           </Select>
         </FormControl>
       )}
-      <SaveCuration />
     </SidebarSection>
   );
 };

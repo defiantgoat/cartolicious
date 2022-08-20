@@ -10,6 +10,8 @@ import {
   SET_CURATION_ID,
   SET_STYLE_ID,
   TOGGLE_SIDEBAR,
+  TOGGLE_CURATIONS_DIALOG,
+  TOGGLE_STYLES_DIALOG,
 } from "../constants";
 import { ReduxActionProps } from "../interfaces";
 
@@ -18,6 +20,7 @@ export const setBackground = (payload: number[]): ReduxActionProps => {
 };
 
 export const setCaroliciousStyles = (payload: any): ReduxActionProps => {
+  console.log(payload)
   return { type: SET_CARTOLICIOUS_STYLES, payload };
 };
 
@@ -58,4 +61,12 @@ export const setCurationId = (payload: number): ReduxActionProps => {
 
 export const toggleSidebar = (): ReduxActionProps => {
   return { type: TOGGLE_SIDEBAR, payload: null };
+};
+
+export const toggleStylesDialog = (): ReduxActionProps => {
+  return { type: TOGGLE_STYLES_DIALOG, payload: null };
+};
+
+export const toggleCurationsDialog = (): ReduxActionProps => {
+  return { type: TOGGLE_CURATIONS_DIALOG, payload: null };
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import useStyles from "./use-styles";
 import OLMap from "ol/Map";
@@ -8,10 +8,13 @@ import MapboxLayer from "../MapboxLayer";
 import MapContext from "../MapContext";
 import Toolbar from "../Toolbar";
 import Sidebar from "../Sidebar";
+import EditCurationsDialog from "../EditCurationsDialog";
 import { MAP_CONFIG, ENDPOINTS } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
 import { setUser, setToken, setUserId, setUserContent } from "../../actions";
 import { useAuth0 } from "@auth0/auth0-react";
+import useQueryString from "../../hooks/useQueryString";
+import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 
 const App: React.FC = () => {
   const classes = useStyles();
@@ -25,8 +28,17 @@ const App: React.FC = () => {
     (state: ReduxStateConfigProps) => state.user
   );
   const [olMap, setOlMap] = useState(null as OLMap | null);
+  const requestedCurationHashRef = useRef('')
+
+  const qs = useQueryString();
+  const {loadCurationByHash} = useCartoliciousApi();
+
+  const getCurationByHash = async (hash) => {
+    await loadCurationByHash(hash);
+  };
 
   const getUserMetadata = async () => {
+    console.log('geuserdata')
     const domain = "api.cartolicious.com/";
 
     try {
@@ -83,6 +95,7 @@ const App: React.FC = () => {
   };
 
   const getUserContent = async () => {
+    console.log("getusercontent")
     try {
       const userContent = await fetch(`${ENDPOINTS.USER}/${id}/content`, {
         headers: {
@@ -98,6 +111,18 @@ const App: React.FC = () => {
     } finally {
     }
   };
+
+  // useEffect(() => {
+  //   if (qs.length > 0) {
+  //     const [type, hash] = qs[0];
+
+  //     if (requestedCurationHashRef.current === hash) {
+  //       return;
+  //     } 
+  //     requestedCurationHashRef.current = hash;
+  //     getCurationByHash(hash);
+  //   }
+  // }, [qs]);
 
   useEffect(() => {
     dispatch(
@@ -147,6 +172,7 @@ const App: React.FC = () => {
   return (
     <MapContext.Provider value={olMap}>
       <div className={classes.app}>
+        <EditCurationsDialog />
         <Toolbar />
         <div className={classes.mainContent}>
           <MapContainer>

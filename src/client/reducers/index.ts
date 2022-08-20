@@ -8,6 +8,8 @@ import {
   SET_USER_ID,
   SET_USER_CONTENT,
   TOGGLE_SIDEBAR,
+  TOGGLE_CURATIONS_DIALOG,
+  TOGGLE_STYLES_DIALOG,
 } from "../constants";
 import { ReduxActionProps, ReduxStateConfigProps } from "../interfaces";
 
@@ -18,6 +20,8 @@ export const initialState: ReduxStateConfigProps = {
   style_id: null,
   curation_id: null,
   sidebar_open: false,
+  styles_dialog_open: false,
+  curations_dialog_open: false,
   user: {
     id: -1,
     loggedIn: false,
@@ -41,10 +45,22 @@ const rootReducer = (
         background: payload,
       };
     case TOGGLE_SIDEBAR:
-      const status = state.sidebar_open;
+      const { sidebar_open } = state;
       return {
         ...state,
-        sidebar_open: !status,
+        sidebar_open: !sidebar_open,
+      };
+    case TOGGLE_STYLES_DIALOG:
+      const { styles_dialog_open } = state;
+      return {
+        ...state,
+        styles_dialog_open: !styles_dialog_open,
+      };
+    case TOGGLE_CURATIONS_DIALOG:
+      const { curations_dialog_open } = state;
+      return {
+        ...state,
+        curations_dialog_open: !curations_dialog_open,
       };
     case SET_CARTOLICIOUS_STYLES:
       return {
