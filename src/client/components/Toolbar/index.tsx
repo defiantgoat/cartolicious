@@ -1,60 +1,29 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import useStyles from "./use-styles";
 import { APP_NAME } from "../../config";
-import { Button, IconButton } from "@material-ui/core";
-import UserButton from "../UserButton";
-import { setCaroliciousStyles, setBackground } from "../../actions";
 import { ReduxStateConfigProps } from "../../interfaces";
-import { ENDPOINTS } from "../../config";
 import { useAuth0 } from "@auth0/auth0-react";
 import BrushIcon from "@material-ui/icons/BrushSharp";
 import ToolbarButton from "../ToolbarButton";
 import MenuButton from "../MenuButton";
 import { CircularProgress } from "@material-ui/core";
+import useCartoliciousApi from "../../hooks/useCartoliciousApi";
+
 
 const Toolbar: React.FC = () => {
-  const dispatch = useDispatch();
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
-  const { token, loggedIn } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
-  );
+
   const sidebarOpen = useSelector(
     (state: ReduxStateConfigProps) => state.sidebar_open
   );
 
   const { isLoading } = useAuth0();
+  const { loadNewStyle } = useCartoliciousApi();
 
-  const fetchStyles = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(ENDPOINTS.STYLES, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const { data, errors } = await res.json();
-      if (data.length > 0) {
-        const [newStyles, background] = data;
-        const newStyleMap = new Map();
-        Object.entries(newStyles).forEach(([key, value]) =>
-          newStyleMap.set(key, value)
-        );
-        dispatch(setCaroliciousStyles(newStyleMap));
-        dispatch(setBackground(background));
-      }
-      if (errors.length > 0) {
-        console.log(errors);
-      }
-    } catch (e) {
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleRecolor = () => {
-    fetchStyles();
+  const handleRecolor = async () => {
+    await loadNewStyle();
   };
 
   return (

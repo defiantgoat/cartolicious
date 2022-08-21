@@ -10,8 +10,9 @@ import Toolbar from "../Toolbar";
 import Sidebar from "../Sidebar";
 import { MAP_CONFIG, ENDPOINTS } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
-import { setUser, setToken, setUserId, setUserContent } from "../../actions";
+import { setUser, setToken, setUserId } from "../../actions";
 import { useAuth0 } from "@auth0/auth0-react";
+import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 
 const App: React.FC = () => {
   const classes = useStyles();
@@ -21,10 +22,11 @@ const App: React.FC = () => {
   );
   const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const busy = useSelector((state: ReduxStateConfigProps) => state.busy);
-  const { id, token, loggedIn } = useSelector(
+  const { id, token } = useSelector(
     (state: ReduxStateConfigProps) => state.user
   );
   const [olMap, setOlMap] = useState(null as OLMap | null);
+  const {getUserContent} = useCartoliciousApi();
 
   const getUserMetadata = async () => {
     const domain = "api.cartolicious.com/";
@@ -79,23 +81,6 @@ const App: React.FC = () => {
       }
     } catch (e) {
       console.log(e.message);
-    }
-  };
-
-  const getUserContent = async () => {
-    try {
-      const userContent = await fetch(`${ENDPOINTS.USER}/${id}/content`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const { data } = await userContent.json();
-      const [styles, curations] = data;
-      dispatch(setUserContent({ styles, curations }));
-    } catch (e) {
-      console.log(e);
-    } finally {
     }
   };
 
