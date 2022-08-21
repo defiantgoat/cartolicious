@@ -102,6 +102,7 @@ const MapboxLayer: React.FC = () => {
   }, [cartolicious]);
 
   useEffect(() => {
+    console.log("mapboxlayer", cartolicious)
     if (layer.current && cartolicious) {
       stylesRef.current = {};
       setStyles();
