@@ -15,6 +15,22 @@ const MAPBOX_FEATURE_TYPES = {
   LAYER: "layer",
 };
 
+const fill = new Fill({
+  color: 'rgba(0,0,0,1)',
+});
+
+const stroke = new Stroke({
+  color: 'rgba(255, 255, 255, 0.1)',
+  width: 1,
+});
+
+const DEFAULT_STYLE = [
+  new Style({
+    fill: fill,
+    stroke: stroke,
+  }),
+];
+
 const mapboxTileUrlFunction = ([z, x, y]) => {
   const domain = "abcd".substr(((x << z) + y) % 4, 1);
 
@@ -143,6 +159,7 @@ const MapboxLayer: React.FC = () => {
 
       layer.current = new OLVectorTileLayer({
         source: source.current,
+        style: DEFAULT_STYLE
       });
 
       map.addLayer(layer.current);

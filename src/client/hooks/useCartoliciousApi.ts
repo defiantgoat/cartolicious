@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import Collection from 'ol/Collection';
 import { useSelector, useDispatch } from "react-redux";
 import MapContext from "../components/MapContext";
 import { ENDPOINTS } from "../config";
@@ -177,6 +178,7 @@ const useCartoliciousApi = () => {
   };
 
   const loadCurationByHash = async (hash: string) => {
+    setBusy(true);
     try {
       const loadedStyle = await fetch(`${ENDPOINTS.CURATIONS}/hash/${hash}`, {
         headers: {
@@ -197,13 +199,19 @@ const useCartoliciousApi = () => {
         const { background } = json;
         console.log(json);
         const styleMap = mapFromObject(json);
+        console.log(map)
         map?.getView().setCenter([long, lat]);
         map?.getView().setZoom(zoom);
+        map?.getInteractions()?.clear()
+        map?.getControls()?.clear();
+        // console.log(map?.getControls())
         dispatch(setCaroliciousStyles(styleMap));
         dispatch(setBackground(background || [0, 0, 0, 1]));
       }
     } catch (e) {
       console.log(e);
+    }finally {
+      // setBusy(false)
     }
   };
 

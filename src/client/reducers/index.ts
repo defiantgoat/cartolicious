@@ -52,6 +52,7 @@ const rootReducer = (
         cartolicious_styles: payload,
       };
     case SET_BUSY:
+      console.log(payload)
       return {
         ...state,
         busy: payload,
@@ -63,7 +64,6 @@ const rootReducer = (
           ...state.user,
           ...payload,
         },
-        sidebar_open: true,
       };
     case SET_USER_ID:
       return {
