@@ -8,8 +8,10 @@ export const MAP_CONFIG = {
   DEFAULT_CENTER: [-8573959.232998796, 4705918.436640128],
 };
 
+const API_DOMAIN = 'https://api.cartolicious.com/v1' // 'http://localhost:3001/v1'
+
 export const ENDPOINTS = {
-  STYLES: "http://localhost:3001/v1/styles",
-  USER: "http://localhost:3001/v1/users",
-  CURATIONS: "http://localhost:3001/v1/curations",
+  STYLES: `${API_DOMAIN}/styles`,
+  USER: `${API_DOMAIN}/users`,
+  CURATIONS: `${API_DOMAIN}/curations`,
 };
