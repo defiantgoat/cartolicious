@@ -16,8 +16,8 @@ export interface ReduxActionProps {
 export interface Curation {
   id: number;
   name: string;
-  style:{
-    id: number
+  style: {
+    id: number;
   };
 }
 
@@ -30,6 +30,7 @@ export interface ReduxStateConfigProps {
   sidebar_open: boolean;
   styles_dialog_open: boolean;
   curations_dialog_open: boolean;
+  advanced: boolean;
   user: {
     id: number;
     loggedIn: boolean;

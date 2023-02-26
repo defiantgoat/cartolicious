@@ -15,8 +15,11 @@ const Sidebar: React.FC = () => {
   const { details, loggedIn } = useSelector(
     (state: ReduxStateConfigProps) => state.user
   );
+  const advanced = useSelector(
+    (state: ReduxStateConfigProps) => state.advanced
+  );
 
-  return (
+  return advanced ? (
     <div className={classes.sidebar}>
       <div className={classes.sidebarContent}>
         {!loggedIn ? (
@@ -56,7 +59,7 @@ const Sidebar: React.FC = () => {
         )}
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default Sidebar;

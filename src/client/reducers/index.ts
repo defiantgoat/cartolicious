@@ -22,6 +22,7 @@ export const initialState: ReduxStateConfigProps = {
   sidebar_open: false,
   styles_dialog_open: false,
   curations_dialog_open: false,
+  advanced: false,
   user: {
     id: -1,
     loggedIn: false,
@@ -121,6 +122,11 @@ const rootReducer = (
         },
       };
     }
+    case "TEMP_ACCESS":
+      return {
+        ...state,
+        advanced: true,
+      };
     default:
       return state;
   }

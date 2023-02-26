@@ -20,7 +20,7 @@ export const setBackground = (payload: number[]): ReduxActionProps => {
 };
 
 export const setCaroliciousStyles = (payload: any): ReduxActionProps => {
-  console.log(payload)
+  console.log(payload);
   return { type: SET_CARTOLICIOUS_STYLES, payload };
 };
 

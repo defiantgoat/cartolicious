@@ -28,23 +28,19 @@ const App: React.FC = () => {
     (state: ReduxStateConfigProps) => state.user
   );
   const [olMap, setOlMap] = useState(null as OLMap | null);
-  const requestedCurationHashRef = useRef('')
 
-  const qs = useQueryString();
-  const {loadCurationByHash} = useCartoliciousApi();
-
-  const getCurationByHash = async (hash) => {
-    await loadCurationByHash(hash);
-  };
+  const { getTemporaryAccess } = useCartoliciousApi();
 
   const getUserMetadata = async () => {
-    console.log('geuserdata')
+    console.log("geuserdata");
     const domain = "api.cartolicious.com/";
 
     try {
       const accessToken = await getAccessTokenSilently({
-        audience: `https://${domain}`,
-        scope: "get:styles",
+        authorizationParams: {
+          audience: `https://${domain}`,
+          scope: "get:styles",
+        },
       });
 
       dispatch(setToken(accessToken));
@@ -95,7 +91,7 @@ const App: React.FC = () => {
   };
 
   const getUserContent = async () => {
-    console.log("getusercontent")
+    console.log("getusercontent");
     try {
       const userContent = await fetch(`${ENDPOINTS.USER}/${id}/content`, {
         headers: {
@@ -111,18 +107,6 @@ const App: React.FC = () => {
     } finally {
     }
   };
-
-  // useEffect(() => {
-  //   if (qs.length > 0) {
-  //     const [type, hash] = qs[0];
-
-  //     if (requestedCurationHashRef.current === hash) {
-  //       return;
-  //     } 
-  //     requestedCurationHashRef.current = hash;
-  //     getCurationByHash(hash);
-  //   }
-  // }, [qs]);
 
   useEffect(() => {
     dispatch(
@@ -143,6 +127,19 @@ const App: React.FC = () => {
       getUserContent();
     }
   }, [id, token]);
+
+  useEffect(() => {
+    const getAdvanced = async (CZZ3od9pCxZNEtzW: string) => {
+      console.log(CZZ3od9pCxZNEtzW);
+      await getTemporaryAccess(CZZ3od9pCxZNEtzW);
+    };
+
+    const { CZZ3od9pCxZNEtzW } = useQueryString();
+
+    if (CZZ3od9pCxZNEtzW) {
+      getAdvanced(CZZ3od9pCxZNEtzW);
+    }
+  }, []);
 
   useLayoutEffect(() => {
     const view = new OLView({

@@ -37,7 +37,7 @@ const EditCurationsButton: React.FC = () => {
 
 const SaveCuration: React.FC = () => {
   const map = useContext(MapContext);
-  const {saveCuration} = useCartoliciousApi();
+  const { saveCuration } = useCartoliciousApi();
 
   const { token, id } = useSelector(
     (state: ReduxStateConfigProps) => state.user
@@ -55,7 +55,13 @@ const SaveCuration: React.FC = () => {
       const [long, lat] = map.getView().getCenter();
       const zoom = map.getView().getZoom();
 
-      const {status, errors, data} = await saveCuration({styles, background: currentBackground, long, lat, zoom});
+      const { status, errors, data } = await saveCuration({
+        styles,
+        background: currentBackground,
+        long,
+        lat,
+        zoom,
+      });
       console.log(status, errors, data);
     }
   };
@@ -70,7 +76,7 @@ const SaveCuration: React.FC = () => {
 const CurationsSection: React.FC = () => {
   const dispatch = useDispatch();
   const map = useContext(MapContext);
-  const {loadCuration} = useCartoliciousApi();
+  const { loadCuration } = useCartoliciousApi();
 
   const [currentCuration, setCurrentCuration] = useState(-1);
 

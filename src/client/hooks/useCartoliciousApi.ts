@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import MapContext from "../components/MapContext";
 import { ENDPOINTS } from "../config";
@@ -8,7 +8,7 @@ import {
   setCaroliciousStyles,
   setBackground,
   toggleCurationsDialog,
-  setBusy
+  setBusy,
 } from "../actions";
 
 const useCartoliciousApi = () => {
@@ -54,7 +54,7 @@ const useCartoliciousApi = () => {
     }
   };
 
-  const loadStyleById = async ({id: styleId}: {id: string}) => {
+  const loadStyleById = async ({ id: styleId }: { id: string }) => {
     dispatch(setBusy(true));
     try {
       const loadedStyle = await fetch(`${ENDPOINTS.STYLES}/${id}`, {
@@ -75,7 +75,7 @@ const useCartoliciousApi = () => {
     }
   };
 
-  const deleteCuration = async ({id: curationId}) => {
+  const deleteCuration = async ({ id: curationId }) => {
     const response = await fetch(`${ENDPOINTS.CURATIONS}/${curationId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -88,10 +88,10 @@ const useCartoliciousApi = () => {
     });
 
     const { status, data, errors } = await response.json();
-    return({status, data, errors});
+    return { status, data, errors };
   };
 
-  const updateCuration = async ({id: curationId, name}) => {
+  const updateCuration = async ({ id: curationId, name }) => {
     const response = await fetch(`${ENDPOINTS.CURATIONS}/${curationId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -100,39 +100,39 @@ const useCartoliciousApi = () => {
       method: "PATCH",
       body: JSON.stringify({
         user_id: id,
-        name
+        name,
       }),
     });
 
     const { status, data, errors } = await response.json();
-    return({status, data, errors});
+    return { status, data, errors };
   };
 
-  const saveCuration = async ({styles, background, long, lat, zoom}) => {
-      const saveCuration = await fetch(ENDPOINTS.CURATIONS, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+  const saveCuration = async ({ styles, background, long, lat, zoom }) => {
+    const saveCuration = await fetch(ENDPOINTS.CURATIONS, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({
+        user_id: id,
+        style_id: null,
+        lat,
+        long,
+        zoom,
+        name: null,
+        shared: true,
+        styles: {
+          ...styles,
+          background,
         },
-        method: "POST",
-        body: JSON.stringify({
-          user_id: id,
-          style_id: null,
-          lat,
-          long,
-          zoom,
-          name: null,
-          shared: true,
-          styles: {
-            ...styles,
-            background,
-          },
-        }),
-      });
-  
-      const { status, data, errors } = await saveCuration.json();
-  
-      return {status, data, errors};
+      }),
+    });
+
+    const { status, data, errors } = await saveCuration.json();
+
+    return { status, data, errors };
   };
 
   const loadCurationByHash = async (hash: string) => {
@@ -154,7 +154,7 @@ const useCartoliciousApi = () => {
           zoom,
         } = curation;
         const { background } = json;
-        console.log(json)
+        console.log(json);
         const styleMap = mapFromObject(json);
         map?.getView().setCenter([long, lat]);
         map?.getView().setZoom(zoom);
@@ -163,7 +163,7 @@ const useCartoliciousApi = () => {
       }
     } catch (e) {
       console.log(e);
-    } 
+    }
   };
 
   const loadCuration = async (id: string) => {
@@ -194,7 +194,23 @@ const useCartoliciousApi = () => {
       }
     } catch (e) {
       console.log(e);
-    } 
+    }
+  };
+
+  const getTemporaryAccess = async (tempKey: string) => {
+    try {
+      dispatch(setBusy(true));
+      const tempAccess = await fetch(`${ENDPOINTS.USER}/temporary/${tempKey}`);
+      const { data } = await tempAccess.json();
+      const [ok] = data;
+      if (ok === true) {
+        dispatch({ type: "TEMP_ACCESS", payload: true });
+      }
+    } catch (e) {
+      console.log("getTemporaryAccess error", e);
+    } finally {
+      dispatch(setBusy(false));
+    }
   };
 
   return {
@@ -204,9 +220,9 @@ const useCartoliciousApi = () => {
     deleteCuration,
     loadCurationByHash,
     loadStyleById,
-    loadNewStyle
-  }
+    loadNewStyle,
+    getTemporaryAccess,
+  };
 };
 
 export default useCartoliciousApi;
-

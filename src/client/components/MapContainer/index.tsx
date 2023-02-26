@@ -7,6 +7,7 @@ import { setCaroliciousStyles, setBackground, setBusy } from "../../actions";
 import useQueryString from "../../hooks/useQueryString";
 import useStyles from "./use-styles";
 import "ol/ol.css";
+import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 
 interface MapContainerProps {
   children?: React.ReactNode;
@@ -21,36 +22,57 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
   );
   const { token } = useSelector((state: ReduxStateConfigProps) => state.user);
 
-  const fetchStyles = async () => {
-    dispatch(setBusy(true));
-    try {
-      const res = await fetch(ENDPOINTS.STYLES, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const { data, errors } = await res.json();
-      if (data.length > 0) {
-        const [newStyles, background] = data;
-        const newStyleMap = new Map();
-        Object.entries(newStyles).forEach(([key, value]) =>
-          newStyleMap.set(key, value)
-        );
-        dispatch(setCaroliciousStyles(newStyleMap));
-        dispatch(setBackground(background));
-      }
-      if (errors.length > 0) {
-        console.log(errors);
-      }
-    } catch (e) {
-    } finally {
-      dispatch(setBusy(false));
-    }
+  // const fetchStyles = async () => {
+  //   dispatch(setBusy(true));
+  //   try {
+  //     const res = await fetch(ENDPOINTS.STYLES, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     const { data, errors } = await res.json();
+  //     if (data.length > 0) {
+  //       const [newStyles, background] = data;
+  //       const newStyleMap = new Map();
+  //       Object.entries(newStyles).forEach(([key, value]) =>
+  //         newStyleMap.set(key, value)
+  //       );
+  //       dispatch(setCaroliciousStyles(newStyleMap));
+  //       dispatch(setBackground(background));
+  //     }
+  //     if (errors.length > 0) {
+  //       console.log(errors);
+  //     }
+  //   } catch (e) {
+  //   } finally {
+  //     dispatch(setBusy(false));
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchStyles();
+  // }, []);
+
+  const { loadNewStyle, loadCurationByHash } = useCartoliciousApi();
+
+  const fetchStyle = async () => {
+    await loadNewStyle();
+  };
+
+  const fetchCuration = async (hash: string) => {
+    await loadCurationByHash(hash);
   };
 
   useEffect(() => {
-    fetchStyles();
-  }, []);
+    if (map) {
+      const { curation } = useQueryString();
+      if (curation) {
+        fetchCuration(curation);
+      } else {
+        fetchStyle();
+      }
+    }
+  }, [map]);
 
   return (
     <>

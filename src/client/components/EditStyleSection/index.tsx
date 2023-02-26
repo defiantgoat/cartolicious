@@ -12,19 +12,20 @@ import SidebarSection from "../SidebarSection";
 import { mapFromObject, objectFromMap } from "../../lib/utils";
 import { CartoliciousInput } from "../../lib/theme";
 
-const StyleDisplay: React.FC<{ style: CartoliciousFill | CartoliciousStroke }> =
-  ({ style }) => {
-    const [r, g, b, alpha] = style;
-    return (
-      <div
-        style={{
-          backgroundColor: `rgba(${r}, ${g}, ${b}, ${alpha})`,
-          width: "1rem",
-          height: "1rem",
-        }}
-      ></div>
-    );
-  };
+const StyleDisplay: React.FC<{
+  style: CartoliciousFill | CartoliciousStroke;
+}> = ({ style }) => {
+  const [r, g, b, alpha] = style;
+  return (
+    <div
+      style={{
+        backgroundColor: `rgba(${r}, ${g}, ${b}, ${alpha})`,
+        width: "1rem",
+        height: "1rem",
+      }}
+    ></div>
+  );
+};
 
 const EditStyleSection: React.FC = () => {
   const dispatch = useDispatch();

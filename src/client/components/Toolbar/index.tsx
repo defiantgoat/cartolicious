@@ -17,6 +17,9 @@ const Toolbar: React.FC = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
+  const advanced = useSelector(
+    (state: ReduxStateConfigProps) => state.advanced
+  );
   const { token, loggedIn } = useSelector(
     (state: ReduxStateConfigProps) => state.user
   );
@@ -71,12 +74,14 @@ const Toolbar: React.FC = () => {
           </ToolbarButton>
         </div>
 
-        <div
-          className={classes.buttonContainer}
-          style={{ backgroundColor: sidebarOpen ? "#222" : "transparent" }}
-        >
-          {isLoading ? <CircularProgress color="primary" /> : <MenuButton />}
-        </div>
+        {advanced ? (
+          <div
+            className={classes.buttonContainer}
+            style={{ backgroundColor: sidebarOpen ? "#222" : "transparent" }}
+          >
+            {isLoading ? <CircularProgress color="primary" /> : <MenuButton />}
+          </div>
+        ) : null}
       </div>
     </div>
   );
