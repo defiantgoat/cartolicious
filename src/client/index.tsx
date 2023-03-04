@@ -12,8 +12,6 @@ render(
   <Auth0Provider
     domain="dev-785wn7ma.us.auth0.com"
     clientId="s6F3LbFaqZrZMYD3vb1JFirj8792vyYC"
-    // audience="https://api.cartolicious.com/"
-    // scope="read:current_user get:styles"
     authorizationParams={{ redirect_uri: window.location.origin }}
   >
     <Provider store={store}>
