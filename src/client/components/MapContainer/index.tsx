@@ -39,7 +39,7 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
         fetchStyle();
       }
     }
-  }, [map]);
+  }, [map, window.location.search]);
 
   return (
     <>

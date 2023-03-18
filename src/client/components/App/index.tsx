@@ -32,7 +32,6 @@ const App: React.FC = () => {
   const { getTemporaryAccess } = useCartoliciousApi();
 
   const getUserMetadata = async () => {
-    console.log("geuserdata");
     const domain = "api.cartolicious.com/";
 
     try {
@@ -91,7 +90,6 @@ const App: React.FC = () => {
   };
 
   const getUserContent = async () => {
-    console.log("getusercontent");
     try {
       const userContent = await fetch(`${ENDPOINTS.USER}/${id}/content`, {
         headers: {
@@ -130,7 +128,6 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const getAdvanced = async (CZZ3od9pCxZNEtzW: string) => {
-      console.log(CZZ3od9pCxZNEtzW);
       await getTemporaryAccess(CZZ3od9pCxZNEtzW);
     };
 
@@ -139,7 +136,7 @@ const App: React.FC = () => {
     if (CZZ3od9pCxZNEtzW) {
       getAdvanced(CZZ3od9pCxZNEtzW);
     }
-  }, []);
+  }, [window.location.search]);
 
   useLayoutEffect(() => {
     const view = new OLView({

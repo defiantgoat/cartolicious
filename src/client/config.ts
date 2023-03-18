@@ -8,7 +8,11 @@ export const MAP_CONFIG = {
   DEFAULT_CENTER: [-8573959.232998796, 4705918.436640128],
 };
 
-const API_DOMAIN = "http://localhost:3001/v1"; //'https://api.cartolicious.com/v1' //
+// dev
+// const API_DOMAIN = "http://localhost:3001/v1"
+
+// prod
+const API_DOMAIN = 'https://api.cartolicious.com/v1'
 
 export const ENDPOINTS = {
   STYLES: `${API_DOMAIN}/styles`,
