@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, JSX } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Select, FormControl, Checkbox } from "@material-ui/core";
 import { ENDPOINTS } from "../../config";
@@ -32,15 +32,15 @@ const EditStyleSection: React.FC = () => {
   const [currentStyle, setCurrentStyle] = useState("");
   const [currentAttribute, setCurrentAttribute] = useState("");
   const [currentAttributeFill, setCurrentAttributeFill] = useState(
-    [] as CartoliciousFill // [r, g, b, alpha, visible]
+    [] as CartoliciousFill, // [r, g, b, alpha, visible]
   );
   const [currentAttributeStroke, setCurrentAttributeStroke] = useState(
-    [] as CartoliciousStroke // [r, g, b, alpha, visible, width]
+    [] as CartoliciousStroke, // [r, g, b, alpha, visible, width]
   );
   const [currentAttributeVisible, setCurrentAttributeVisible] = useState(0);
 
   const cartolicious = useSelector(
-    (state: ReduxStateConfigProps) => state.cartolicious_styles
+    (state: ReduxStateConfigProps) => state.cartolicious_styles,
   );
 
   const createOptions = (): JSX.Element[] => {
@@ -55,7 +55,7 @@ const EditStyleSection: React.FC = () => {
         options.push(
           <option key={`attribute-${key}`} value={key}>
             {key.replace("_", " ").toUpperCase()}
-          </option>
+          </option>,
         );
       });
     }

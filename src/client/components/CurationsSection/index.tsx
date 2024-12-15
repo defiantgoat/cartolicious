@@ -1,13 +1,7 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, JSX } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Button,
-  Select,
-  FormControl,
-  IconButton,
-  Dialog,
-} from "@material-ui/core";
-import EditRounded from "@material-ui/icons/EditRounded";
+import { Button, Select, FormControl, IconButton, Dialog } from "@mui/material";
+import EditRounded from "@mui/icons-material/EditRounded";
 import MapContext from "../MapContext";
 import { ENDPOINTS } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
@@ -40,13 +34,13 @@ const SaveCuration: React.FC = () => {
   const { saveCuration } = useCartoliciousApi();
 
   const { token, id } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
+    (state: ReduxStateConfigProps) => state.user,
   );
   const currentStyles = useSelector(
-    (state: ReduxStateConfigProps) => state.cartolicious_styles
+    (state: ReduxStateConfigProps) => state.cartolicious_styles,
   );
   const currentBackground = useSelector(
-    (state: ReduxStateConfigProps) => state.background
+    (state: ReduxStateConfigProps) => state.background,
   );
 
   const handleSave = async () => {
@@ -81,7 +75,7 @@ const CurationsSection: React.FC = () => {
   const [currentCuration, setCurrentCuration] = useState(-1);
 
   const { token, curations } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
+    (state: ReduxStateConfigProps) => state.user,
   );
 
   const createOptions = (): JSX.Element[] => {
@@ -95,8 +89,8 @@ const CurationsSection: React.FC = () => {
       options.push(
         <option key={`curation-${i}`} value={id}>
           {name}
-        </option>
-      )
+        </option>,
+      ),
     );
 
     return options;

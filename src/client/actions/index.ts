@@ -15,58 +15,58 @@ import {
 } from "../constants";
 import { ReduxActionProps } from "../interfaces";
 
-export const setBackground = (payload: number[]): ReduxActionProps => {
+export const setBackground = (payload: number[]): any => {
   return { type: SET_BACKGROUND, payload };
 };
 
-export const setCaroliciousStyles = (payload: any): ReduxActionProps => {
+export const setCaroliciousStyles = (payload: any): any => {
   console.log(payload);
   return { type: SET_CARTOLICIOUS_STYLES, payload };
 };
 
-export const setBusy = (payload: boolean): ReduxActionProps => {
+export const setBusy = (payload: boolean): any => {
   return { type: SET_BUSY, payload };
 };
 
-export const setUser = (payload: any): ReduxActionProps => {
+export const setUser = (payload: any): any => {
   return { type: SET_USER_DATA, payload };
 };
 
-export const setToken = (payload: string): ReduxActionProps => {
+export const setToken = (payload: string): any => {
   return { type: SET_TOKEN, payload };
 };
 
-export const logOut = (): ReduxActionProps => {
+export const logOut = (): any => {
   return { type: SET_LOGGED_OUT, payload: null };
 };
 
-export const setUserId = (payload: any): ReduxActionProps => {
+export const setUserId = (payload: any): any => {
   return { type: SET_USER_ID, payload };
 };
 
 export const setUserContent = (payload: {
   styles: any[];
   curations: any[];
-}): ReduxActionProps => {
+}): any => {
   return { type: SET_USER_CONTENT, payload };
 };
 
-export const setStyleId = (payload: number): ReduxActionProps => {
+export const setStyleId = (payload: number): any => {
   return { type: SET_STYLE_ID, payload };
 };
 
-export const setCurationId = (payload: number): ReduxActionProps => {
+export const setCurationId = (payload: number): any => {
   return { type: SET_CURATION_ID, payload };
 };
 
-export const toggleSidebar = (): ReduxActionProps => {
+export const toggleSidebar = (): any => {
   return { type: TOGGLE_SIDEBAR, payload: null };
 };
 
-export const toggleStylesDialog = (): ReduxActionProps => {
+export const toggleStylesDialog = (): any => {
   return { type: TOGGLE_STYLES_DIALOG, payload: null };
 };
 
-export const toggleCurationsDialog = (): ReduxActionProps => {
+export const toggleCurationsDialog = (): any => {
   return { type: TOGGLE_CURATIONS_DIALOG, payload: null };
 };

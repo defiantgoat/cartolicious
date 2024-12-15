@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, JSX } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Select, FormControl, IconButton } from "@material-ui/core";
 import EditRounded from "@material-ui/icons/EditRounded";
@@ -19,13 +19,13 @@ const EditStylesButton: React.FC = () => {
 
 const SaveStyleButton: React.FC = () => {
   const { token, id } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
+    (state: ReduxStateConfigProps) => state.user,
   );
   const currentStyles = useSelector(
-    (state: ReduxStateConfigProps) => state.cartolicious_styles
+    (state: ReduxStateConfigProps) => state.cartolicious_styles,
   );
   const currentBackground = useSelector(
-    (state: ReduxStateConfigProps) => state.background
+    (state: ReduxStateConfigProps) => state.background,
   );
 
   const handleSave = async () => {
@@ -65,7 +65,7 @@ const StylesSection: React.FC = () => {
   const [currentStyle, setCurrentStyle] = useState(-1);
 
   const { token, styles } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
+    (state: ReduxStateConfigProps) => state.user,
   );
 
   const createOptions = (): JSX.Element[] => {
@@ -79,8 +79,8 @@ const StylesSection: React.FC = () => {
       options.push(
         <option key={`style-${i}`} value={id}>
           {`Style ${id}`}
-        </option>
-      )
+        </option>,
+      ),
     );
 
     return options;

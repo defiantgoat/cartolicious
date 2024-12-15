@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, JSX } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Dialog,
@@ -53,7 +53,7 @@ const CurationItem: React.FC<{ curation: Curation }> = ({ curation }) => {
   };
 
   const { token, curations } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
+    (state: ReduxStateConfigProps) => state.user,
   );
 
   return !deleted ? (
@@ -118,11 +118,11 @@ const EditCurationsDialog: React.FC = () => {
   const dispatch = useDispatch();
 
   const open = useSelector(
-    (state: ReduxStateConfigProps) => state.curations_dialog_open
+    (state: ReduxStateConfigProps) => state.curations_dialog_open,
   );
 
   const { curations } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
+    (state: ReduxStateConfigProps) => state.user,
   );
 
   const handleClose = (event: object, reason: string) => {
@@ -134,7 +134,7 @@ const EditCurationsDialog: React.FC = () => {
 
     curations.forEach((curation, i) =>
       options.push(
-        <CurationItem curation={curation} />
+        <CurationItem curation={curation} />,
         // <ListItem key={`curation-${i}`} style={{borderBottom: "1px solid #ccc", display:"flex"}}>
         //   <div style={{display: "flex", flex: 1}}>
         //     <div style={{flexGrow: 1, display: "flex", alignItems: "center"}}>
@@ -147,7 +147,7 @@ const EditCurationsDialog: React.FC = () => {
         //     </div>
         //     </div>
         // </ListItem>
-      )
+      ),
     );
 
     return options;

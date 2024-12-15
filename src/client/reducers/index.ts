@@ -35,7 +35,7 @@ export const initialState: ReduxStateConfigProps = {
 
 const rootReducer = (
   state = initialState,
-  action: ReduxActionProps
+  action: any,
 ): ReduxStateConfigProps => {
   const { payload } = action as any;
 
