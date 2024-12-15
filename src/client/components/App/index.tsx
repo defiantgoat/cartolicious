@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useState, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import useStyles from "./use-styles";
 import OLMap from "ol/Map";
@@ -11,10 +11,12 @@ import Sidebar from "../Sidebar";
 import EditCurationsDialog from "../EditCurationsDialog";
 import { MAP_CONFIG, ENDPOINTS } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
-import { setUser, setToken, setUserId, setUserContent } from "../../actions";
-import { useAuth0 } from "@auth0/auth0-react";
+import { setUserId, setUserContent } from "../../actions";
 import useQueryString from "../../hooks/useQueryString";
 import useCartoliciousApi from "../../hooks/useCartoliciousApi";
+import useUser from "../../hooks/useUser";
+import { onAuthStateChanged, getAuth, User } from "firebase/auth";
+import FirebaseContext from "../Firebase/context";
 
 const App: React.FC = () => {
   const classes = useStyles();
@@ -22,11 +24,11 @@ const App: React.FC = () => {
   const sidebarOpen = useSelector(
     (state: ReduxStateConfigProps) => state.sidebar_open
   );
-  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const busy = useSelector((state: ReduxStateConfigProps) => state.busy);
-  const { id, token, loggedIn } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
-  );
+  const firebaseApp = useContext(FirebaseContext);
+
+  const { user, setUser } = useUser();
+
   const [olMap, setOlMap] = useState(null as OLMap | null);
 
   const { getTemporaryAccess } = useCartoliciousApi();
@@ -35,20 +37,11 @@ const App: React.FC = () => {
     const domain = "api.cartolicious.com/";
 
     try {
-      const accessToken = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: `https://${domain}`,
-          scope: "get:styles",
-        },
-      });
-
-      dispatch(setToken(accessToken));
-
-      const userDetailsByIdUrl = `${ENDPOINTS.USER}/${user?.sub}`;
+      const userDetailsByIdUrl = `${ENDPOINTS.USER}/${user?.uid}`;
 
       const metadataResponse = await fetch(userDetailsByIdUrl, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${user?.token}`,
         },
       });
 
@@ -58,18 +51,16 @@ const App: React.FC = () => {
         const [error] = errors;
 
         if (error === "User does not exist" && user) {
-          const { sub, given_name, family_name, email } = user;
+          const { uid, token } = user;
           const newUser = await fetch(ENDPOINTS.USER, {
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
             method: "POST",
             body: JSON.stringify({
-              sub,
-              given_name,
-              family_name,
-              email,
+              uid,
+              email: "",
             }),
           });
 
@@ -91,11 +82,14 @@ const App: React.FC = () => {
 
   const getUserContent = async () => {
     try {
-      const userContent = await fetch(`${ENDPOINTS.USER}/${id}/content`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const userContent = await fetch(
+        `${ENDPOINTS.USER}/${user?._id}/content`,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        }
+      );
 
       const { data } = await userContent.json();
       const [styles, curations] = data;
@@ -107,24 +101,38 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch(
+    const handleUserInfo = async (user: User) => {
+      const accessToken = await user?.getIdToken();
       setUser({
-        loggedIn: isAuthenticated,
-        token: "",
+        uid: user?.uid,
+        loggedIn: true,
         details: user,
-      })
-    );
+        token: accessToken,
+        email: user?.email,
+      });
+    };
 
-    if (user && isAuthenticated) {
-      getUserMetadata();
+    console.log(firebaseApp);
+
+    if (firebaseApp) {
+      const auth = getAuth(firebaseApp);
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+          handleUserInfo(user);
+        } else {
+          console.log("no user");
+        }
+      });
+      return unsubscribe;
     }
-  }, [user, isAuthenticated]);
+    return () => null;
+  }, [firebaseApp]);
 
   useEffect(() => {
-    if (id > -1 && token > "") {
+    if (user?.id > -1 && user?.token > "") {
       getUserContent();
     }
-  }, [id, token]);
+  }, [user]);
 
   useEffect(() => {
     const getAdvanced = async (CZZ3od9pCxZNEtzW: string) => {

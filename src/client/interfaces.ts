@@ -33,6 +33,8 @@ export interface ReduxStateConfigProps {
   advanced: boolean;
   user: {
     id: number;
+    _id: string;
+    uid: string;
     loggedIn: boolean;
     token: string;
     details: any;

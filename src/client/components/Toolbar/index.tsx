@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useStyles from "./use-styles";
 import { APP_NAME } from "../../config";
 import { Button, IconButton } from "@material-ui/core";
-import UserButton from "../UserButton";
 import { setCaroliciousStyles, setBackground } from "../../actions";
 import { ReduxStateConfigProps } from "../../interfaces";
 import { ENDPOINTS } from "../../config";
@@ -12,6 +11,9 @@ import BrushIcon from "@material-ui/icons/BrushSharp";
 import ToolbarButton from "../ToolbarButton";
 import MenuButton from "../MenuButton";
 import { CircularProgress } from "@material-ui/core";
+import FirebaseContext from "../Firebase/context";
+import useUser from "../../hooks/useUser";
+import UserButton from "./UserButton";
 
 const Toolbar: React.FC = () => {
   const dispatch = useDispatch();
@@ -23,11 +25,17 @@ const Toolbar: React.FC = () => {
   const { token, loggedIn } = useSelector(
     (state: ReduxStateConfigProps) => state.user
   );
+  const { user } = useUser();
   const sidebarOpen = useSelector(
     (state: ReduxStateConfigProps) => state.sidebar_open
   );
 
   const { isLoading } = useAuth0();
+  const firebaseApp = useContext(FirebaseContext);
+
+  console.log("firebaseApp", firebaseApp);
+
+  // Initialize Firebase Authentication and get a reference to the service
 
   const fetchStyles = async () => {
     setLoading(true);
@@ -74,12 +82,12 @@ const Toolbar: React.FC = () => {
           </ToolbarButton>
         </div>
 
-        {advanced ? (
+        {firebaseApp ? (
           <div
             className={classes.buttonContainer}
             style={{ backgroundColor: sidebarOpen ? "#222" : "transparent" }}
           >
-            {isLoading ? <CircularProgress color="primary" /> : <MenuButton />}
+            {user?.loggedIn ? <MenuButton /> : <UserButton />}
           </div>
         ) : null}
       </div>

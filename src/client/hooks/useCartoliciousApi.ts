@@ -209,6 +209,7 @@ const useCartoliciousApi = () => {
     } catch (e) {
       console.log("getTemporaryAccess error", e);
     } finally {
+      dispatch({ type: "TEMP_ACCESS", payload: true });
       dispatch(setBusy(false));
     }
   };

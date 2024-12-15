@@ -4,7 +4,7 @@ import { toggleSidebar } from "../../actions";
 import Menu from "@material-ui/icons/Menu";
 import ToolbarButton from "../ToolbarButton";
 
-const UserButton: React.FC = () => {
+const MenuButton: React.FC = () => {
   const dispatch = useDispatch();
 
   const handleSidebarToggle = () => dispatch(toggleSidebar());
@@ -16,4 +16,4 @@ const UserButton: React.FC = () => {
   );
 };
 
-export default UserButton;
+export default MenuButton;

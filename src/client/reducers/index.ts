@@ -25,6 +25,8 @@ export const initialState: ReduxStateConfigProps = {
   advanced: false,
   user: {
     id: -1,
+    _id: "",
+    uid: "",
     loggedIn: false,
     details: null,
     token: "",
@@ -35,7 +37,7 @@ export const initialState: ReduxStateConfigProps = {
 
 const rootReducer = (
   state = initialState,
-  action: ReduxActionProps
+  action: ReduxActionProps,
 ): ReduxStateConfigProps => {
   const { payload } = action as any;
 
@@ -74,6 +76,7 @@ const rootReducer = (
         busy: payload,
       };
     case SET_USER_DATA:
+      console.log("payload", payload);
       return {
         ...state,
         user: {
@@ -105,11 +108,13 @@ const rootReducer = (
         ...state,
         user: {
           id: -1,
+          _id: "",
           loggedIn: false,
           token: "",
           details: null,
           styles: [],
           curations: [],
+          uid: "",
         },
         sidebar_open: false,
       };
