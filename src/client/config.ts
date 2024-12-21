@@ -9,10 +9,10 @@ export const MAP_CONFIG = {
 };
 
 // dev
-// const API_DOMAIN = "http://localhost:3001/v1";
+const API_DOMAIN = "http://localhost:3001/v1";
 
 // prod
-const API_DOMAIN = "https://cartolicious-api.onrender.com/v1";
+// const API_DOMAIN = "https://cartolicious-api.onrender.com/v1";
 
 export const ENDPOINTS = {
   STYLES: `${API_DOMAIN}/styles`,

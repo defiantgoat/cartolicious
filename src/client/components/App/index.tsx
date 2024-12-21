@@ -27,69 +27,22 @@ const App: React.FC = () => {
   const busy = useSelector((state: ReduxStateConfigProps) => state.busy);
   const firebaseApp = useContext(FirebaseContext);
 
-  const { user, setUser } = useUser();
+  const { token, user_id, setUser, loggedIn, uid } = useUser();
 
   const [olMap, setOlMap] = useState(null as OLMap | null);
 
   const { getTemporaryAccess } = useCartoliciousApi();
 
-  const getUserMetadata = async () => {
-    const domain = "api.cartolicious.com/";
-
+  const getUserContent = async ({ user_id, token }) => {
+    if (!user_id || !token) {
+      return;
+    }
     try {
-      const userDetailsByIdUrl = `${ENDPOINTS.USER}/${user?.uid}`;
-
-      const metadataResponse = await fetch(userDetailsByIdUrl, {
+      const userContent = await fetch(`${ENDPOINTS.USER}/${user_id}/content`, {
         headers: {
-          Authorization: `Bearer ${user?.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
-
-      const { status, data, errors } = await metadataResponse.json();
-
-      if (status !== 200) {
-        const [error] = errors;
-
-        if (error === "User does not exist" && user) {
-          const { uid, token } = user;
-          const newUser = await fetch(ENDPOINTS.USER, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify({
-              uid,
-              email: "",
-            }),
-          });
-
-          const { status, data, errors } = await newUser.json();
-          if (status === 200) {
-            const [userData] = data;
-            const { id } = userData;
-            dispatch(setUserId(id));
-          }
-        }
-      } else {
-        const [id] = data;
-        dispatch(setUserId(id));
-      }
-    } catch (e) {
-      console.log(e.message);
-    }
-  };
-
-  const getUserContent = async () => {
-    try {
-      const userContent = await fetch(
-        `${ENDPOINTS.USER}/${user?._id}/content`,
-        {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        }
-      );
 
       const { data } = await userContent.json();
       const [styles, curations] = data;
@@ -99,6 +52,52 @@ const App: React.FC = () => {
     } finally {
     }
   };
+
+  useEffect(() => {
+    if (user_id && token > "") {
+      getUserContent({ user_id, token });
+    }
+  }, [user_id, token]);
+
+  const getUserMetadata = async ({
+    uid,
+    token,
+  }: {
+    uid?: string;
+    token?: string;
+  }) => {
+    if (!uid || !token) {
+      return;
+    }
+
+    try {
+      const userDetailsByIdUrl = `${ENDPOINTS.USER}/${uid}`;
+
+      const metadataResponse = await fetch(userDetailsByIdUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const { status, data, errors } = await metadataResponse.json();
+
+      if (status === 200) {
+        const [_id] = data;
+        dispatch(setUserId(_id));
+      }
+      if (errors && errors.length) {
+        console.log(errors);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  useEffect(() => {
+    if (loggedIn && token && uid) {
+      getUserMetadata({ uid, token });
+    }
+  }, [loggedIn, token, uid]);
 
   useEffect(() => {
     const handleUserInfo = async (user: User) => {
@@ -111,8 +110,6 @@ const App: React.FC = () => {
         email: user?.email,
       });
     };
-
-    console.log(firebaseApp);
 
     if (firebaseApp) {
       const auth = getAuth(firebaseApp);
@@ -127,24 +124,6 @@ const App: React.FC = () => {
     }
     return () => null;
   }, [firebaseApp]);
-
-  useEffect(() => {
-    if (user?.id > -1 && user?.token > "") {
-      getUserContent();
-    }
-  }, [user]);
-
-  useEffect(() => {
-    const getAdvanced = async (CZZ3od9pCxZNEtzW: string) => {
-      await getTemporaryAccess(CZZ3od9pCxZNEtzW);
-    };
-
-    const { CZZ3od9pCxZNEtzW } = useQueryString();
-
-    if (CZZ3od9pCxZNEtzW) {
-      getAdvanced(CZZ3od9pCxZNEtzW);
-    }
-  }, [window.location.search]);
 
   useLayoutEffect(() => {
     const view = new OLView({

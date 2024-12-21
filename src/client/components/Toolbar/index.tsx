@@ -10,32 +10,24 @@ import { useAuth0 } from "@auth0/auth0-react";
 import BrushIcon from "@material-ui/icons/BrushSharp";
 import ToolbarButton from "../ToolbarButton";
 import MenuButton from "../MenuButton";
+import EngageButton from "./EngageButton";
 import { CircularProgress } from "@material-ui/core";
 import FirebaseContext from "../Firebase/context";
 import useUser from "../../hooks/useUser";
 import UserButton from "./UserButton";
 
 const Toolbar: React.FC = () => {
+  const firebaseApp = useContext(FirebaseContext);
+
   const dispatch = useDispatch();
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
-  const advanced = useSelector(
-    (state: ReduxStateConfigProps) => state.advanced
-  );
-  const { token, loggedIn } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
-  );
-  const { user } = useUser();
+
+  const { user, token, loggedIn } = useUser();
+
   const sidebarOpen = useSelector(
     (state: ReduxStateConfigProps) => state.sidebar_open
   );
-
-  const { isLoading } = useAuth0();
-  const firebaseApp = useContext(FirebaseContext);
-
-  console.log("firebaseApp", firebaseApp);
-
-  // Initialize Firebase Authentication and get a reference to the service
 
   const fetchStyles = async () => {
     setLoading(true);
@@ -76,18 +68,19 @@ const Toolbar: React.FC = () => {
 
       <div className={classes.buttonsContainer}>
         {loading && <div style={{ color: "white" }}>Loading</div>}
-        <div className={classes.buttonContainer}>
-          <ToolbarButton onClickHandler={handleRecolor}>
-            <BrushIcon />
-          </ToolbarButton>
-        </div>
-
+        {loggedIn ? (
+          <div className={classes.buttonContainer}>
+            <ToolbarButton onClickHandler={handleRecolor}>
+              <BrushIcon />
+            </ToolbarButton>
+          </div>
+        ) : null}
         {firebaseApp ? (
           <div
             className={classes.buttonContainer}
             style={{ backgroundColor: sidebarOpen ? "#222" : "transparent" }}
           >
-            {user?.loggedIn ? <MenuButton /> : <UserButton />}
+            {loggedIn ? <MenuButton /> : <MenuButton />}
           </div>
         ) : null}
       </div>

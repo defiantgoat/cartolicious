@@ -13,6 +13,15 @@ import {
 } from "../constants";
 import { ReduxActionProps, ReduxStateConfigProps } from "../interfaces";
 
+export const DEFAULT_USER = {
+  user_id: null,
+  loggedIn: false,
+  details: null,
+  token: "",
+  styles: [],
+  curations: [],
+};
+
 export const initialState: ReduxStateConfigProps = {
   background: [0, 0, 0, 1],
   cartolicious_styles: null,
@@ -24,20 +33,13 @@ export const initialState: ReduxStateConfigProps = {
   curations_dialog_open: false,
   advanced: false,
   user: {
-    id: -1,
-    _id: "",
-    uid: "",
-    loggedIn: false,
-    details: null,
-    token: "",
-    styles: [],
-    curations: [],
+    ...DEFAULT_USER,
   },
 };
 
 const rootReducer = (
   state = initialState,
-  action: ReduxActionProps,
+  action: ReduxActionProps
 ): ReduxStateConfigProps => {
   const { payload } = action as any;
 
@@ -90,7 +92,7 @@ const rootReducer = (
         ...state,
         user: {
           ...state.user,
-          id: payload,
+          user_id: payload,
         },
       };
     case SET_USER_CONTENT:
@@ -107,8 +109,7 @@ const rootReducer = (
       return {
         ...state,
         user: {
-          id: -1,
-          _id: "",
+          user_id: null,
           loggedIn: false,
           token: "",
           details: null,
