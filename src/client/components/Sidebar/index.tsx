@@ -1,7 +1,6 @@
 import React from "react";
 import useStyles from "./use-styles";
 import LogoutButton from "../LogoutButton";
-import LoginButton from "../LoginButton";
 import CurationsSection from "../CurationsSection";
 import StylesSection from "../StylesSection";
 import EditStyleSection from "../EditStyleSection";
