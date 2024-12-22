@@ -68,17 +68,22 @@ const rootReducer = (
         curations_dialog_open: !curations_dialog_open,
       };
     case SET_CARTOLICIOUS_STYLES:
-      return {
+      const { styleMap, style_id = null, curation_id = null } = payload;
+      const newState = {
         ...state,
-        cartolicious_styles: payload,
+        cartolicious_styles: styleMap,
+        style_id,
       };
+      if (curation_id) {
+        newState["curation_id"] = curation_id;
+      }
+      return newState;
     case SET_BUSY:
       return {
         ...state,
         busy: payload,
       };
     case SET_USER_DATA:
-      console.log("payload", payload);
       return {
         ...state,
         user: {
@@ -128,11 +133,6 @@ const rootReducer = (
         },
       };
     }
-    case "TEMP_ACCESS":
-      return {
-        ...state,
-        advanced: true,
-      };
     default:
       return state;
   }

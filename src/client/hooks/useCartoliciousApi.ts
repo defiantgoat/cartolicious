@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import MapContext from "../components/MapContext";
 import { ENDPOINTS } from "../config";
@@ -11,17 +11,19 @@ import {
   setBusy,
 } from "../actions";
 
+import useUser from "./useUser";
+
 const useCartoliciousApi = () => {
   const map = useContext(MapContext);
   const dispatch = useDispatch();
 
-  const { token, id } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
-  );
+  const { token, user_id } = useUser();
 
   const currentStyles = useSelector(
     (state: ReduxStateConfigProps) => state.cartolicious_styles
   );
+
+  const styleId = useSelector((state: ReduxStateConfigProps) => state.style_id);
 
   // const currentBackground = useSelector(
   //   (state: ReduxStateConfigProps) => state.background
@@ -42,7 +44,7 @@ const useCartoliciousApi = () => {
         Object.entries(newStyles).forEach(([key, value]) =>
           newStyleMap.set(key, value)
         );
-        dispatch(setCaroliciousStyles(newStyleMap));
+        dispatch(setCaroliciousStyles({ styleMap: newStyleMap }));
         dispatch(setBackground(background));
       }
       if (errors.length > 0) {
@@ -54,10 +56,10 @@ const useCartoliciousApi = () => {
     }
   };
 
-  const loadStyleById = async ({ id: styleId }: { id: string }) => {
+  const loadStyleById = async ({ _id: styleId }: { _id: string }) => {
     dispatch(setBusy(true));
     try {
-      const loadedStyle = await fetch(`${ENDPOINTS.STYLES}/${id}`, {
+      const loadedStyle = await fetch(`${ENDPOINTS.STYLES}/${styleId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -67,7 +69,7 @@ const useCartoliciousApi = () => {
       const [style] = data;
       const { background } = style;
       const styleMap = mapFromObject(style);
-      dispatch(setCaroliciousStyles(styleMap));
+      dispatch(setCaroliciousStyles({ styleMap, style_id: styleId }));
       dispatch(setBackground(background || [0, 0, 0, 1]));
     } catch (e) {
     } finally {
@@ -75,7 +77,7 @@ const useCartoliciousApi = () => {
     }
   };
 
-  const deleteCuration = async ({ id: curationId }) => {
+  const deleteCuration = async ({ _id: curationId }) => {
     const response = await fetch(`${ENDPOINTS.CURATIONS}/${curationId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -83,7 +85,7 @@ const useCartoliciousApi = () => {
       },
       method: "DELETE",
       body: JSON.stringify({
-        user_id: id,
+        user_id,
       }),
     });
 
@@ -91,7 +93,7 @@ const useCartoliciousApi = () => {
     return { status, data, errors };
   };
 
-  const updateCuration = async ({ id: curationId, name }) => {
+  const updateCuration = async ({ _id: curationId, name }) => {
     const response = await fetch(`${ENDPOINTS.CURATIONS}/${curationId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -99,7 +101,7 @@ const useCartoliciousApi = () => {
       },
       method: "PATCH",
       body: JSON.stringify({
-        user_id: id,
+        user_id,
         name,
       }),
     });
@@ -116,8 +118,8 @@ const useCartoliciousApi = () => {
       },
       method: "POST",
       body: JSON.stringify({
-        user_id: id,
-        style_id: null,
+        user_id,
+        style_id: styleId || null,
         lat,
         long,
         zoom,
@@ -158,7 +160,9 @@ const useCartoliciousApi = () => {
         const styleMap = mapFromObject(json);
         map?.getView().setCenter([long, lat]);
         map?.getView().setZoom(zoom);
-        dispatch(setCaroliciousStyles(styleMap));
+        dispatch(
+          setCaroliciousStyles({ styleMap, style_id: curation?.style?._id })
+        );
         dispatch(setBackground(background || [0, 0, 0, 1]));
       }
     } catch (e) {
@@ -166,9 +170,9 @@ const useCartoliciousApi = () => {
     }
   };
 
-  const loadCuration = async (id: string) => {
+  const loadCuration = async (_id: string) => {
     try {
-      const loadedStyle = await fetch(`${ENDPOINTS.CURATIONS}/${id}`, {
+      const loadedStyle = await fetch(`${ENDPOINTS.CURATIONS}/${_id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -189,7 +193,13 @@ const useCartoliciousApi = () => {
         const styleMap = mapFromObject(json);
         map?.getView().setCenter([long, lat]);
         map?.getView().setZoom(zoom);
-        dispatch(setCaroliciousStyles(styleMap));
+        dispatch(
+          setCaroliciousStyles({
+            styleMap,
+            style_id: curation?.style?._id,
+            curation_id: curation?._id,
+          })
+        );
         dispatch(setBackground(background || [0, 0, 0, 1]));
       }
     } catch (e) {

@@ -18,19 +18,19 @@ import {
 import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 
 const CurationItem: React.FC<{ curation: Curation }> = ({ curation }) => {
-  const { id, name, style } = curation;
+  const { _id, name, style } = curation;
   const [editName, setEditName] = useState(false);
   const [deleted, setDeleted] = useState(false);
   const [curationName, setCurationName] = useState(name);
   const { loadCuration, updateCuration, deleteCuration } = useCartoliciousApi();
 
   const handleLoadCuration = () => {
-    loadCuration(`${id}`);
+    loadCuration(_id);
   };
 
   const handleUpdateCuration = async () => {
     const { status, data, errors } = await updateCuration({
-      id,
+      _id,
       name: curationName,
     });
     if (status === 200) {
@@ -40,7 +40,7 @@ const CurationItem: React.FC<{ curation: Curation }> = ({ curation }) => {
   };
 
   const handleDeleteCuration = async () => {
-    const { status, data, errors } = await deleteCuration({ id });
+    const { status, data, errors } = await deleteCuration({ _id });
     console.log(status, data, errors);
     if (status === 200) {
       setDeleted(true);
@@ -58,7 +58,7 @@ const CurationItem: React.FC<{ curation: Curation }> = ({ curation }) => {
 
   return !deleted ? (
     <ListItem
-      key={`curation-${id}`}
+      key={`curation-${_id}`}
       style={{ borderBottom: "1px solid #ccc", display: "flex" }}
     >
       <div style={{ display: "flex", flex: 1 }}>
@@ -106,7 +106,7 @@ const CurationItem: React.FC<{ curation: Curation }> = ({ curation }) => {
     </ListItem>
   ) : (
     <ListItem
-      key={`curation-${id}`}
+      key={`curation-${_id}`}
       style={{ borderBottom: "1px solid #ccc", display: "flex" }}
     >
       <p>deleted</p>

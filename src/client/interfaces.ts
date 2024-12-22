@@ -14,10 +14,10 @@ export interface ReduxActionProps {
 }
 
 export interface Curation {
-  id: number;
+  _id: string;
   name: string;
   style: {
-    id: number;
+    _id: string;
   };
 }
 

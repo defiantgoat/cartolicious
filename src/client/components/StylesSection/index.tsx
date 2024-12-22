@@ -30,7 +30,6 @@ const SaveStyleButton: React.FC = () => {
   const handleSave = async () => {
     if (currentStyles) {
       const styles = objectFromMap(currentStyles);
-      console.log(styles);
       const saveStyle = await fetch(ENDPOINTS.STYLES, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -74,7 +73,6 @@ const StylesSection: React.FC = () => {
       </option>,
     ] as JSX.Element[];
 
-    console.log(styles);
     styles.forEach(({ _id: id }, i) =>
       options.push(
         <option key={`style-${i}`} value={id}>
@@ -86,9 +84,9 @@ const StylesSection: React.FC = () => {
     return options;
   };
 
-  const loadStyle = async (id: string) => {
+  const loadStyle = async (_id: string) => {
     try {
-      const loadedStyle = await fetch(`${ENDPOINTS.STYLES}/${id}`, {
+      const loadedStyle = await fetch(`${ENDPOINTS.STYLES}/${_id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -98,7 +96,7 @@ const StylesSection: React.FC = () => {
       const [style] = data;
       const { background } = style;
       const styleMap = mapFromObject(style);
-      dispatch(setCaroliciousStyles(styleMap));
+      dispatch(setCaroliciousStyles({ styleMap, style_id: _id }));
       dispatch(setBackground(background || [0, 0, 0, 1]));
     } catch (e) {
     } finally {
