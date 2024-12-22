@@ -7,7 +7,6 @@ import store from "./store";
 import theme from "./lib/theme";
 
 import App from "./components/App";
-import { Auth0Provider } from "@auth0/auth0-react";
 import FirebaseProvider from "./components/Firebase/provider";
 
 // // Import the functions you need from the SDKs you need
@@ -40,7 +39,7 @@ render(
       </ThemeProvider>
     </Provider>
   </FirebaseProvider>,
-  document.getElementById("root"),
+  document.getElementById("root")
 );
 
 // Needed for Hot Module Replacement
