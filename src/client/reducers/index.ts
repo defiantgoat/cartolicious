@@ -72,8 +72,10 @@ const rootReducer = (
       const newState = {
         ...state,
         cartolicious_styles: styleMap,
-        style_id,
       };
+      if (style_id) {
+        newState["style_id"] = style_id;
+      }
       if (curation_id) {
         newState["curation_id"] = curation_id;
       }
