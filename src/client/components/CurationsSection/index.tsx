@@ -20,6 +20,7 @@ import SidebarSection from "../SidebarSection";
 import { mapFromObject, objectFromMap } from "../../lib/utils";
 import { CartoliciousInput } from "../../lib/theme";
 import useCartoliciousApi from "../../hooks/useCartoliciousApi";
+import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
 import useUser from "../../hooks/useUser";
 
 const EditCurationsButton: React.FC = () => {
@@ -39,14 +40,8 @@ const EditCurationsButton: React.FC = () => {
 const SaveCuration: React.FC = () => {
   const map = useContext(MapContext);
   const { saveCuration } = useCartoliciousApi();
-  const { token, user_id } = useUser();
 
-  const currentStyles = useSelector(
-    (state: ReduxStateConfigProps) => state.cartolicious_styles
-  );
-  const currentBackground = useSelector(
-    (state: ReduxStateConfigProps) => state.background
-  );
+  const { currentStyles, currentBackground } = useCartoliciousStyles();
 
   const handleSave = async () => {
     if (currentStyles && map) {

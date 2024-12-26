@@ -1,33 +1,18 @@
 import { useContext } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import MapContext from "../components/MapContext";
 import { ENDPOINTS } from "../config";
-import { ReduxStateConfigProps } from "../interfaces";
-import { mapFromObject, objectFromMap } from "../lib/utils";
-import {
-  setCaroliciousStyles,
-  setBackground,
-  toggleCurationsDialog,
-  setBusy,
-} from "../actions";
-
+import { mapFromObject } from "../lib/utils";
+import { setCaroliciousStyles, setBackground, setBusy } from "../actions";
 import useUser from "./useUser";
+import useCartoliciousStyles from "./useCartoliciousStyles";
 
 const useCartoliciousApi = () => {
   const map = useContext(MapContext);
   const dispatch = useDispatch();
+  const { styleId } = useCartoliciousStyles();
 
   const { token, user_id } = useUser();
-
-  const currentStyles = useSelector(
-    (state: ReduxStateConfigProps) => state.cartolicious_styles
-  );
-
-  const styleId = useSelector((state: ReduxStateConfigProps) => state.style_id);
-
-  // const currentBackground = useSelector(
-  //   (state: ReduxStateConfigProps) => state.background
-  // );
 
   const loadNewStyle = async () => {
     dispatch(setBusy(true));
@@ -207,23 +192,6 @@ const useCartoliciousApi = () => {
     }
   };
 
-  const getTemporaryAccess = async (tempKey: string) => {
-    try {
-      dispatch(setBusy(true));
-      const tempAccess = await fetch(`${ENDPOINTS.USER}/temporary/${tempKey}`);
-      const { data } = await tempAccess.json();
-      const [ok] = data;
-      if (ok === true) {
-        dispatch({ type: "TEMP_ACCESS", payload: true });
-      }
-    } catch (e) {
-      console.log("getTemporaryAccess error", e);
-    } finally {
-      dispatch({ type: "TEMP_ACCESS", payload: true });
-      dispatch(setBusy(false));
-    }
-  };
-
   return {
     loadCuration,
     saveCuration,
@@ -232,7 +200,6 @@ const useCartoliciousApi = () => {
     loadCurationByHash,
     loadStyleById,
     loadNewStyle,
-    getTemporaryAccess,
   };
 };
 

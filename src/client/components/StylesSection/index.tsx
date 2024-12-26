@@ -9,6 +9,7 @@ import SidebarSection from "../SidebarSection";
 import { mapFromObject, objectFromMap } from "../../lib/utils";
 import { CartoliciousInput } from "../../lib/theme";
 import useUser from "../../hooks/useUser";
+import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
 
 const EditStylesButton: React.FC = () => {
   return (
@@ -20,12 +21,7 @@ const EditStylesButton: React.FC = () => {
 
 const SaveStyleButton: React.FC = () => {
   const { token, user_id } = useUser();
-  const currentStyles = useSelector(
-    (state: ReduxStateConfigProps) => state.cartolicious_styles
-  );
-  const currentBackground = useSelector(
-    (state: ReduxStateConfigProps) => state.background
-  );
+  const { currentStyles, currentBackground } = useCartoliciousStyles();
 
   const handleSave = async () => {
     if (currentStyles) {
@@ -104,12 +100,15 @@ const StylesSection: React.FC = () => {
   };
 
   const handleStyleSelect = ({ target: { value } }) => {
+    if (value === "none") {
+      setCurrentStyle("");
+      return;
+    }
     setCurrentStyle(value);
   };
 
   useEffect(() => {
-    console.log(currentStyle);
-    if (currentStyle !== "none") {
+    if (currentStyle !== "") {
       loadStyle(currentStyle);
     }
   }, [currentStyle]);

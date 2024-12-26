@@ -12,8 +12,6 @@ import EditCurationsDialog from "../EditCurationsDialog";
 import { MAP_CONFIG, ENDPOINTS } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
 import { setUserId, setUserContent } from "../../actions";
-import useQueryString from "../../hooks/useQueryString";
-import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 import useUser from "../../hooks/useUser";
 import { onAuthStateChanged, getAuth, User } from "firebase/auth";
 import FirebaseContext from "../Firebase/context";
@@ -30,8 +28,6 @@ const App: React.FC = () => {
   const { token, user_id, setUser, loggedIn, uid } = useUser();
 
   const [olMap, setOlMap] = useState(null as OLMap | null);
-
-  const { getTemporaryAccess } = useCartoliciousApi();
 
   const getUserContent = async ({ user_id, token }) => {
     if (!user_id || !token) {
@@ -52,12 +48,6 @@ const App: React.FC = () => {
     } finally {
     }
   };
-
-  useEffect(() => {
-    if (user_id && token > "") {
-      getUserContent({ user_id, token });
-    }
-  }, [user_id, token]);
 
   const getUserMetadata = async ({
     uid,
@@ -92,6 +82,12 @@ const App: React.FC = () => {
       console.log(e.message);
     }
   };
+
+  useEffect(() => {
+    if (user_id && token > "") {
+      getUserContent({ user_id, token });
+    }
+  }, [user_id, token]);
 
   useEffect(() => {
     if (loggedIn && token && uid) {
@@ -157,10 +153,10 @@ const App: React.FC = () => {
         <Toolbar />
         <div className={classes.mainContent}>
           <MapContainer>
-            {busy && <div className={classes.busyIndicator}>Loading</div>}
+            {busy ? <div className={classes.busyIndicator}>Loading</div> : null}
             <MapboxLayer />
           </MapContainer>
-          {sidebarOpen && <Sidebar />}
+          {sidebarOpen ? <Sidebar /> : null}
         </div>
       </div>
     </MapContext.Provider>
