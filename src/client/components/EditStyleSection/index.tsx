@@ -8,7 +8,7 @@ import {
   ReduxStateConfigProps,
 } from "../../interfaces";
 import { setCaroliciousStyles, setBackground } from "../../actions";
-import SidebarSection from "../SidebarSection";
+import SidebarSection from "../common/SidebarSection";
 import { mapFromObject, objectFromMap } from "../../lib/utils";
 import { CartoliciousInput } from "../../lib/theme";
 

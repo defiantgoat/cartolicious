@@ -6,7 +6,7 @@ import { setCaroliciousStyles, setBackground } from "../../actions";
 import { ReduxStateConfigProps } from "../../interfaces";
 import { ENDPOINTS } from "../../config";
 import BrushIcon from "@material-ui/icons/BrushSharp";
-import ToolbarButton from "../ToolbarButton";
+import ToolbarButton from "../common/ToolbarButton";
 import MenuButton from "../MenuButton";
 import { CircularProgress } from "@material-ui/core";
 import FirebaseContext from "../Firebase/context";
@@ -19,7 +19,7 @@ const Toolbar: React.FC = () => {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
 
-  const { token, loggedIn } = useUser();
+  const { token, logged_in } = useUser();
 
   const sidebarOpen = useSelector(
     (state: ReduxStateConfigProps) => state.sidebar_open
@@ -75,7 +75,7 @@ const Toolbar: React.FC = () => {
             />
           </div>
         )}
-        {loggedIn ? (
+        {logged_in ? (
           <div className={classes.buttonContainer}>
             <ToolbarButton onClickHandler={handleRecolor}>
               <BrushIcon />

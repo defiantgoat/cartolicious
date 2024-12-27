@@ -1,11 +1,17 @@
 import React from "react";
 import { IconButton } from "@material-ui/core";
-import useStyles from "./use-styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 interface ToolbarButtonProps {
   onClickHandler: any;
   children?: React.ReactNode;
 }
+
+const useStyles = makeStyles((theme) => ({
+  toolbarButton: {
+    backgroundColor: "darkred",
+  },
+}));
 
 const ToolbarButton: React.FC<ToolbarButtonProps> = ({
   children,

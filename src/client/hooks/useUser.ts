@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
-import { ReduxStateConfigProps, ReduxActionProps } from "../interfaces";
-import { SET_USER_CONTENT, SET_USER_DATA, SET_LOGGED_OUT } from "../constants";
+import { ReduxStateConfigProps } from "../interfaces";
+import { SET_USER_DATA, SET_LOGGED_OUT } from "../constants";
 
 const useUser = () => {
   const dispatch = useDispatch();
@@ -15,7 +15,6 @@ const useUser = () => {
   };
 
   return {
-    user,
     setUser,
     setUserLoggedOut,
     ...user,

@@ -16,7 +16,7 @@ import {
   setBackground,
   toggleCurationsDialog,
 } from "../../actions";
-import SidebarSection from "../SidebarSection";
+import SidebarSection from "../common/SidebarSection";
 import { mapFromObject, objectFromMap } from "../../lib/utils";
 import { CartoliciousInput } from "../../lib/theme";
 import useCartoliciousApi from "../../hooks/useCartoliciousApi";

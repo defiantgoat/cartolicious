@@ -25,7 +25,7 @@ const App: React.FC = () => {
   const busy = useSelector((state: ReduxStateConfigProps) => state.busy);
   const firebaseApp = useContext(FirebaseContext);
 
-  const { token, user_id, setUser, loggedIn, uid } = useUser();
+  const { token, user_id, setUser, logged_in, uid } = useUser();
 
   const [olMap, setOlMap] = useState(null as OLMap | null);
 
@@ -90,17 +90,17 @@ const App: React.FC = () => {
   }, [user_id, token]);
 
   useEffect(() => {
-    if (loggedIn && token && uid) {
+    if (logged_in && token && uid) {
       getUserMetadata({ uid, token });
     }
-  }, [loggedIn, token, uid]);
+  }, [logged_in, token, uid]);
 
   useEffect(() => {
     const handleUserInfo = async (user: User) => {
       const accessToken = await user?.getIdToken();
       setUser({
         uid: user?.uid,
-        loggedIn: true,
+        logged_in: true,
         details: user,
         token: accessToken,
         email: user?.email,

@@ -1,8 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { toggleSidebar } from "../../actions";
-// import Menu from "@material-ui/icons/Menu";
-import ToolbarButton from "../ToolbarButton";
+import ToolbarButton from "../common/ToolbarButton";
 import { SvgIcon } from "@material-ui/core";
 
 const MenuButton: React.FC = () => {

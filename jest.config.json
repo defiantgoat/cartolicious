@@ -19,8 +19,6 @@
   "collectCoverageFrom": [
     "src/**/*.(ts|tsx|js)",
     "!src/client/index.tsx",
-    "!src/server/server-dev.ts",
-    "!src/server/tests/*",
     "!src/client/tests/*",
     "!src/client/workers/*"
   ],

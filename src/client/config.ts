@@ -1,5 +1,5 @@
 export const APP_NAME = "Cartolicious";
-export const VERSION = "1.0.0";
+export const VERSION = "1.1.0";
 
 export const MAP_CONFIG = {
   MIN_ZOOM: 2,

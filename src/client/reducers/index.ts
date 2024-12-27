@@ -15,7 +15,7 @@ import { ReduxActionProps, ReduxStateConfigProps } from "../interfaces";
 
 export const DEFAULT_USER = {
   user_id: null,
-  loggedIn: false,
+  logged_in: false,
   details: null,
   token: "",
   styles: [],
@@ -117,7 +117,7 @@ const rootReducer = (
         ...state,
         user: {
           user_id: null,
-          loggedIn: false,
+          logged_in: false,
           token: "",
           details: null,
           styles: [],
