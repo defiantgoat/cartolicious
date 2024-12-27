@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Button, Select, FormControl, IconButton } from "@material-ui/core";
 import EditRounded from "@material-ui/icons/EditRounded";
 import { ENDPOINTS } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
-import { setCaroliciousStyles, setBackground } from "../../actions";
 import SidebarSection from "../common/SidebarSection";
 import { mapFromObject, objectFromMap } from "../../lib/utils";
 import { CartoliciousInput } from "../../lib/theme";
@@ -55,8 +54,8 @@ const SaveStyleButton: React.FC = () => {
 };
 
 const StylesSection: React.FC = () => {
-  const dispatch = useDispatch();
   const [currentStyle, setCurrentStyle] = useState("");
+  const { setCaroliciousStyles, setBackground } = useCartoliciousStyles();
 
   const { token, styles } = useSelector(
     (state: ReduxStateConfigProps) => state.user
@@ -92,8 +91,8 @@ const StylesSection: React.FC = () => {
       const [style] = data;
       const { background } = style;
       const styleMap = mapFromObject(style);
-      dispatch(setCaroliciousStyles({ styleMap, style_id: _id }));
-      dispatch(setBackground(background || [0, 0, 0, 1]));
+      setCaroliciousStyles({ styleMap, style_id: _id });
+      setBackground(background || [0, 0, 0, 1]);
     } catch (e) {
     } finally {
     }

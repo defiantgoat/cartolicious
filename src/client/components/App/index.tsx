@@ -11,21 +11,20 @@ import Sidebar from "../Sidebar";
 import EditCurationsDialog from "../EditCurationsDialog";
 import { MAP_CONFIG, ENDPOINTS } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
-import { setUserId, setUserContent } from "../../actions";
 import useUser from "../../hooks/useUser";
 import { onAuthStateChanged, getAuth, User } from "firebase/auth";
 import FirebaseContext from "../Firebase/context";
 
 const App: React.FC = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const sidebarOpen = useSelector(
     (state: ReduxStateConfigProps) => state.sidebar_open
   );
   const busy = useSelector((state: ReduxStateConfigProps) => state.busy);
   const firebaseApp = useContext(FirebaseContext);
 
-  const { token, user_id, setUser, logged_in, uid } = useUser();
+  const { token, user_id, setUser, logged_in, uid, setUserId, setUserContent } =
+    useUser();
 
   const [olMap, setOlMap] = useState(null as OLMap | null);
 
@@ -42,7 +41,7 @@ const App: React.FC = () => {
 
       const { data } = await userContent.json();
       const [styles, curations] = data;
-      dispatch(setUserContent({ styles, curations }));
+      setUserContent({ styles, curations });
     } catch (e) {
       console.log(e);
     } finally {
@@ -73,7 +72,7 @@ const App: React.FC = () => {
 
       if (status === 200) {
         const [_id] = data;
-        dispatch(setUserId(_id));
+        setUserId(_id);
       }
       if (errors && errors.length) {
         console.log(errors);

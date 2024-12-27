@@ -4,7 +4,6 @@ import LogoutButton from "../LogoutButton";
 import CurationsSection from "../CurationsSection";
 import StylesSection from "../StylesSection";
 import EditStyleSection from "../EditStyleSection";
-import RecolorSection from "../RecolorSection";
 import Login from "../Login";
 import useUser from "../../hooks/useUser";
 

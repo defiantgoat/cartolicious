@@ -1,8 +1,7 @@
 import React, { useContext, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import useStyles from "./use-styles";
 import { APP_NAME } from "../../config";
-import { setCaroliciousStyles, setBackground } from "../../actions";
 import { ReduxStateConfigProps } from "../../interfaces";
 import { ENDPOINTS } from "../../config";
 import BrushIcon from "@material-ui/icons/BrushSharp";
@@ -11,15 +10,15 @@ import MenuButton from "../MenuButton";
 import { CircularProgress } from "@material-ui/core";
 import FirebaseContext from "../Firebase/context";
 import useUser from "../../hooks/useUser";
+import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
 
 const Toolbar: React.FC = () => {
   const firebaseApp = useContext(FirebaseContext);
-
-  const dispatch = useDispatch();
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
 
   const { token, logged_in } = useUser();
+  const { setCaroliciousStyles, setBackground } = useCartoliciousStyles();
 
   const sidebarOpen = useSelector(
     (state: ReduxStateConfigProps) => state.sidebar_open
@@ -40,8 +39,8 @@ const Toolbar: React.FC = () => {
         Object.entries(newStyles).forEach(([key, value]) =>
           newStyleMap.set(key, value)
         );
-        dispatch(setCaroliciousStyles({ styleMap: newStyleMap }));
-        dispatch(setBackground(background));
+        setCaroliciousStyles({ styleMap: newStyleMap });
+        setBackground(background);
       }
       if (errors.length > 0) {
         console.log(errors);

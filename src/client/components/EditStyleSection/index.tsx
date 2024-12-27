@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Button, Select, FormControl, Checkbox } from "@material-ui/core";
 import { ENDPOINTS } from "../../config";
 import {
@@ -7,10 +7,10 @@ import {
   CartoliciousStroke,
   ReduxStateConfigProps,
 } from "../../interfaces";
-import { setCaroliciousStyles, setBackground } from "../../actions";
 import SidebarSection from "../common/SidebarSection";
 import { mapFromObject, objectFromMap } from "../../lib/utils";
 import { CartoliciousInput } from "../../lib/theme";
+import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
 
 const StyleDisplay: React.FC<{
   style: CartoliciousFill | CartoliciousStroke;
@@ -28,7 +28,6 @@ const StyleDisplay: React.FC<{
 };
 
 const EditStyleSection: React.FC = () => {
-  const dispatch = useDispatch();
   const [currentStyle, setCurrentStyle] = useState("");
   const [currentAttribute, setCurrentAttribute] = useState("");
   const [currentAttributeFill, setCurrentAttributeFill] = useState(
@@ -42,6 +41,8 @@ const EditStyleSection: React.FC = () => {
   const cartolicious = useSelector(
     (state: ReduxStateConfigProps) => state.cartolicious_styles
   );
+
+  const { setCaroliciousStyles } = useCartoliciousStyles();
 
   const createOptions = (): JSX.Element[] => {
     const options = [
@@ -80,7 +81,7 @@ const EditStyleSection: React.FC = () => {
 
     newMap.set(currentStyle, updatedCartoliciousStyle);
 
-    dispatch(setCaroliciousStyles({ styleMap: newMap }));
+    setCaroliciousStyles({ styleMap: newMap });
   };
 
   const handleStrokeAttributeChange = ({ target: { checked } }) => {
@@ -100,7 +101,7 @@ const EditStyleSection: React.FC = () => {
 
     newMap.set(currentStyle, updatedCartoliciousStyle);
 
-    dispatch(setCaroliciousStyles({ styleMap: newMap }));
+    setCaroliciousStyles({ styleMap: newMap });
   };
 
   const handleStyleSelect = ({ target: { value } }) => {
