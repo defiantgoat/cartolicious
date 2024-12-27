@@ -4,18 +4,17 @@ import LogoutButton from "../LogoutButton";
 import CurationsSection from "../CurationsSection";
 import StylesSection from "../StylesSection";
 import EditStyleSection from "../EditStyleSection";
-import RecolorSection from "../RecolorSection";
 import Login from "../Login";
 import useUser from "../../hooks/useUser";
 
 const Sidebar: React.FC = () => {
   const classes = useStyles();
-  const { details, loggedIn } = useUser();
+  const { details, logged_in } = useUser();
 
   return (
     <div className={classes.sidebar}>
       <div className={classes.sidebarContent}>
-        {loggedIn ? (
+        {logged_in ? (
           <>
             <EditStyleSection />
             <StylesSection />
@@ -26,7 +25,7 @@ const Sidebar: React.FC = () => {
         )}
       </div>
 
-      {loggedIn && (
+      {logged_in && (
         <div className={classes.profileContainer}>
           <>
             <div

@@ -3,14 +3,15 @@ import { useDispatch } from "react-redux";
 import MapContext from "../components/MapContext";
 import { ENDPOINTS } from "../config";
 import { mapFromObject } from "../lib/utils";
-import { setCaroliciousStyles, setBackground, setBusy } from "../actions";
+import { setBusy } from "../actions";
 import useUser from "./useUser";
 import useCartoliciousStyles from "./useCartoliciousStyles";
 
 const useCartoliciousApi = () => {
   const map = useContext(MapContext);
   const dispatch = useDispatch();
-  const { styleId } = useCartoliciousStyles();
+  const { styleId, setCaroliciousStyles, setBackground } =
+    useCartoliciousStyles();
 
   const { token, user_id } = useUser();
 
@@ -29,8 +30,8 @@ const useCartoliciousApi = () => {
         Object.entries(newStyles).forEach(([key, value]) =>
           newStyleMap.set(key, value)
         );
-        dispatch(setCaroliciousStyles({ styleMap: newStyleMap }));
-        dispatch(setBackground(background));
+        setCaroliciousStyles({ styleMap: newStyleMap });
+        setBackground(background);
       }
       if (errors.length > 0) {
         console.log(errors);
@@ -54,8 +55,8 @@ const useCartoliciousApi = () => {
       const [style] = data;
       const { background } = style;
       const styleMap = mapFromObject(style);
-      dispatch(setCaroliciousStyles({ styleMap, style_id: styleId }));
-      dispatch(setBackground(background || [0, 0, 0, 1]));
+      setCaroliciousStyles({ styleMap, style_id: styleId });
+      setBackground(background || [0, 0, 0, 1]);
     } catch (e) {
     } finally {
       dispatch(setBusy(false));
@@ -145,10 +146,8 @@ const useCartoliciousApi = () => {
         const styleMap = mapFromObject(json);
         map?.getView().setCenter([long, lat]);
         map?.getView().setZoom(zoom);
-        dispatch(
-          setCaroliciousStyles({ styleMap, style_id: curation?.style?._id })
-        );
-        dispatch(setBackground(background || [0, 0, 0, 1]));
+        setCaroliciousStyles({ styleMap, style_id: curation?.style?._id });
+        setBackground(background || [0, 0, 0, 1]);
       }
     } catch (e) {
       console.log(e);
@@ -178,14 +177,12 @@ const useCartoliciousApi = () => {
         const styleMap = mapFromObject(json);
         map?.getView().setCenter([long, lat]);
         map?.getView().setZoom(zoom);
-        dispatch(
-          setCaroliciousStyles({
-            styleMap,
-            style_id: curation?.style?._id,
-            curation_id: curation?._id,
-          })
-        );
-        dispatch(setBackground(background || [0, 0, 0, 1]));
+        setCaroliciousStyles({
+          styleMap,
+          style_id: curation?.style?._id,
+          curation_id: curation?._id,
+        });
+        setBackground(background || [0, 0, 0, 1]);
       }
     } catch (e) {
       console.log(e);

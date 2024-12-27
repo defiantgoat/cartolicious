@@ -1,3 +1,4 @@
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -30,4 +31,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default useStyles;
+interface SidebarSectionProps {
+  header?: string;
+  children?: React.ReactNode;
+  buttons?: JSX.Element[];
+}
+
+const SidebarSection: React.FC<SidebarSectionProps> = ({
+  header,
+  children,
+  buttons,
+}) => {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.sidebarSection}>
+      {header && <h2>{header}</h2>}
+      {children}
+      <div className={classes.sectionButtons}>{buttons}</div>
+    </div>
+  );
+};
+
+export default SidebarSection;

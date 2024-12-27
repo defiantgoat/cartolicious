@@ -32,11 +32,9 @@ export interface ReduxStateConfigProps {
   curations_dialog_open: boolean;
   advanced: boolean;
   user: {
-    id?: number;
-    _id?: string;
     user_id: string | null;
     uid?: string;
-    loggedIn: boolean;
+    logged_in: boolean;
     token: string;
     details: any;
     styles: any[];

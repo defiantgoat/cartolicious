@@ -1,6 +1,6 @@
 import React from "react";
 import useStyles from "./use-styles";
-import SidebarSection from "../SidebarSection";
+import SidebarSection from "../common/SidebarSection";
 import GoogleLoginButton from "./GoogleLoginButton";
 
 const Login: React.FC = () => {

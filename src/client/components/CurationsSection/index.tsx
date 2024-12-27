@@ -11,17 +11,12 @@ import EditRounded from "@material-ui/icons/EditRounded";
 import MapContext from "../MapContext";
 import { ENDPOINTS } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
-import {
-  setCaroliciousStyles,
-  setBackground,
-  toggleCurationsDialog,
-} from "../../actions";
-import SidebarSection from "../SidebarSection";
+import { toggleCurationsDialog } from "../../actions";
+import SidebarSection from "../common/SidebarSection";
 import { mapFromObject, objectFromMap } from "../../lib/utils";
 import { CartoliciousInput } from "../../lib/theme";
 import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
-import useUser from "../../hooks/useUser";
 
 const EditCurationsButton: React.FC = () => {
   const dispatch = useDispatch();
@@ -41,7 +36,8 @@ const SaveCuration: React.FC = () => {
   const map = useContext(MapContext);
   const { saveCuration } = useCartoliciousApi();
 
-  const { currentStyles, currentBackground } = useCartoliciousStyles();
+  const { currentStyles, currentBackground, setCaroliciousStyles } =
+    useCartoliciousStyles();
 
   const handleSave = async () => {
     if (currentStyles && map) {
