@@ -1,40 +1,33 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import useStyles from "./use-styles";
 import LogoutButton from "../LogoutButton";
-import LoginButton from "../LoginButton";
-import SidebarSection from "../SidebarSection";
 import CurationsSection from "../CurationsSection";
 import StylesSection from "../StylesSection";
 import EditStyleSection from "../EditStyleSection";
-import { ReduxStateConfigProps } from "../../interfaces";
+import RecolorSection from "../RecolorSection";
+import Login from "../Login";
+import useUser from "../../hooks/useUser";
 
 const Sidebar: React.FC = () => {
   const classes = useStyles();
-  // const busy = useSelector((state: ReduxStateConfigProps) => state.busy);
-  const { details, loggedIn } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
-  );
-  const advanced = useSelector(
-    (state: ReduxStateConfigProps) => state.advanced
-  );
+  const { details, loggedIn } = useUser();
 
-  return advanced ? (
+  return (
     <div className={classes.sidebar}>
       <div className={classes.sidebarContent}>
-        {!loggedIn ? (
-          <LoginButton />
-        ) : (
+        {loggedIn ? (
           <>
             <EditStyleSection />
             <StylesSection />
             <CurationsSection />
           </>
+        ) : (
+          <Login />
         )}
       </div>
 
-      <div className={classes.profileContainer}>
-        {loggedIn && (
+      {loggedIn && (
+        <div className={classes.profileContainer}>
           <>
             <div
               style={{
@@ -46,9 +39,9 @@ const Sidebar: React.FC = () => {
             >
               <img
                 className={classes.profilePicture}
-                src={details["picture"]}
+                src={details["photoURL"]}
               />
-              <span>{details["name"]}</span>
+              <span>{details["displayName"]}</span>
             </div>
             <div
               style={{ display: "flex", flexGrow: 1, justifyContent: "end" }}
@@ -56,10 +49,10 @@ const Sidebar: React.FC = () => {
               <LogoutButton />
             </div>
           </>
-        )}
-      </div>
+        </div>
+      )}
     </div>
-  ) : null;
+  );
 };
 
 export default Sidebar;

@@ -14,10 +14,10 @@ export interface ReduxActionProps {
 }
 
 export interface Curation {
-  id: number;
+  _id: string;
   name: string;
   style: {
-    id: number;
+    _id: string;
   };
 }
 
@@ -32,7 +32,10 @@ export interface ReduxStateConfigProps {
   curations_dialog_open: boolean;
   advanced: boolean;
   user: {
-    id: number;
+    id?: number;
+    _id?: string;
+    user_id: string | null;
+    uid?: string;
     loggedIn: boolean;
     token: string;
     details: any;

@@ -8,6 +8,8 @@ import { setCaroliciousStyles, setBackground } from "../../actions";
 import SidebarSection from "../SidebarSection";
 import { mapFromObject, objectFromMap } from "../../lib/utils";
 import { CartoliciousInput } from "../../lib/theme";
+import useUser from "../../hooks/useUser";
+import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
 
 const EditStylesButton: React.FC = () => {
   return (
@@ -18,20 +20,12 @@ const EditStylesButton: React.FC = () => {
 };
 
 const SaveStyleButton: React.FC = () => {
-  const { token, id } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
-  );
-  const currentStyles = useSelector(
-    (state: ReduxStateConfigProps) => state.cartolicious_styles
-  );
-  const currentBackground = useSelector(
-    (state: ReduxStateConfigProps) => state.background
-  );
+  const { token, user_id } = useUser();
+  const { currentStyles, currentBackground } = useCartoliciousStyles();
 
   const handleSave = async () => {
     if (currentStyles) {
       const styles = objectFromMap(currentStyles);
-      console.log(styles);
       const saveStyle = await fetch(ENDPOINTS.STYLES, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -39,7 +33,7 @@ const SaveStyleButton: React.FC = () => {
         },
         method: "POST",
         body: JSON.stringify({
-          user_id: id,
+          user_id,
           styles: {
             ...styles,
             background: currentBackground,
@@ -62,7 +56,7 @@ const SaveStyleButton: React.FC = () => {
 
 const StylesSection: React.FC = () => {
   const dispatch = useDispatch();
-  const [currentStyle, setCurrentStyle] = useState(-1);
+  const [currentStyle, setCurrentStyle] = useState("");
 
   const { token, styles } = useSelector(
     (state: ReduxStateConfigProps) => state.user
@@ -70,12 +64,12 @@ const StylesSection: React.FC = () => {
 
   const createOptions = (): JSX.Element[] => {
     const options = [
-      <option value={-1} key="select-a-style">
+      <option value={"none"} key="select-a-style">
         Select a Style
       </option>,
     ] as JSX.Element[];
 
-    styles.forEach(({ id }, i) =>
+    styles.forEach(({ _id: id }, i) =>
       options.push(
         <option key={`style-${i}`} value={id}>
           {`Style ${id}`}
@@ -86,9 +80,9 @@ const StylesSection: React.FC = () => {
     return options;
   };
 
-  const loadStyle = async (id: string) => {
+  const loadStyle = async (_id: string) => {
     try {
-      const loadedStyle = await fetch(`${ENDPOINTS.STYLES}/${id}`, {
+      const loadedStyle = await fetch(`${ENDPOINTS.STYLES}/${_id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -98,7 +92,7 @@ const StylesSection: React.FC = () => {
       const [style] = data;
       const { background } = style;
       const styleMap = mapFromObject(style);
-      dispatch(setCaroliciousStyles(styleMap));
+      dispatch(setCaroliciousStyles({ styleMap, style_id: _id }));
       dispatch(setBackground(background || [0, 0, 0, 1]));
     } catch (e) {
     } finally {
@@ -106,12 +100,16 @@ const StylesSection: React.FC = () => {
   };
 
   const handleStyleSelect = ({ target: { value } }) => {
+    if (value === "none") {
+      setCurrentStyle("");
+      return;
+    }
     setCurrentStyle(value);
   };
 
   useEffect(() => {
-    if (currentStyle > -1) {
-      loadStyle(`${currentStyle}`);
+    if (currentStyle !== "") {
+      loadStyle(currentStyle);
     }
   }, [currentStyle]);
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useState, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import useStyles from "./use-styles";
 import OLMap from "ol/Map";
@@ -11,10 +11,10 @@ import Sidebar from "../Sidebar";
 import EditCurationsDialog from "../EditCurationsDialog";
 import { MAP_CONFIG, ENDPOINTS } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
-import { setUser, setToken, setUserId, setUserContent } from "../../actions";
-import { useAuth0 } from "@auth0/auth0-react";
-import useQueryString from "../../hooks/useQueryString";
-import useCartoliciousApi from "../../hooks/useCartoliciousApi";
+import { setUserId, setUserContent } from "../../actions";
+import useUser from "../../hooks/useUser";
+import { onAuthStateChanged, getAuth, User } from "firebase/auth";
+import FirebaseContext from "../Firebase/context";
 
 const App: React.FC = () => {
   const classes = useStyles();
@@ -22,76 +22,19 @@ const App: React.FC = () => {
   const sidebarOpen = useSelector(
     (state: ReduxStateConfigProps) => state.sidebar_open
   );
-  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const busy = useSelector((state: ReduxStateConfigProps) => state.busy);
-  const { id, token, loggedIn } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
-  );
+  const firebaseApp = useContext(FirebaseContext);
+
+  const { token, user_id, setUser, loggedIn, uid } = useUser();
+
   const [olMap, setOlMap] = useState(null as OLMap | null);
 
-  const { getTemporaryAccess } = useCartoliciousApi();
-
-  const getUserMetadata = async () => {
-    const domain = "api.cartolicious.com/";
-
-    try {
-      const accessToken = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: `https://${domain}`,
-          scope: "get:styles",
-        },
-      });
-
-      dispatch(setToken(accessToken));
-
-      const userDetailsByIdUrl = `${ENDPOINTS.USER}/${user?.sub}`;
-
-      const metadataResponse = await fetch(userDetailsByIdUrl, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      const { status, data, errors } = await metadataResponse.json();
-
-      if (status !== 200) {
-        const [error] = errors;
-
-        if (error === "User does not exist" && user) {
-          const { sub, given_name, family_name, email } = user;
-          const newUser = await fetch(ENDPOINTS.USER, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              "Content-Type": "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify({
-              sub,
-              given_name,
-              family_name,
-              email,
-            }),
-          });
-
-          const { status, data, errors } = await newUser.json();
-          if (status === 200) {
-            const [userData] = data;
-            const { id } = userData;
-            dispatch(setUserId(id));
-          }
-        }
-      } else {
-        const [id] = data;
-        dispatch(setUserId(id));
-      }
-    } catch (e) {
-      console.log(e.message);
+  const getUserContent = async ({ user_id, token }) => {
+    if (!user_id || !token) {
+      return;
     }
-  };
-
-  const getUserContent = async () => {
     try {
-      const userContent = await fetch(`${ENDPOINTS.USER}/${id}/content`, {
+      const userContent = await fetch(`${ENDPOINTS.USER}/${user_id}/content`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -106,37 +49,77 @@ const App: React.FC = () => {
     }
   };
 
+  const getUserMetadata = async ({
+    uid,
+    token,
+  }: {
+    uid?: string;
+    token?: string;
+  }) => {
+    if (!uid || !token) {
+      return;
+    }
+
+    try {
+      const userDetailsByIdUrl = `${ENDPOINTS.USER}/${uid}`;
+
+      const metadataResponse = await fetch(userDetailsByIdUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const { status, data, errors } = await metadataResponse.json();
+
+      if (status === 200) {
+        const [_id] = data;
+        dispatch(setUserId(_id));
+      }
+      if (errors && errors.length) {
+        console.log(errors);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
   useEffect(() => {
-    dispatch(
+    if (user_id && token > "") {
+      getUserContent({ user_id, token });
+    }
+  }, [user_id, token]);
+
+  useEffect(() => {
+    if (loggedIn && token && uid) {
+      getUserMetadata({ uid, token });
+    }
+  }, [loggedIn, token, uid]);
+
+  useEffect(() => {
+    const handleUserInfo = async (user: User) => {
+      const accessToken = await user?.getIdToken();
       setUser({
-        loggedIn: isAuthenticated,
-        token: "",
+        uid: user?.uid,
+        loggedIn: true,
         details: user,
-      })
-    );
-
-    if (user && isAuthenticated) {
-      getUserMetadata();
-    }
-  }, [user, isAuthenticated]);
-
-  useEffect(() => {
-    if (id > -1 && token > "") {
-      getUserContent();
-    }
-  }, [id, token]);
-
-  useEffect(() => {
-    const getAdvanced = async (CZZ3od9pCxZNEtzW: string) => {
-      await getTemporaryAccess(CZZ3od9pCxZNEtzW);
+        token: accessToken,
+        email: user?.email,
+      });
     };
 
-    const { CZZ3od9pCxZNEtzW } = useQueryString();
-
-    if (CZZ3od9pCxZNEtzW) {
-      getAdvanced(CZZ3od9pCxZNEtzW);
+    if (firebaseApp) {
+      const auth = getAuth(firebaseApp);
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+          handleUserInfo(user);
+        } else {
+          console.log("no user");
+        }
+      });
+      return unsubscribe;
     }
-  }, [window.location.search]);
+    return () => null;
+  }, [firebaseApp]);
 
   useLayoutEffect(() => {
     const view = new OLView({
@@ -170,10 +153,10 @@ const App: React.FC = () => {
         <Toolbar />
         <div className={classes.mainContent}>
           <MapContainer>
-            {busy && <div className={classes.busyIndicator}>Loading</div>}
+            {busy ? <div className={classes.busyIndicator}>Loading</div> : null}
             <MapboxLayer />
           </MapContainer>
-          {sidebarOpen && <Sidebar />}
+          {sidebarOpen ? <Sidebar /> : null}
         </div>
       </div>
     </MapContext.Provider>

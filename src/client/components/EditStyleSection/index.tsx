@@ -80,7 +80,7 @@ const EditStyleSection: React.FC = () => {
 
     newMap.set(currentStyle, updatedCartoliciousStyle);
 
-    dispatch(setCaroliciousStyles(newMap));
+    dispatch(setCaroliciousStyles({ styleMap: newMap }));
   };
 
   const handleStrokeAttributeChange = ({ target: { checked } }) => {
@@ -100,7 +100,7 @@ const EditStyleSection: React.FC = () => {
 
     newMap.set(currentStyle, updatedCartoliciousStyle);
 
-    dispatch(setCaroliciousStyles(newMap));
+    dispatch(setCaroliciousStyles({ styleMap: newMap }));
   };
 
   const handleStyleSelect = ({ target: { value } }) => {

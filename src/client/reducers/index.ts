@@ -13,6 +13,15 @@ import {
 } from "../constants";
 import { ReduxActionProps, ReduxStateConfigProps } from "../interfaces";
 
+export const DEFAULT_USER = {
+  user_id: null,
+  loggedIn: false,
+  details: null,
+  token: "",
+  styles: [],
+  curations: [],
+};
+
 export const initialState: ReduxStateConfigProps = {
   background: [0, 0, 0, 1],
   cartolicious_styles: null,
@@ -24,12 +33,7 @@ export const initialState: ReduxStateConfigProps = {
   curations_dialog_open: false,
   advanced: false,
   user: {
-    id: -1,
-    loggedIn: false,
-    details: null,
-    token: "",
-    styles: [],
-    curations: [],
+    ...DEFAULT_USER,
   },
 };
 
@@ -64,10 +68,18 @@ const rootReducer = (
         curations_dialog_open: !curations_dialog_open,
       };
     case SET_CARTOLICIOUS_STYLES:
-      return {
+      const { styleMap, style_id = null, curation_id = null } = payload;
+      const newState = {
         ...state,
-        cartolicious_styles: payload,
+        cartolicious_styles: styleMap,
       };
+      if (style_id) {
+        newState["style_id"] = style_id;
+      }
+      if (curation_id) {
+        newState["curation_id"] = curation_id;
+      }
+      return newState;
     case SET_BUSY:
       return {
         ...state,
@@ -87,7 +99,7 @@ const rootReducer = (
         ...state,
         user: {
           ...state.user,
-          id: payload,
+          user_id: payload,
         },
       };
     case SET_USER_CONTENT:
@@ -104,12 +116,13 @@ const rootReducer = (
       return {
         ...state,
         user: {
-          id: -1,
+          user_id: null,
           loggedIn: false,
           token: "",
           details: null,
           styles: [],
           curations: [],
+          uid: "",
         },
         sidebar_open: false,
       };
@@ -122,11 +135,6 @@ const rootReducer = (
         },
       };
     }
-    case "TEMP_ACCESS":
-      return {
-        ...state,
-        advanced: true,
-      };
     default:
       return state;
   }

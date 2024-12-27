@@ -20,6 +20,8 @@ import SidebarSection from "../SidebarSection";
 import { mapFromObject, objectFromMap } from "../../lib/utils";
 import { CartoliciousInput } from "../../lib/theme";
 import useCartoliciousApi from "../../hooks/useCartoliciousApi";
+import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
+import useUser from "../../hooks/useUser";
 
 const EditCurationsButton: React.FC = () => {
   const dispatch = useDispatch();
@@ -39,15 +41,7 @@ const SaveCuration: React.FC = () => {
   const map = useContext(MapContext);
   const { saveCuration } = useCartoliciousApi();
 
-  const { token, id } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
-  );
-  const currentStyles = useSelector(
-    (state: ReduxStateConfigProps) => state.cartolicious_styles
-  );
-  const currentBackground = useSelector(
-    (state: ReduxStateConfigProps) => state.background
-  );
+  const { currentStyles, currentBackground } = useCartoliciousStyles();
 
   const handleSave = async () => {
     if (currentStyles && map) {
@@ -78,7 +72,7 @@ const CurationsSection: React.FC = () => {
   const map = useContext(MapContext);
   const { loadCuration } = useCartoliciousApi();
 
-  const [currentCuration, setCurrentCuration] = useState(-1);
+  const [currentCuration, setCurrentCuration] = useState("none");
 
   const { token, curations } = useSelector(
     (state: ReduxStateConfigProps) => state.user
@@ -86,14 +80,14 @@ const CurationsSection: React.FC = () => {
 
   const createOptions = (): JSX.Element[] => {
     const options = [
-      <option key="select-a-curation" value={-1}>
+      <option key="select-a-curation" value={"none"}>
         Select a Curation
       </option>,
     ] as JSX.Element[];
 
-    curations.forEach(({ id, name }, i) =>
+    curations.forEach(({ _id, name }, i) =>
       options.push(
-        <option key={`curation-${i}`} value={id}>
+        <option key={`curation-${i}`} value={_id}>
           {name}
         </option>
       )
@@ -107,8 +101,8 @@ const CurationsSection: React.FC = () => {
   };
 
   useEffect(() => {
-    if (currentCuration > -1) {
-      loadCuration(`${currentCuration}`);
+    if (currentCuration !== "none") {
+      loadCuration(currentCuration);
     }
   }, [currentCuration]);
 

@@ -1,8 +1,5 @@
-import useCartoliciousApi from "./useCartoliciousApi";
-
 interface CartoliciousQueryParams {
   curation?: string;
-  CZZ3od9pCxZNEtzW?: string;
 }
 
 const useQueryString = () => {

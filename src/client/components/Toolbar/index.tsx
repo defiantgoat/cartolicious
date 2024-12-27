@@ -1,33 +1,29 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useStyles from "./use-styles";
 import { APP_NAME } from "../../config";
-import { Button, IconButton } from "@material-ui/core";
-import UserButton from "../UserButton";
 import { setCaroliciousStyles, setBackground } from "../../actions";
 import { ReduxStateConfigProps } from "../../interfaces";
 import { ENDPOINTS } from "../../config";
-import { useAuth0 } from "@auth0/auth0-react";
 import BrushIcon from "@material-ui/icons/BrushSharp";
 import ToolbarButton from "../ToolbarButton";
 import MenuButton from "../MenuButton";
 import { CircularProgress } from "@material-ui/core";
+import FirebaseContext from "../Firebase/context";
+import useUser from "../../hooks/useUser";
 
 const Toolbar: React.FC = () => {
+  const firebaseApp = useContext(FirebaseContext);
+
   const dispatch = useDispatch();
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
-  const advanced = useSelector(
-    (state: ReduxStateConfigProps) => state.advanced
-  );
-  const { token, loggedIn } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
-  );
+
+  const { token, loggedIn } = useUser();
+
   const sidebarOpen = useSelector(
     (state: ReduxStateConfigProps) => state.sidebar_open
   );
-
-  const { isLoading } = useAuth0();
 
   const fetchStyles = async () => {
     setLoading(true);
@@ -44,7 +40,7 @@ const Toolbar: React.FC = () => {
         Object.entries(newStyles).forEach(([key, value]) =>
           newStyleMap.set(key, value)
         );
-        dispatch(setCaroliciousStyles(newStyleMap));
+        dispatch(setCaroliciousStyles({ styleMap: newStyleMap }));
         dispatch(setBackground(background));
       }
       if (errors.length > 0) {
@@ -67,19 +63,31 @@ const Toolbar: React.FC = () => {
       </div>
 
       <div className={classes.buttonsContainer}>
-        {loading && <div style={{ color: "white" }}>Loading</div>}
-        <div className={classes.buttonContainer}>
-          <ToolbarButton onClickHandler={handleRecolor}>
-            <BrushIcon />
-          </ToolbarButton>
-        </div>
-
-        {advanced ? (
+        {loading && (
+          <div
+            className={classes.buttonContainer}
+            style={{ backgroundColor: "transparent" }}
+          >
+            <CircularProgress
+              color="primary"
+              size={"sm"}
+              style={{ width: "2rem" }}
+            />
+          </div>
+        )}
+        {loggedIn ? (
+          <div className={classes.buttonContainer}>
+            <ToolbarButton onClickHandler={handleRecolor}>
+              <BrushIcon />
+            </ToolbarButton>
+          </div>
+        ) : null}
+        {firebaseApp ? (
           <div
             className={classes.buttonContainer}
             style={{ backgroundColor: sidebarOpen ? "#222" : "transparent" }}
           >
-            {isLoading ? <CircularProgress color="primary" /> : <MenuButton />}
+            <MenuButton />
           </div>
         ) : null}
       </div>
