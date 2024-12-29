@@ -4,13 +4,12 @@ import useStyles from "./use-styles";
 import { APP_NAME } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
 import { ENDPOINTS } from "../../config";
-import BrushIcon from "@material-ui/icons/BrushSharp";
-import ToolbarButton from "../common/ToolbarButton";
 import MenuButton from "../MenuButton";
 import { CircularProgress } from "@material-ui/core";
 import FirebaseContext from "../Firebase/context";
 import useUser from "../../hooks/useUser";
 import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
+import { LiciousToolbarButton } from "@licious/react";
 
 const Toolbar: React.FC = () => {
   const firebaseApp = useContext(FirebaseContext);
@@ -60,7 +59,6 @@ const Toolbar: React.FC = () => {
       <div className={classes.titleContainer}>
         <h2 className={classes.title}>{APP_NAME}</h2>
       </div>
-
       <div className={classes.buttonsContainer}>
         {loading && (
           <div
@@ -76,9 +74,11 @@ const Toolbar: React.FC = () => {
         )}
         {logged_in ? (
           <div className={classes.buttonContainer}>
-            <ToolbarButton onClickHandler={handleRecolor}>
-              <BrushIcon />
-            </ToolbarButton>
+            <LiciousToolbarButton
+              icon="paint"
+              size="lg"
+              onClick={handleRecolor}
+            />
           </div>
         ) : null}
         {firebaseApp ? (

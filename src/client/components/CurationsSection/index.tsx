@@ -1,34 +1,23 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Button,
-  Select,
-  FormControl,
-  IconButton,
-  Dialog,
-} from "@material-ui/core";
-import EditRounded from "@material-ui/icons/EditRounded";
 import MapContext from "../MapContext";
-import { ENDPOINTS } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
 import { toggleCurationsDialog } from "../../actions";
 import SidebarSection from "../common/SidebarSection";
-import { mapFromObject, objectFromMap } from "../../lib/utils";
-import { CartoliciousInput } from "../../lib/theme";
+import { objectFromMap } from "../../lib/utils";
 import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
+import { LiciousIconButton, LiciousSelect } from "@licious/react";
 
 const EditCurationsButton: React.FC = () => {
   const dispatch = useDispatch();
   const handleClick = () => dispatch(toggleCurationsDialog());
   return (
-    <IconButton
-      color="primary"
-      title="Edit Your Curations"
+    <LiciousIconButton
+      icon="edit"
       onClick={handleClick}
-    >
-      <EditRounded />
-    </IconButton>
+      title="Edit Your Curations"
+    />
   );
 };
 
@@ -56,11 +45,7 @@ const SaveCuration: React.FC = () => {
     }
   };
 
-  return (
-    <Button color="primary" variant="outlined" onClick={handleSave}>
-      Save Curation
-    </Button>
-  );
+  return <LiciousIconButton icon="save" onClick={handleSave} />;
 };
 
 const CurationsSection: React.FC = () => {
@@ -74,25 +59,24 @@ const CurationsSection: React.FC = () => {
     (state: ReduxStateConfigProps) => state.user
   );
 
-  const createOptions = (): JSX.Element[] => {
-    const options = [
-      <option key="select-a-curation" value={"none"}>
-        Select a Curation
-      </option>,
-    ] as JSX.Element[];
+  const options = useMemo(() => {
+    const options = [{ label: "Select a curation", value: "none" }];
 
-    curations.forEach(({ _id, name }, i) =>
-      options.push(
-        <option key={`curation-${i}`} value={_id}>
-          {name}
-        </option>
-      )
-    );
+    curations.forEach(({ _id: id, name }, i) => {
+      const smallName = name.length > 15 ? `${name.substring(0, 15)}...` : name;
+      options.push({ value: id, label: smallName });
+    });
 
     return options;
-  };
+  }, []);
 
-  const handleCurationSelect = ({ target: { value } }) => {
+  const handleSelectLicious = (e: any) => {
+    const value =
+      e?.target?.shadowRoot?.querySelector("select").value || "none";
+    if (value === "none") {
+      setCurrentCuration("");
+      return;
+    }
     setCurrentCuration(value);
   };
 
@@ -111,16 +95,7 @@ const CurationsSection: React.FC = () => {
       ]}
     >
       {curations.length > 0 && (
-        <FormControl variant="outlined">
-          <Select
-            native
-            value={currentCuration}
-            onChange={handleCurationSelect}
-            input={<CartoliciousInput />}
-          >
-            {createOptions()}
-          </Select>
-        </FormControl>
+        <LiciousSelect options={options} onInput={handleSelectLicious} />
       )}
     </SidebarSection>
   );

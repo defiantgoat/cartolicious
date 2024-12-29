@@ -27,7 +27,8 @@ const useStyles = makeStyles((theme) => ({
   },
   sectionButtons: {
     display: "flex",
-    justifyContent: "space-between",
+    gap: ".5rem",
+    justifyContent: "flex-end",
   },
 }));
 

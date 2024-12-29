@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { Button } from "@material-ui/core";
 import { getAuth, signOut } from "firebase/auth";
 import FirebaseContext from "../Firebase/context";
 import useUser from "../../hooks/useUser";
+import { LiciousIconButton } from "@licious/react";
 
 const LogoutButton = () => {
   const firebaseApp = useContext(FirebaseContext);
@@ -18,11 +18,7 @@ const LogoutButton = () => {
     }
   };
 
-  return (
-    <Button color="primary" variant="outlined" onClick={handleLogout}>
-      Log Out
-    </Button>
-  );
+  return <LiciousIconButton icon="logout" onClick={handleLogout} />;
 };
 
 export default LogoutButton;
