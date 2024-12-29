@@ -76,7 +76,7 @@ const Toolbar: React.FC = () => {
           <div className={classes.buttonContainer}>
             <LiciousToolbarButton
               icon="paint"
-              size="lg"
+              size="md"
               onClick={handleRecolor}
             />
           </div>

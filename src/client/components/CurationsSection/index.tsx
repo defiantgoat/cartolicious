@@ -14,6 +14,7 @@ const EditCurationsButton: React.FC = () => {
   const handleClick = () => dispatch(toggleCurationsDialog());
   return (
     <LiciousIconButton
+      size="sm"
       icon="edit"
       onClick={handleClick}
       title="Edit Your Curations"
@@ -45,7 +46,7 @@ const SaveCuration: React.FC = () => {
     }
   };
 
-  return <LiciousIconButton icon="save" onClick={handleSave} />;
+  return <LiciousIconButton size="sm" icon="save" onClick={handleSave} />;
 };
 
 const CurationsSection: React.FC = () => {

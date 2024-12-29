@@ -18,7 +18,7 @@ const LogoutButton = () => {
     }
   };
 
-  return <LiciousIconButton icon="logout" onClick={handleLogout} />;
+  return <LiciousIconButton size="sm" icon="logout" onClick={handleLogout} />;
 };
 
 export default LogoutButton;

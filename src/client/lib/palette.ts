@@ -5,7 +5,7 @@ const palette = {
       rgb: [255, 215, 0],
     },
     secondary: {
-      hex: "#000000",
+      hex: "#FFF4B6",
       rgb: [0, 0, 0],
     },
     tertiary: {

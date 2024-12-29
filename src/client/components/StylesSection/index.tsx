@@ -9,7 +9,7 @@ import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
 import { LiciousIconButton, LiciousSelect } from "@licious/react";
 
 const EditStylesButton: React.FC = () => {
-  return <LiciousIconButton disabled icon="edit" />;
+  return <LiciousIconButton size="sm" disabled icon="edit" />;
 };
 
 const SaveStyleButton: React.FC = () => {
@@ -40,7 +40,7 @@ const SaveStyleButton: React.FC = () => {
     }
   };
 
-  return <LiciousIconButton icon="save" onClick={handleSave} />;
+  return <LiciousIconButton size="sm" icon="save" onClick={handleSave} />;
 };
 
 const StylesSection: React.FC = () => {

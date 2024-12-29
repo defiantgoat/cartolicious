@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "1rem",
     height: "2rem",
     alignItems: "center",
-    color: theme.palette.primary.main,
+    color: theme.palette.secondary.main,
     backgroundColor: "#000",
   },
 }));
