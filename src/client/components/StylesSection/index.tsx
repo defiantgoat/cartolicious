@@ -59,7 +59,7 @@ const StylesSection: React.FC = () => {
     );
 
     return options;
-  }, []);
+  }, [styles]);
 
   const loadStyle = async (_id: string) => {
     try {

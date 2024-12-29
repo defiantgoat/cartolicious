@@ -68,7 +68,7 @@ const CurationsSection: React.FC = () => {
     });
 
     return options;
-  }, []);
+  }, [curations]);
 
   const handleSelectLicious = (e: any) => {
     const value =

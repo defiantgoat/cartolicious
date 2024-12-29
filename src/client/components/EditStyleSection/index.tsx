@@ -56,7 +56,7 @@ const EditStyleSection: React.FC = () => {
     }
 
     return options;
-  }, []);
+  }, [cartolicious]);
 
   const handleSelectLicious = (e: any) => {
     const value =
