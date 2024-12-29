@@ -4,12 +4,17 @@ const useStyles = makeStyles((theme) => ({
   toolbar: {
     flexShrink: 0,
     backgroundColor: "#000",
-    borderRight: "1px solid #ccc",
-    alignItems: "center",
+    // alignItems: "center",
     display: "flex",
-    padding: ".75rem",
     flexDirection: "row",
     justifyContent: "space-between",
+    flexBasis: "65px",
+  },
+  titleContainer: {
+    display: "flex",
+    flexGrow: 1,
+    padding: "0 .55rem",
+    alignItems: "center",
   },
   title: {
     fontFamily: "rig-shaded-bold-extrude, sans-serif",
@@ -17,11 +22,17 @@ const useStyles = makeStyles((theme) => ({
     fontStyle: "normal",
     color: "gold",
   },
-  buttonContainer: {
+  buttonsContainer: {
     flexShrink: 1,
     display: "flex",
     flexDirection: "row",
-    gap: "1rem",
+    gap: ".5rem",
+  },
+  buttonContainer: {
+    display: "flex",
+    flexGrow: 1,
+    padding: 0,
+    alignItems: "center",
   },
 }));
 

@@ -9,6 +9,12 @@ const useStyles = makeStyles((theme) => ({
     overflow: "hidden",
     flexDirection: "column",
   },
+  mainContent: {
+    display: "flex",
+    flexDirection: "row",
+    flexGrow: 1,
+    height: "calc(100% - 65px)",
+  },
   busyIndicator: {
     zIndex: 100,
     backgroundColor: "rgba(0, 0, 0, .8)",

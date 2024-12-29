@@ -4,11 +4,12 @@ import OLVectorTile from "ol/source/VectorTile";
 import { Fill, Stroke, Style } from "ol/style.js";
 import MVT from "ol/format/MVT.js";
 import { createXYZ, extentFromProjection } from "ol/tilegrid";
-import { MAPBOX_TOKEN } from "../../keys";
-import MapContainerContext from "../MapContainerContext";
+// import { MAPBOX_TOKEN } from "../../keys";
+import MapContext from "../MapContext";
 import { useSelector } from "react-redux";
 import { ReduxStateConfigProps, CartoliciousStyles } from "../../interfaces";
-
+export const MAPBOX_TOKEN =
+  "pk.eyJ1IjoiZGVmaWFudGdvYXQiLCJhIjoiY200cHM2ampqMHk1YTJrb3N2MnlzOHJ1dyJ9.iU8b-PtlueSQuP3oq31O5A";
 const MAPBOX_FEATURE_TYPES = {
   CLASS: "class",
   TYPE: "type",
@@ -24,7 +25,7 @@ const mapboxTileUrlFunction = ([z, x, y]) => {
 };
 
 const MapboxLayer: React.FC = () => {
-  const map = useContext(MapContainerContext);
+  const map = useContext(MapContext);
   const layer = useRef(null as OLVectorTileLayer | null);
   const source = useRef(null as OLVectorTile | null);
   const stylesRef = useRef({});

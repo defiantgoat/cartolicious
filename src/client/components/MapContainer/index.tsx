@@ -1,88 +1,54 @@
-import React, { useLayoutEffect, useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import OLMap from "ol/Map";
-import OLView from "ol/View";
-import useStyles from "./use-styles";
+import React, { useContext, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { ReduxStateConfigProps } from "../../interfaces";
-import { MAP_CONFIG, ENDPOINTS } from "../../config";
-import MapContainerContext from "../MapContainerContext";
-import { setCaroliciousStyles, setBackground, setBusy } from "../../actions";
-import { TEMP_CARTOLICIOUS_API_BAKED_TOKEN } from "../../keys";
+import MapContext from "../MapContext";
+import useQueryString from "../../hooks/useQueryString";
+import useStyles from "./use-styles";
 import "ol/ol.css";
+import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 
 interface MapContainerProps {
   children?: React.ReactNode;
 }
 
 const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
-  const dispatch = useDispatch();
+  const map = useContext(MapContext);
   const { mapContainer } = useStyles();
   const [r, g, b, a] = useSelector(
     (state: ReduxStateConfigProps) => state.background
   );
 
-  const [olMap, setOlMap] = useState(null as OLMap | null);
+  const { loadNewStyle, loadCurationByHash } = useCartoliciousApi();
 
-  const fetchStyles = async () => {
-    dispatch(setBusy(true));
-    try {
-      const res = await fetch(
-        ENDPOINTS.GET_STYLES(TEMP_CARTOLICIOUS_API_BAKED_TOKEN)
-      );
-      const { data, errors } = await res.json();
-      if (data.length > 0) {
-        const [newStyles, background] = data;
-        const newStyleMap = new Map();
-        Object.entries(newStyles).forEach(([key, value]) =>
-          newStyleMap.set(key, value)
-        );
-        dispatch(setCaroliciousStyles(newStyleMap));
-        dispatch(setBackground(background));
-      }
-      if (errors.length > 0) {
-        console.log(errors);
-      }
-    } catch (e) {
-    } finally {
-      dispatch(setBusy(false));
-    }
+  const fetchStyle = async () => {
+    await loadNewStyle();
   };
 
-  useLayoutEffect(() => {
-    const view = new OLView({
-      center: MAP_CONFIG.DEFAULT_CENTER,
-      zoom: MAP_CONFIG.DEFAULT_ZOOM,
-      maxZoom: MAP_CONFIG.MAX_ZOOM,
-      minZoom: MAP_CONFIG.MIN_ZOOM,
-      constrainResolution: true,
-    });
-
-    const map = new OLMap({
-      view,
-      target: "map",
-    });
-
-    setOlMap(map);
-
-    return () => {
-      setOlMap(null);
-    };
-  }, []);
+  const fetchCuration = async (hash: string) => {
+    await loadCurationByHash(hash);
+  };
 
   useEffect(() => {
-    fetchStyles();
-  }, []);
+    if (map) {
+      const { curation } = useQueryString();
+      if (curation) {
+        fetchCuration(curation);
+      } else {
+        fetchStyle();
+      }
+    }
+  }, [map, window.location.search]);
 
   return (
-    <MapContainerContext.Provider value={olMap}>
+    <>
       <div
         id="map"
         className={mapContainer}
         style={{ backgroundColor: `rgba(${r}, ${g}, ${b}, ${a})` }}
       >
-        {olMap && children}
+        {map && children}
       </div>
-    </MapContainerContext.Provider>
+    </>
   );
 };
 

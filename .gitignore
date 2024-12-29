@@ -6,3 +6,4 @@ src/client/keys.ts
 dist_dev
 dist_prod
 Dockerrun.aws.json
+aws-deploy-reference.rtf
