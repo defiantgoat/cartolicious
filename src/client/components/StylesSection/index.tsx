@@ -1,21 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
-import { Button, Select, FormControl, IconButton } from "@material-ui/core";
-import EditRounded from "@material-ui/icons/EditRounded";
 import { ENDPOINTS } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
 import SidebarSection from "../common/SidebarSection";
 import { mapFromObject, objectFromMap } from "../../lib/utils";
-import { CartoliciousInput } from "../../lib/theme";
 import useUser from "../../hooks/useUser";
 import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
+import { LiciousIconButton, LiciousSelect } from "@licious/react";
 
 const EditStylesButton: React.FC = () => {
-  return (
-    <IconButton color="primary" title="Edit Your Styles">
-      <EditRounded />
-    </IconButton>
-  );
+  return <LiciousIconButton disabled icon="edit" />;
 };
 
 const SaveStyleButton: React.FC = () => {
@@ -46,11 +40,7 @@ const SaveStyleButton: React.FC = () => {
     }
   };
 
-  return (
-    <Button color="primary" variant="outlined" onClick={handleSave}>
-      Save Style
-    </Button>
-  );
+  return <LiciousIconButton icon="save" onClick={handleSave} />;
 };
 
 const StylesSection: React.FC = () => {
@@ -61,23 +51,15 @@ const StylesSection: React.FC = () => {
     (state: ReduxStateConfigProps) => state.user
   );
 
-  const createOptions = (): JSX.Element[] => {
-    const options = [
-      <option value={"none"} key="select-a-style">
-        Select a Style
-      </option>,
-    ] as JSX.Element[];
+  const options = useMemo(() => {
+    const options = [{ label: "Select a style", value: "none" }];
 
     styles.forEach(({ _id: id }, i) =>
-      options.push(
-        <option key={`style-${i}`} value={id}>
-          {`Style ${id}`}
-        </option>
-      )
+      options.push({ value: id, label: `Style ${i}` })
     );
 
     return options;
-  };
+  }, []);
 
   const loadStyle = async (_id: string) => {
     try {
@@ -98,7 +80,9 @@ const StylesSection: React.FC = () => {
     }
   };
 
-  const handleStyleSelect = ({ target: { value } }) => {
+  const handleStyleSelectLicious = (e: any) => {
+    const value =
+      e?.target?.shadowRoot?.querySelector("select").value || "none";
     if (value === "none") {
       setCurrentStyle("");
       return;
@@ -121,16 +105,7 @@ const StylesSection: React.FC = () => {
       ]}
     >
       {styles.length > 0 && (
-        <FormControl variant="outlined">
-          <Select
-            native
-            value={currentStyle}
-            onChange={handleStyleSelect}
-            input={<CartoliciousInput />}
-          >
-            {createOptions()}
-          </Select>
-        </FormControl>
+        <LiciousSelect options={options} onInput={handleStyleSelectLicious} />
       )}
     </SidebarSection>
   );

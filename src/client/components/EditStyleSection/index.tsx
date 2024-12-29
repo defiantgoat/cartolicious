@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { useSelector } from "react-redux";
-import { Button, Select, FormControl, Checkbox } from "@material-ui/core";
-import { ENDPOINTS } from "../../config";
+import { Checkbox } from "@material-ui/core";
 import {
   CartoliciousFill,
   CartoliciousStroke,
   ReduxStateConfigProps,
 } from "../../interfaces";
 import SidebarSection from "../common/SidebarSection";
-import { mapFromObject, objectFromMap } from "../../lib/utils";
-import { CartoliciousInput } from "../../lib/theme";
 import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
+import { LiciousSelect } from "@licious/react";
 
 const StyleDisplay: React.FC<{
   style: CartoliciousFill | CartoliciousStroke;
@@ -44,24 +42,33 @@ const EditStyleSection: React.FC = () => {
 
   const { setCaroliciousStyles } = useCartoliciousStyles();
 
-  const createOptions = (): JSX.Element[] => {
-    const options = [
-      <option value={-1} key="select-an-attribute">
-        Select an Attribute
-      </option>,
-    ] as JSX.Element[];
+  const options = useMemo(() => {
+    const options = [{ label: "Select an Attribute", value: "none" }];
 
     if (cartolicious) {
       cartolicious.forEach((value, key) => {
-        options.push(
-          <option key={`attribute-${key}`} value={key}>
-            {key.replace("_", " ").toUpperCase()}
-          </option>
-        );
+        console.log(key);
+        options.push({
+          value: key,
+          label: key.replace("_", " ").toUpperCase(),
+        });
       });
     }
 
     return options;
+  }, []);
+
+  const handleSelectLicious = (e: any) => {
+    const value =
+      e?.target?.shadowRoot?.querySelector("select").value || "none";
+    console.log(value);
+    setCurrentStyle(value);
+    if (cartolicious) {
+      const [fill, stroke, visible] = cartolicious.get(value) || [[], [], 0];
+      setCurrentAttributeFill(fill);
+      setCurrentAttributeStroke(stroke);
+      setCurrentAttributeVisible(visible);
+    }
   };
 
   const handleFillAttributeChange = ({ target: { checked } }) => {
@@ -104,17 +111,6 @@ const EditStyleSection: React.FC = () => {
     setCaroliciousStyles({ styleMap: newMap });
   };
 
-  const handleStyleSelect = ({ target: { value } }) => {
-    console.log(value);
-    setCurrentStyle(value);
-    if (cartolicious) {
-      const [fill, stroke, visible] = cartolicious.get(value) || [[], [], 0];
-      setCurrentAttributeFill(fill);
-      setCurrentAttributeStroke(stroke);
-      setCurrentAttributeVisible(visible);
-    }
-  };
-
   // useEffect(() => {
   //   if (currentStyle > -1) {
   //     loadStyle(`${currentStyle}`);
@@ -139,18 +135,8 @@ const EditStyleSection: React.FC = () => {
   return (
     <SidebarSection header="Edit Style">
       {cartolicious && (
-        <FormControl variant="outlined">
-          <Select
-            native
-            value={currentStyle}
-            onChange={handleStyleSelect}
-            input={<CartoliciousInput />}
-          >
-            {createOptions()}
-          </Select>
-        </FormControl>
+        <LiciousSelect options={options} onInput={handleSelectLicious} />
       )}
-
       {currentAttributeFill.length > 0 && (
         <div
           style={{

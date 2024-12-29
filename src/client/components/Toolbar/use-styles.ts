@@ -26,11 +26,12 @@ const useStyles = makeStyles((theme) => ({
     flexShrink: 1,
     display: "flex",
     flexDirection: "row",
+    gap: ".5rem",
   },
   buttonContainer: {
     display: "flex",
     flexGrow: 1,
-    padding: "0 .55rem",
+    padding: 0,
     alignItems: "center",
   },
 }));
