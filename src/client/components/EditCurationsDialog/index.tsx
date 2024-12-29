@@ -1,12 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Dialog,
-  IconButton,
-  List,
-  ListItem,
-  TextField,
-} from "@material-ui/core";
+import { IconButton, List, ListItem, TextField } from "@material-ui/core";
 import { Curation, ReduxStateConfigProps } from "../../interfaces";
 import { toggleCurationsDialog } from "../../actions";
 import {
@@ -16,6 +10,8 @@ import {
   Visibility,
 } from "@material-ui/icons";
 import useCartoliciousApi from "../../hooks/useCartoliciousApi";
+import { LiciousPanel, LiciousInput } from "@licious/react";
+import { CLOSE_CURATIONS_DIALOG } from "../../constants";
 
 const CurationItem: React.FC<{ curation: Curation }> = ({ curation }) => {
   const { _id, name, style } = curation;
@@ -43,13 +39,14 @@ const CurationItem: React.FC<{ curation: Curation }> = ({ curation }) => {
     const { status, data, errors } = await deleteCuration({ _id });
     console.log(status, data, errors);
     if (status === 200) {
-      setDeleted(true);
       console.log("update local state with new curation");
     }
   };
 
-  const handleCurationName = ({ target: { value } }) => {
-    setCurationName(value);
+  const handleCurationName = (e: any) => {
+    setCurationName(
+      e?.target?.shadowRoot?.querySelector("input")?.value || "?"
+    );
   };
 
   const { token, curations } = useSelector(
@@ -64,13 +61,11 @@ const CurationItem: React.FC<{ curation: Curation }> = ({ curation }) => {
       <div style={{ display: "flex", flex: 1 }}>
         <div style={{ flexGrow: 1, display: "flex", alignItems: "center" }}>
           {editName ? (
-            <TextField
+            <LiciousInput
+              value={curationName}
               disabled={!editName}
-              variant="outlined"
-              defaultValue={curationName}
-              style={{ flex: 1 }}
-              onChange={handleCurationName}
-            ></TextField>
+              onInput={handleCurationName}
+            />
           ) : (
             curationName
           )}
@@ -116,6 +111,7 @@ const CurationItem: React.FC<{ curation: Curation }> = ({ curation }) => {
 
 const EditCurationsDialog: React.FC = () => {
   const dispatch = useDispatch();
+  const panelRef = useRef<any>(null);
 
   const open = useSelector(
     (state: ReduxStateConfigProps) => state.curations_dialog_open
@@ -125,9 +121,20 @@ const EditCurationsDialog: React.FC = () => {
     (state: ReduxStateConfigProps) => state.user
   );
 
-  const handleClose = (event: object, reason: string) => {
-    dispatch(toggleCurationsDialog());
+  const handleClose = (event: object) => {
+    dispatch({ type: CLOSE_CURATIONS_DIALOG });
   };
+
+  useEffect(() => {
+    if (panelRef.current) {
+      panelRef?.current?.addEventListener("panelClosed", (e: any) =>
+        handleClose(e)
+      );
+      return panelRef?.current?.removeEventListener("panelClosed", (e: any) =>
+        handleClose(e)
+      );
+    }
+  }, [panelRef.current]);
 
   const createCurationList = (): JSX.Element[] => {
     const options = [] as JSX.Element[];
@@ -154,11 +161,11 @@ const EditCurationsDialog: React.FC = () => {
   };
 
   return (
-    <Dialog fullWidth={true} maxWidth="md" open={open} onClose={handleClose}>
-      <div style={{ padding: "2rem" }}>
+    <LiciousPanel ref={panelRef} open={open} header="Edit Curations">
+      <div slot="content">
         <List>{createCurationList()}</List>
       </div>
-    </Dialog>
+    </LiciousPanel>
   );
 };
 

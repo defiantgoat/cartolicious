@@ -2,16 +2,16 @@ import React, { useContext, useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import MapContext from "../MapContext";
 import { ReduxStateConfigProps } from "../../interfaces";
-import { toggleCurationsDialog } from "../../actions";
 import SidebarSection from "../common/SidebarSection";
 import { objectFromMap } from "../../lib/utils";
 import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
 import { LiciousIconButton, LiciousSelect } from "@licious/react";
+import { OPEN_CURATIONS_DIALOG } from "../../constants";
 
 const EditCurationsButton: React.FC = () => {
   const dispatch = useDispatch();
-  const handleClick = () => dispatch(toggleCurationsDialog());
+  const handleClick = () => dispatch({ type: OPEN_CURATIONS_DIALOG });
   return (
     <LiciousIconButton
       size="sm"
@@ -26,8 +26,7 @@ const SaveCuration: React.FC = () => {
   const map = useContext(MapContext);
   const { saveCuration } = useCartoliciousApi();
 
-  const { currentStyles, currentBackground, setCaroliciousStyles } =
-    useCartoliciousStyles();
+  const { currentStyles, currentBackground } = useCartoliciousStyles();
 
   const handleSave = async () => {
     if (currentStyles && map) {

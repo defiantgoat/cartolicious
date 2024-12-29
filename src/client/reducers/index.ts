@@ -10,6 +10,8 @@ import {
   TOGGLE_SIDEBAR,
   TOGGLE_CURATIONS_DIALOG,
   TOGGLE_STYLES_DIALOG,
+  OPEN_CURATIONS_DIALOG,
+  CLOSE_CURATIONS_DIALOG,
 } from "../constants";
 import { ReduxActionProps, ReduxStateConfigProps } from "../interfaces";
 
@@ -62,10 +64,21 @@ const rootReducer = (
         styles_dialog_open: !styles_dialog_open,
       };
     case TOGGLE_CURATIONS_DIALOG:
+      console.log("TOGGLE_CURATIONS_DIALOG");
       const { curations_dialog_open } = state;
       return {
         ...state,
         curations_dialog_open: !curations_dialog_open,
+      };
+    case CLOSE_CURATIONS_DIALOG:
+      return {
+        ...state,
+        curations_dialog_open: false,
+      };
+    case OPEN_CURATIONS_DIALOG:
+      return {
+        ...state,
+        curations_dialog_open: true,
       };
     case SET_CARTOLICIOUS_STYLES:
       const { styleMap, style_id = null, curation_id = null } = payload;
