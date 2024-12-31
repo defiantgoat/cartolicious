@@ -38,7 +38,11 @@ const Toolbar: React.FC = () => {
         Object.entries(newStyles).forEach(([key, value]) =>
           newStyleMap.set(key, value)
         );
-        setCaroliciousStyles({ styleMap: newStyleMap });
+        setCaroliciousStyles({
+          styleMap: newStyleMap,
+          resetStyleId: true,
+          resetCurationId: true,
+        });
         setBackground(background);
       }
       if (errors.length > 0) {

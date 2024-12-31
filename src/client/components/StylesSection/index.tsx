@@ -14,7 +14,8 @@ const EditStylesButton: React.FC = () => {
 
 const SaveStyleButton: React.FC = () => {
   const { token, user_id } = useUser();
-  const { currentStyles, currentBackground } = useCartoliciousStyles();
+  const { currentStyles, currentBackground, addStyle } =
+    useCartoliciousStyles();
 
   const handleSave = async () => {
     if (currentStyles) {
@@ -34,9 +35,12 @@ const SaveStyleButton: React.FC = () => {
         }),
       });
 
-      const { status, data, errors } = await saveStyle.json();
+      const { data, errors } = await saveStyle.json();
 
-      console.log(status, data, errors);
+      if (data && data.length > 0) {
+        const newStyle = data[0];
+        addStyle(newStyle);
+      }
     }
   };
 
@@ -44,8 +48,13 @@ const SaveStyleButton: React.FC = () => {
 };
 
 const StylesSection: React.FC = () => {
-  const [currentStyle, setCurrentStyle] = useState("");
-  const { setCaroliciousStyles, setBackground } = useCartoliciousStyles();
+  const [currentStyle, setCurrentStyle] = useState("none");
+  const { setCaroliciousStyles, setBackground, styleId } =
+    useCartoliciousStyles();
+
+  useEffect(() => {
+    setCurrentStyle(styleId || "none");
+  }, [styleId]);
 
   const { token, styles } = useSelector(
     (state: ReduxStateConfigProps) => state.user
@@ -54,12 +63,20 @@ const StylesSection: React.FC = () => {
   const options = useMemo(() => {
     const options = [{ label: "Select a style", value: "none" }];
 
-    styles.forEach(({ _id: id }, i) =>
-      options.push({ value: id, label: `Style ${i}` })
-    );
+    if (currentStyle === "none") {
+      options[0]["selected"] = true;
+    }
+
+    styles.forEach(({ _id: id, name }, i) => {
+      const opt = { value: id, label: name || `zStyle ${i}` };
+      if (id === currentStyle) {
+        opt["selected"] = true;
+      }
+      options.push(opt);
+    });
 
     return options;
-  }, [styles]);
+  }, [styles, currentStyle]);
 
   const loadStyle = async (_id: string) => {
     try {

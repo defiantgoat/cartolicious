@@ -12,6 +12,8 @@ import {
   TOGGLE_STYLES_DIALOG,
   OPEN_CURATIONS_DIALOG,
   CLOSE_CURATIONS_DIALOG,
+  ADD_STYLE,
+  ADD_CURATION,
 } from "../constants";
 import { ReduxActionProps, ReduxStateConfigProps } from "../interfaces";
 
@@ -81,7 +83,13 @@ const rootReducer = (
         curations_dialog_open: true,
       };
     case SET_CARTOLICIOUS_STYLES:
-      const { styleMap, style_id = null, curation_id = null } = payload;
+      const {
+        styleMap,
+        style_id = null,
+        curation_id = null,
+        resetStyleId = false,
+        resetCurationId = false,
+      } = payload;
       const newState = {
         ...state,
         cartolicious_styles: styleMap,
@@ -89,8 +97,14 @@ const rootReducer = (
       if (style_id) {
         newState["style_id"] = style_id;
       }
+      if (resetStyleId) {
+        newState["style_id"] = null;
+      }
       if (curation_id) {
         newState["curation_id"] = curation_id;
+      }
+      if (resetCurationId) {
+        newState["curation_id"] = null;
       }
       return newState;
     case SET_BUSY:
@@ -145,6 +159,15 @@ const rootReducer = (
         user: {
           ...state.user,
           token: payload,
+        },
+      };
+    }
+    case ADD_STYLE: {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          styles: [...state.user.styles, payload],
         },
       };
     }

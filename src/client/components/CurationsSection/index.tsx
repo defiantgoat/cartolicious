@@ -8,12 +8,16 @@ import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
 import { LiciousIconButton, LiciousSelect } from "@licious/react";
 import { OPEN_CURATIONS_DIALOG } from "../../constants";
+// import { getThumbnail } from "../../lib/utils";
 
-const EditCurationsButton: React.FC = () => {
+const EditCurationsButton: React.FC<{
+  disabled?: boolean;
+}> = ({ disabled }) => {
   const dispatch = useDispatch();
   const handleClick = () => dispatch({ type: OPEN_CURATIONS_DIALOG });
   return (
     <LiciousIconButton
+      disabled={disabled}
       size="sm"
       icon="edit"
       onClick={handleClick}
@@ -30,6 +34,14 @@ const SaveCuration: React.FC = () => {
 
   const handleSave = async () => {
     if (currentStyles && map) {
+      // const thumbnail = await getThumbnail({
+      //   map,
+      //   exportOptions: {
+      //     width: 400,
+      //     height: 225,
+      //   },
+      // });
+      // console.log(thumbnail);
       const styles = objectFromMap(currentStyles);
       const [long, lat] = map.getView().getCenter();
       const zoom = map.getView().getZoom();
@@ -91,7 +103,10 @@ const CurationsSection: React.FC = () => {
       header="Your Curations"
       buttons={[
         <SaveCuration key="save-curations-button" />,
-        <EditCurationsButton key="edit-curations-button" />,
+        <EditCurationsButton
+          key="edit-curations-button"
+          disabled={curations.length === 0}
+        />,
       ]}
     >
       {curations.length > 0 && (

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { IconButton, List, ListItem, TextField } from "@material-ui/core";
+import { IconButton, List, ListItem } from "@material-ui/core";
 import { Curation, ReduxStateConfigProps } from "../../interfaces";
 import { toggleCurationsDialog } from "../../actions";
 import {
@@ -10,7 +10,7 @@ import {
   Visibility,
 } from "@material-ui/icons";
 import useCartoliciousApi from "../../hooks/useCartoliciousApi";
-import { LiciousPanel, LiciousInput } from "@licious/react";
+import { LiciousPanel, LiciousInput, LiciousIconButton } from "@licious/react";
 import { CLOSE_CURATIONS_DIALOG } from "../../constants";
 
 const CurationItem: React.FC<{ curation: Curation }> = ({ curation }) => {
@@ -85,15 +85,11 @@ const CurationItem: React.FC<{ curation: Curation }> = ({ curation }) => {
               <IconButton onClick={() => setEditName(true)}>
                 <EditRounded />
               </IconButton>
-              <IconButton onClick={handleDeleteCuration}>
-                <Delete />
-              </IconButton>
+              <LiciousIconButton icon="trash" onClick={handleDeleteCuration} />
             </>
           ) : (
             <>
-              <IconButton onClick={handleUpdateCuration}>
-                <SaveRounded />
-              </IconButton>
+              <LiciousIconButton icon="save" onClick={handleUpdateCuration} />
             </>
           )}
         </div>

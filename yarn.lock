@@ -1682,18 +1682,18 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@licious/react@^0.0.15":
-  version "0.0.15"
-  resolved "https://registry.yarnpkg.com/@licious/react/-/react-0.0.15.tgz#427b17042cbcb226c3ec241dfa9282cca33c9e3e"
-  integrity sha512-B2vAHJCvysJCly7R9Qf95ymHmsMSlaFjtjg33zjXdD/ZHCrVTVJJwKqTSFDBmnyDPn11ggFP4wq6UwdN2U7kNQ==
+"@licious/react@^0.0.16":
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/@licious/react/-/react-0.0.16.tgz#ac7081711dd15ca61e2cb35710546b0db75dced3"
+  integrity sha512-mEJU+mtQWwZaeFnJzOgZWl90HakC90rMSYYyXPZBQP2PPDyle4tIEMOU6on0Qfbx34dP1/X9qou1FYdVrBMPUQ==
   dependencies:
-    "@licious/web-components" "^0.0.15"
+    "@licious/web-components" "^0.0.16"
     "@stencil/react-output-target" "^0.8.1"
 
-"@licious/web-components@^0.0.15":
-  version "0.0.15"
-  resolved "https://registry.yarnpkg.com/@licious/web-components/-/web-components-0.0.15.tgz#698d897ae76cf2b9a10dc2657f282cba1f4aba0a"
-  integrity sha512-XO0stQBdbg5svLJVpbR9fORen7PkWbY/JDuLvoI+/k4lFoy1Gocnk7duKc2as8Zi4oe0V1pW52Oo96YoIKm+2A==
+"@licious/web-components@^0.0.16":
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/@licious/web-components/-/web-components-0.0.16.tgz#fd728eea36ff8f2793a45cf5203bb154e77512b3"
+  integrity sha512-AeEEjPBKcEGKS34p/90tcHgFOKaNhltw1bwpvwSfwq9Hg8ENBDgc1XXmCH5V/CGZX+/5mWGahLAC8NkDREiN8Q==
   dependencies:
     "@stencil/core" "^4.23.0"
 
@@ -2808,6 +2808,11 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
+base64-arraybuffer@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/base64-arraybuffer/-/base64-arraybuffer-1.0.2.tgz#1c37589a7c4b0746e34bd1feb951da2df01c1bdc"
+  integrity sha512-I3yl4r9QB5ZRY3XuJVEPfc2XhZO6YweFPI+UovAzn+8/hb3oJ6lnysaFcjVpkCPfVWFUDvoZ8kmVDP7WyRtYtQ==
+
 base64-js@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.5.1.tgz#1b1b440160a5bf7ad40b650f095963481903930a"
@@ -3213,6 +3218,13 @@ crypto-js@^4.0.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-4.1.1.tgz#9e485bcf03521041bd85844786b83fb7619736cf"
   integrity sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==
+
+css-line-break@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/css-line-break/-/css-line-break-2.1.0.tgz#bfef660dfa6f5397ea54116bb3cb4873edbc4fa0"
+  integrity sha512-FHcKFCZcAha3LwfVBhCQbW2nCNbkZXn7KVUJcsT5/P8YmfsVja0FMPJr0B903j/E69HUphKiV9iQArX8SDYA4w==
+  dependencies:
+    utrie "^1.0.2"
 
 css-loader@^6.7.3:
   version "6.7.3"
@@ -4466,6 +4478,14 @@ html-webpack-plugin@^5.3.1:
     lodash "^4.17.21"
     pretty-error "^4.0.0"
     tapable "^2.0.0"
+
+html2canvas@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/html2canvas/-/html2canvas-1.4.1.tgz#7cef1888311b5011d507794a066041b14669a543"
+  integrity sha512-fPU6BHNpsyIhr8yyMpTLLxAbkaK8ArIBcmZIRiBLiDhjeqvXolaEmDGmELFuX9I4xDcaKKcJl+TKZLqruBbmWA==
+  dependencies:
+    css-line-break "^2.1.0"
+    text-segmentation "^1.0.3"
 
 htmlparser2@10.0.0:
   version "10.0.0"
@@ -7086,6 +7106,13 @@ test-exclude@^6.0.0:
     glob "^7.1.4"
     minimatch "^3.0.4"
 
+text-segmentation@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/text-segmentation/-/text-segmentation-1.0.3.tgz#52a388159efffe746b24a63ba311b6ac9f2d7943"
+  integrity sha512-iOiPUo/BGnZ6+54OsWxZidGCsdU8YbE4PSpdPinp7DeMtUJNJBoJ/ouUSTJjHkh1KntHaltHl/gDs2FC4i5+Nw==
+  dependencies:
+    utrie "^1.0.2"
+
 text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
@@ -7359,6 +7386,13 @@ utils-merge@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==
+
+utrie@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/utrie/-/utrie-1.0.2.tgz#d42fe44de9bc0119c25de7f564a6ed1b2c87a645"
+  integrity sha512-1MLa5ouZiOmQzUbjbu9VmjLzn1QLXBhwpUa7kdLUQK+KQ5KA9I1vk5U4YHe/X2Ch7PYnJfWuWT+VbuxbGwljhw==
+  dependencies:
+    base64-arraybuffer "^1.0.2"
 
 v8-compile-cache-lib@^3.0.1:
   version "3.0.1"

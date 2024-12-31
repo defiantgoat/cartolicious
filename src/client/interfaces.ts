@@ -25,8 +25,8 @@ export interface ReduxStateConfigProps {
   background: [number, number, number, number];
   cartolicious_styles: Map<string, CartoliciousStyle> | null;
   busy: boolean;
-  style_id: number | null;
-  curation_id: number | null;
+  style_id: string | null;
+  curation_id: string | null;
   sidebar_open: boolean;
   styles_dialog_open: boolean;
   curations_dialog_open: boolean;
