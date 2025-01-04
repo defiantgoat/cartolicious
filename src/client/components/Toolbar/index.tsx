@@ -1,11 +1,16 @@
 import React, { useContext, useState } from "react";
 import { useSelector } from "react-redux";
-import useStyles from "./use-styles";
+import {
+  ToolbarRoot,
+  TitleContainer,
+  Title,
+  ButtonsContainer,
+  ButtonContainer,
+} from "./styled-components";
 import { APP_NAME } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
 import { ENDPOINTS } from "../../config";
 import MenuButton from "../MenuButton";
-import { CircularProgress } from "@material-ui/core";
 import FirebaseContext from "../Firebase/context";
 import useUser from "../../hooks/useUser";
 import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
@@ -13,7 +18,6 @@ import { LiciousToolbarButton } from "@licious/react";
 
 const Toolbar: React.FC = () => {
   const firebaseApp = useContext(FirebaseContext);
-  const classes = useStyles();
   const [loading, setLoading] = useState(false);
 
   const { token, logged_in } = useUser();
@@ -59,42 +63,34 @@ const Toolbar: React.FC = () => {
   };
 
   return (
-    <div className={classes.toolbar}>
-      <div className={classes.titleContainer}>
-        <h2 className={classes.title}>{APP_NAME}</h2>
-      </div>
-      <div className={classes.buttonsContainer}>
+    <ToolbarRoot>
+      <TitleContainer>
+        <Title>{APP_NAME}</Title>
+      </TitleContainer>
+      <ButtonsContainer>
         {loading && (
-          <div
-            className={classes.buttonContainer}
-            style={{ backgroundColor: "transparent" }}
-          >
-            <CircularProgress
-              color="primary"
-              size={"sm"}
-              style={{ width: "2rem" }}
-            />
-          </div>
+          <ButtonContainer $backgroundColor="transparent">
+            <span>Loading</span>
+          </ButtonContainer>
         )}
         {logged_in ? (
-          <div className={classes.buttonContainer}>
+          <ButtonContainer>
             <LiciousToolbarButton
               icon="paint"
               size="md"
               onClick={handleRecolor}
             />
-          </div>
+          </ButtonContainer>
         ) : null}
         {firebaseApp ? (
-          <div
-            className={classes.buttonContainer}
-            style={{ backgroundColor: sidebarOpen ? "#222" : "transparent" }}
+          <ButtonContainer
+            $backgroundColor={sidebarOpen ? "#222" : "transparent"}
           >
             <MenuButton />
-          </div>
+          </ButtonContainer>
         ) : null}
-      </div>
-    </div>
+      </ButtonsContainer>
+    </ToolbarRoot>
   );
 };
 

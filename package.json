@@ -1,6 +1,6 @@
 {
   "name": "cartolicious",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Cartolicious. A cartographic art tool",
   "main": "index.js",
   "repository": "https://github.com/defiantgoat/cartolicious.git",
@@ -20,23 +20,18 @@
     "view-coverage-report": "open coverage/lcov-report/index.html"
   },
   "dependencies": {
-    "@licious/react": "^0.0.16",
-    "@material-ui/core": "^4.12.4",
-    "@material-ui/icons": "^4.11.3",
-    "crypto-js": "^4.0.0",
+    "@licious/react": "^0.0.17",
     "express": "^4.18.2",
     "firebase": "^11.1.0",
     "html2canvas": "^1.4.1",
-    "jwt-decode": "^3.1.2",
-    "normalize.css": "^8.0.1",
-    "oidc-client": "^1.10.1",
     "ol": "^7.2.2",
     "pbf": "^3.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
     "redux": "^4.2.1",
-    "redux-thunk": "^2.4.2"
+    "redux-thunk": "^2.4.2",
+    "styled-components": "^6.1.14"
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",
@@ -44,10 +39,8 @@
     "@babel/preset-env": "^7.20.2",
     "@testing-library/react": "^14.0.0",
     "@testing-library/react-hooks": "^8.0.1",
-    "@types/crypto-js": "^4.1.1",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.4.0",
-    "@types/jwt-decode": "^3.1.0",
     "@types/node": "^18.14.2",
     "@types/ol": "^7.0.0",
     "@types/react": "^18.0.28",

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { ReduxStateConfigProps } from "../../interfaces";
 import MapContext from "../MapContext";
 import useQueryString from "../../hooks/useQueryString";
-import useStyles from "./use-styles";
+import { MapContainerRoot } from "./styled-components";
 import "ol/ol.css";
 import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 
@@ -13,7 +13,6 @@ interface MapContainerProps {
 
 const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
   const map = useContext(MapContext);
-  const { mapContainer } = useStyles();
   const [r, g, b, a] = useSelector(
     (state: ReduxStateConfigProps) => state.background
   );
@@ -41,13 +40,12 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
 
   return (
     <>
-      <div
+      <MapContainerRoot
         id="map"
-        className={mapContainer}
-        style={{ backgroundColor: `rgba(${r}, ${g}, ${b}, ${a})` }}
+        $backgroundColor={`rgba(${r}, ${g}, ${b}, ${a})`}
       >
         {map && children}
-      </div>
+      </MapContainerRoot>
     </>
   );
 };

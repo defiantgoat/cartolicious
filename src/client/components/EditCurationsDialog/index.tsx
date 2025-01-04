@@ -1,14 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { IconButton, List, ListItem } from "@material-ui/core";
 import { Curation, ReduxStateConfigProps } from "../../interfaces";
-import { toggleCurationsDialog } from "../../actions";
-import {
-  Delete,
-  EditRounded,
-  SaveRounded,
-  Visibility,
-} from "@material-ui/icons";
 import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 import { LiciousPanel, LiciousInput, LiciousIconButton } from "@licious/react";
 import { CLOSE_CURATIONS_DIALOG } from "../../constants";
@@ -54,7 +46,7 @@ const CurationItem: React.FC<{ curation: Curation }> = ({ curation }) => {
   );
 
   return !deleted ? (
-    <ListItem
+    <div
       key={`curation-${_id}`}
       style={{ borderBottom: "1px solid #ccc", display: "flex" }}
     >
@@ -79,12 +71,27 @@ const CurationItem: React.FC<{ curation: Curation }> = ({ curation }) => {
         >
           {!editName ? (
             <>
-              <IconButton onClick={handleLoadCuration}>
-                <Visibility />
-              </IconButton>
-              <IconButton onClick={() => setEditName(true)}>
-                <EditRounded />
-              </IconButton>
+              <LiciousIconButton icon="custom" onClick={handleLoadCuration}>
+                <svg
+                  /*
+                  // @ts-ignore */
+                  slot="custom-icon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  width="24"
+                >
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+                    fill="gold"
+                  />
+                </svg>
+              </LiciousIconButton>
+              <LiciousIconButton
+                icon="edit"
+                onClick={() => setEditName(true)}
+              ></LiciousIconButton>
               <LiciousIconButton icon="trash" onClick={handleDeleteCuration} />
             </>
           ) : (
@@ -94,14 +101,14 @@ const CurationItem: React.FC<{ curation: Curation }> = ({ curation }) => {
           )}
         </div>
       </div>
-    </ListItem>
+    </div>
   ) : (
-    <ListItem
+    <div
       key={`curation-${_id}`}
       style={{ borderBottom: "1px solid #ccc", display: "flex" }}
     >
       <p>deleted</p>
-    </ListItem>
+    </div>
   );
 };
 
@@ -136,21 +143,7 @@ const EditCurationsDialog: React.FC = () => {
     const options = [] as JSX.Element[];
 
     curations.forEach((curation, i) =>
-      options.push(
-        <CurationItem curation={curation} />
-        // <ListItem key={`curation-${i}`} style={{borderBottom: "1px solid #ccc", display:"flex"}}>
-        //   <div style={{display: "flex", flex: 1}}>
-        //     <div style={{flexGrow: 1, display: "flex", alignItems: "center"}}>
-        //       <TextField defaultValue={name} style={{flex: 1}}></TextField>
-        //       </div>
-        //     <div style={{flexBasis: "33%",display: "flex", justifyContent: "flex-end"}}>
-        //       <IconButton><Visibility /></IconButton>
-        //       <IconButton><EditAttributes /></IconButton>
-        //       <IconButton><Delete /></IconButton>
-        //     </div>
-        //     </div>
-        // </ListItem>
-      )
+      options.push(<CurationItem curation={curation} />)
     );
 
     return options;
@@ -159,7 +152,7 @@ const EditCurationsDialog: React.FC = () => {
   return (
     <LiciousPanel ref={panelRef} open={open} header="Edit Curations">
       <div slot="content">
-        <List>{createCurationList()}</List>
+        <div>{createCurationList()}</div>
       </div>
     </LiciousPanel>
   );

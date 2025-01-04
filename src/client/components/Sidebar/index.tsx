@@ -1,5 +1,11 @@
 import React from "react";
-import useStyles from "./use-styles";
+import {
+  SidebarRoot,
+  SidebarContentContainer,
+  LogoutButtonContainer,
+  ProfileContainer,
+  ProfilePictureContainer,
+} from "./styled-components";
 import LogoutButton from "../LogoutButton";
 import CurationsSection from "../CurationsSection";
 import StylesSection from "../StylesSection";
@@ -8,12 +14,11 @@ import Login from "../Login";
 import useUser from "../../hooks/useUser";
 
 const Sidebar: React.FC = () => {
-  const classes = useStyles();
   const { details, logged_in } = useUser();
 
   return (
-    <div className={classes.sidebar}>
-      <div className={classes.sidebarContent}>
+    <SidebarRoot>
+      <SidebarContentContainer>
         {logged_in ? (
           <>
             <EditStyleSection />
@@ -23,34 +28,22 @@ const Sidebar: React.FC = () => {
         ) : (
           <Login />
         )}
-      </div>
+      </SidebarContentContainer>
 
       {logged_in && (
-        <div className={classes.profileContainer}>
+        <ProfileContainer>
           <>
-            <div
-              style={{
-                display: "flex",
-                flexGrow: 1,
-                alignItems: "center",
-                gap: ".5rem",
-              }}
-            >
-              <img
-                className={classes.profilePicture}
-                src={details["photoURL"]}
-              />
+            <ProfilePictureContainer>
+              <img src={details["photoURL"]} />
               <span>{details["displayName"]}</span>
-            </div>
-            <div
-              style={{ display: "flex", flexGrow: 1, justifyContent: "end" }}
-            >
+            </ProfilePictureContainer>
+            <LogoutButtonContainer>
               <LogoutButton />
-            </div>
+            </LogoutButtonContainer>
           </>
-        </div>
+        </ProfileContainer>
       )}
-    </div>
+    </SidebarRoot>
   );
 };
 

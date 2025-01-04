@@ -1,24 +1,22 @@
 import React from "react";
-import useStyles from "./use-styles";
+import { AboutContainer, LoginRoot } from "./styled-components";
 import SidebarSection from "../common/SidebarSection";
 import GoogleLoginButton from "./GoogleLoginButton";
 
 const Login: React.FC = () => {
-  const classes = useStyles();
-
   return (
     <SidebarSection header="Sign In">
-      <div className={classes.root}>
+      <LoginRoot>
         <GoogleLoginButton />
-        <div className={classes.about}>
+        <AboutContainer>
           <h3>With a login you can:</h3>
           <ul>
             <li>Recolor the map</li>
             <li>Save styles and curations</li>
             <li>Share curations with others</li>
           </ul>
-        </div>
-      </div>
+        </AboutContainer>
+      </LoginRoot>
     </SidebarSection>
   );
 };

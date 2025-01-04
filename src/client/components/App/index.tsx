@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState, useContext } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import useStyles from "./use-styles";
+import { useSelector } from "react-redux";
+import { AppRoot, MainContent, BusyIndicator } from "./styled-components";
 import OLMap from "ol/Map";
 import OLView from "ol/View";
 import MapContainer from "../MapContainer";
@@ -16,7 +16,6 @@ import { onAuthStateChanged, getAuth, User } from "firebase/auth";
 import FirebaseContext from "../Firebase/context";
 
 const App: React.FC = () => {
-  const classes = useStyles();
   const sidebarOpen = useSelector(
     (state: ReduxStateConfigProps) => state.sidebar_open
   );
@@ -147,17 +146,17 @@ const App: React.FC = () => {
 
   return (
     <MapContext.Provider value={olMap}>
-      <div className={classes.app}>
+      <AppRoot>
         <EditCurationsDialog />
         <Toolbar />
-        <div className={classes.mainContent}>
+        <MainContent>
           <MapContainer>
-            {busy ? <div className={classes.busyIndicator}>Loading</div> : null}
+            {busy ? <BusyIndicator>Loading</BusyIndicator> : null}
             <MapboxLayer />
           </MapContainer>
           {sidebarOpen ? <Sidebar /> : null}
-        </div>
-      </div>
+        </MainContent>
+      </AppRoot>
     </MapContext.Provider>
   );
 };

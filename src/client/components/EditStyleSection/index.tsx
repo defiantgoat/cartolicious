@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from "react";
 import { useSelector } from "react-redux";
-import { Checkbox } from "@material-ui/core";
 import {
   CartoliciousFill,
   CartoliciousStroke,
@@ -148,9 +147,9 @@ const EditStyleSection: React.FC = () => {
           }}
         >
           <span>
-            <Checkbox
-              color="primary"
-              checked={currentFillVisible}
+            <input
+              type="checkbox"
+              checked={!!currentFillVisible}
               onChange={handleFillAttributeChange}
             />
           </span>
@@ -172,9 +171,9 @@ const EditStyleSection: React.FC = () => {
           }}
         >
           <span>
-            <Checkbox
-              color="primary"
-              checked={currentStrokeVisible}
+            <input
+              type="checkbox"
+              checked={!!currentStrokeVisible}
               onChange={handleStrokeAttributeChange}
             />
           </span>

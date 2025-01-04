@@ -1,36 +1,36 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import palette from "../../lib/palette";
+import styled from "styled-components";
 
-const useStyles = makeStyles((theme) => ({
-  sidebarSection: {
-    display: "flex",
-    flexDirection: "column",
-    flexShrink: 0,
-    gap: "1rem",
-    backgroundColor: "#222",
-    padding: "1rem 1.2rem",
-    borderBottom: "3px solid #000",
-    "& h2": {
-      color: theme.palette.primary.main,
-      fontFamily: "rig-shaded-bold-face, sans-serif",
-      fontWeight: 700,
-      fontStyle: "normal",
-      fontSize: "1em",
-    },
-    "& h3": {
-      color: theme.palette.primary.main,
-      fontFamily: "rig-shaded-bold-face, sans-serif",
-      fontWeight: 500,
-      fontStyle: "normal",
-      fontSize: ".75em",
-    },
-  },
-  sectionButtons: {
-    display: "flex",
-    gap: ".5rem",
-    justifyContent: "flex-end",
-  },
-}));
+const SidebarSectionRoot = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 1rem;
+  background-color: #222;
+  padding: 1rem 1.2rem;
+  border-bottom: 3px solid #000;
+  & h2 {
+    color: ${palette.warm.primary.hex};
+    font-family: rig-shaded-bold-face, sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 1em;
+  }
+  & h3 {
+    color: ${palette.warm.primary.hex};
+    font-family: rig-shaded-bold-face, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 0.75em;
+  }
+`;
+
+const SectionButtons = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+`;
 
 interface SidebarSectionProps {
   header?: string;
@@ -43,14 +43,12 @@ const SidebarSection: React.FC<SidebarSectionProps> = ({
   children,
   buttons,
 }) => {
-  const classes = useStyles();
-
   return (
-    <div className={classes.sidebarSection}>
+    <SidebarSectionRoot>
       {header && <h2>{header}</h2>}
       {children}
-      <div className={classes.sectionButtons}>{buttons}</div>
-    </div>
+      <SectionButtons>{buttons}</SectionButtons>
+    </SidebarSectionRoot>
   );
 };
 
