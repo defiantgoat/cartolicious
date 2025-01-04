@@ -20,7 +20,7 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
   const { loadNewStyle, loadCurationByHash } = useCartoliciousApi();
 
   const fetchStyle = async () => {
-    await loadNewStyle();
+    // await loadNewStyle();
   };
 
   const fetchCuration = async (hash: string) => {
