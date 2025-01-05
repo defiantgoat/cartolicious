@@ -14,6 +14,7 @@ import { ReduxStateConfigProps } from "../../interfaces";
 import useUser from "../../hooks/useUser";
 import { onAuthStateChanged, getAuth, User } from "firebase/auth";
 import FirebaseContext from "../Firebase/context";
+import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 
 const App: React.FC = () => {
   const sidebarOpen = useSelector(
@@ -22,8 +23,18 @@ const App: React.FC = () => {
   const busy = useSelector((state: ReduxStateConfigProps) => state.busy);
   const firebaseApp = useContext(FirebaseContext);
 
-  const { token, user_id, setUser, logged_in, uid, setUserId, setUserContent } =
-    useUser();
+  const {
+    token,
+    user_id,
+    setUser,
+    logged_in,
+    uid,
+    setUserId,
+    setUserContent,
+    setAnonymousUser,
+  } = useUser();
+
+  const { getDailyCuration } = useCartoliciousApi();
 
   const [olMap, setOlMap] = useState(null as OLMap | null);
 
@@ -70,8 +81,8 @@ const App: React.FC = () => {
       const { status, data, errors } = await metadataResponse.json();
 
       if (status === 200) {
-        const [_id] = data;
-        setUserId(_id);
+        const [_id, roles] = data;
+        setUserId({ _id, roles });
       }
       if (errors && errors.length) {
         console.log(errors);
@@ -111,7 +122,7 @@ const App: React.FC = () => {
         if (user) {
           handleUserInfo(user);
         } else {
-          console.log("no user");
+          setAnonymousUser();
         }
       });
       return unsubscribe;

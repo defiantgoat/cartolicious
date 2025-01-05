@@ -6,6 +6,7 @@ import SidebarSection from "../common/SidebarSection";
 import { mapFromObject, objectFromMap } from "../../lib/utils";
 import useUser from "../../hooks/useUser";
 import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
+import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 import { LiciousIconButton, LiciousSelect } from "@licious/react";
 
 const EditStylesButton: React.FC = () => {
@@ -49,8 +50,8 @@ const SaveStyleButton: React.FC = () => {
 
 const StylesSection: React.FC = () => {
   const [currentStyle, setCurrentStyle] = useState("none");
-  const { setCaroliciousStyles, setBackground, styleId } =
-    useCartoliciousStyles();
+  const { styleId } = useCartoliciousStyles();
+  const { loadStyleById } = useCartoliciousApi();
 
   useEffect(() => {
     setCurrentStyle(styleId || "none");
@@ -79,19 +80,11 @@ const StylesSection: React.FC = () => {
   }, [styles, currentStyle]);
 
   const loadStyle = async (_id: string) => {
+    if (!_id || _id === "none") {
+      return;
+    }
     try {
-      const loadedStyle = await fetch(`${ENDPOINTS.STYLES}/${_id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const { data } = await loadedStyle.json();
-      const [style] = data;
-      const { background } = style;
-      const styleMap = mapFromObject(style);
-      setCaroliciousStyles({ styleMap, style_id: _id });
-      setBackground(background || [0, 0, 0, 1]);
+      await loadStyleById({ _id });
     } catch (e) {
     } finally {
     }

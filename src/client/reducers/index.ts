@@ -24,6 +24,8 @@ export const DEFAULT_USER = {
   token: "",
   styles: [],
   curations: [],
+  roles: [],
+  anonymous: false,
 };
 
 export const initialState: ReduxStateConfigProps = {
@@ -126,7 +128,17 @@ const rootReducer = (
         ...state,
         user: {
           ...state.user,
-          user_id: payload,
+          user_id: payload._id,
+          roles: payload.roles || [],
+          anonymous: false,
+        },
+      };
+    case "SET_ANONYMOUS":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          anonymous: true,
         },
       };
     case SET_USER_CONTENT:
@@ -150,6 +162,8 @@ const rootReducer = (
           styles: [],
           curations: [],
           uid: "",
+          roles: [],
+          anonymous: false,
         },
         sidebar_open: false,
       };

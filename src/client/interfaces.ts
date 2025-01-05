@@ -32,6 +32,7 @@ export interface ReduxStateConfigProps {
   curations_dialog_open: boolean;
   advanced: boolean;
   user: {
+    anonymous: boolean;
     user_id: string | null;
     uid?: string;
     logged_in: boolean;
@@ -39,5 +40,6 @@ export interface ReduxStateConfigProps {
     details: any;
     styles: any[];
     curations: Curation[];
+    roles: string[];
   };
 }

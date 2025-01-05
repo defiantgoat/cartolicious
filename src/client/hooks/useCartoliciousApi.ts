@@ -43,6 +43,9 @@ const useCartoliciousApi = () => {
   };
 
   const loadStyleById = async ({ _id: styleId }: { _id: string }) => {
+    if (!styleId || styleId === "none") {
+      return;
+    }
     dispatch(setBusy(true));
     try {
       const loadedStyle = await fetch(`${ENDPOINTS.STYLES}/${styleId}`, {
@@ -94,6 +97,62 @@ const useCartoliciousApi = () => {
 
     const { status, data, errors } = await response.json();
     return { status, data, errors };
+  };
+
+  const saveDailyCuration = async ({ _id }) => {
+    const saveDaily = await fetch(`${ENDPOINTS.CURATIONS}/daily/curation`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({
+        user_id,
+        curation_id: _id,
+      }),
+    });
+
+    const { status, data, errors } = await saveDaily.json();
+
+    return { status, data, errors };
+  };
+
+  const getDailyCuration = async () => {
+    dispatch(setBusy(true));
+    try {
+      const loadedCuration = await fetch(
+        `${ENDPOINTS.CURATIONS}/daily/curation`
+      );
+
+      const { data, errors } = await loadedCuration.json();
+      const [curation] = data;
+
+      if (curation) {
+        const {
+          lat,
+          long,
+          style: { json },
+          zoom,
+          name,
+        } = curation;
+        const { background } = json;
+
+        const styleMap = mapFromObject(json);
+        console.log(map);
+        map?.getView().setCenter([long, lat]);
+        map?.getView().setZoom(zoom);
+        setCaroliciousStyles({
+          styleMap,
+          style_id: curation?.style?._id,
+          curation_id: curation?._id,
+        });
+        setBackground(background || [0, 0, 0, 1]);
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      dispatch(setBusy(false));
+    }
   };
 
   const saveCuration = async ({ styles, background, long, lat, zoom }) => {
@@ -197,6 +256,8 @@ const useCartoliciousApi = () => {
     loadCurationByHash,
     loadStyleById,
     loadNewStyle,
+    saveDailyCuration,
+    getDailyCuration,
   };
 };
 

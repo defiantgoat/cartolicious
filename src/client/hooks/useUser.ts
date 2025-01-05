@@ -23,6 +23,12 @@ const useUser = () => {
     dispatch({ type: SET_LOGGED_OUT });
   };
 
+  const setAnonymousUser = (): void => {
+    dispatch({ type: "SET_ANONYMOUS" });
+  };
+
+  const userIsOwner = user?.roles?.includes("owner");
+
   const setUserContent = (payload: {
     styles: any[];
     curations: any[];
@@ -35,6 +41,8 @@ const useUser = () => {
     setUserLoggedOut,
     setUserId,
     setUserContent,
+    setAnonymousUser,
+    userIsOwner,
     ...user,
   };
 };
