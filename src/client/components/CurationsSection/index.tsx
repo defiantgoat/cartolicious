@@ -1,20 +1,32 @@
 import React, { useContext, useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import MapContext from "../MapContext";
-import { ReduxStateConfigProps } from "../../interfaces";
 import SidebarSection from "../common/SidebarSection";
 import { objectFromMap } from "../../lib/utils";
 import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
 import { LiciousIconButton, LiciousSelect } from "@licious/react";
-import { OPEN_CURATIONS_DIALOG } from "../../constants";
 // import { getThumbnail } from "../../lib/utils";
+
+import {
+  open_curations_dialog,
+  close_curations_dialog,
+} from "../../reducers/rootSlice";
 
 const EditCurationsButton: React.FC<{
   disabled?: boolean;
 }> = ({ disabled }) => {
   const dispatch = useDispatch();
-  const handleClick = () => dispatch({ type: OPEN_CURATIONS_DIALOG });
+  const dialogOpen = useSelector(
+    (state: any) => state.root.curations_dialog_open
+  );
+  const handleClick = () => {
+    if (dialogOpen) {
+      dispatch(close_curations_dialog());
+      return;
+    }
+    dispatch(open_curations_dialog());
+  };
   return (
     <LiciousIconButton
       disabled={disabled}
@@ -67,9 +79,7 @@ const CurationsSection: React.FC = () => {
 
   const [currentCuration, setCurrentCuration] = useState("none");
 
-  const { token, curations } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
-  );
+  const { token, curations } = useSelector((state: any) => state.user);
 
   const options = useMemo(() => {
     const options = [{ label: "Select a curation", value: "none" }];

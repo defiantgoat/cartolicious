@@ -1,10 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useSelector } from "react-redux";
-import {
-  CartoliciousFill,
-  CartoliciousStroke,
-  ReduxStateConfigProps,
-} from "../../interfaces";
+import { CartoliciousFill, CartoliciousStroke } from "../../interfaces";
 import SidebarSection from "../common/SidebarSection";
 import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
 import { LiciousSelect } from "@licious/react";
@@ -36,7 +32,7 @@ const EditStyleSection: React.FC = () => {
   const [currentAttributeVisible, setCurrentAttributeVisible] = useState(0);
 
   const cartolicious = useSelector(
-    (state: ReduxStateConfigProps) => state.cartolicious_styles
+    (state: any) => state.root.cartolicious_styles
   );
 
   const { setCaroliciousStyles } = useCartoliciousStyles();

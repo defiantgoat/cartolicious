@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { ENDPOINTS } from "../../config";
-import { ReduxStateConfigProps } from "../../interfaces";
 import SidebarSection from "../common/SidebarSection";
 import { mapFromObject, objectFromMap } from "../../lib/utils";
 import useUser from "../../hooks/useUser";
@@ -57,9 +56,7 @@ const StylesSection: React.FC = () => {
     setCurrentStyle(styleId || "none");
   }, [styleId]);
 
-  const { token, styles } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
-  );
+  const { token, styles } = useSelector((state: any) => state.user);
 
   const options = useMemo(() => {
     const options = [{ label: "Select a style", value: "none" }];

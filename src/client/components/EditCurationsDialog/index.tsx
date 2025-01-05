@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, JSX } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Curation, ReduxStateConfigProps } from "../../interfaces";
+import { Curation } from "../../interfaces";
 import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 import { LiciousPanel, LiciousInput, LiciousIconButton } from "@licious/react";
-import { CLOSE_CURATIONS_DIALOG } from "../../constants";
 import useUser from "../../hooks/useUser";
 import palette from "../../lib/palette";
+import { close_curations_dialog } from "../../reducers/rootSlice";
 
 const CurationItem: React.FC<{ curation: Curation }> = ({ curation }) => {
   const { _id, name, style } = curation;
@@ -53,9 +53,7 @@ const CurationItem: React.FC<{ curation: Curation }> = ({ curation }) => {
     );
   };
 
-  const { token, curations } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
-  );
+  const { token, curations } = useSelector((state: any) => state.user);
 
   return !deleted ? (
     <div
@@ -150,16 +148,12 @@ const EditCurationsDialog: React.FC = () => {
   const dispatch = useDispatch();
   const panelRef = useRef<any>(null);
 
-  const open = useSelector(
-    (state: ReduxStateConfigProps) => state.curations_dialog_open
-  );
+  const open = useSelector((state: any) => state.root.curations_dialog_open);
 
-  const { curations } = useSelector(
-    (state: ReduxStateConfigProps) => state.user
-  );
+  const { curations } = useSelector((state: any) => state.user);
 
   const handleClose = (event: object) => {
-    dispatch({ type: CLOSE_CURATIONS_DIALOG });
+    dispatch(close_curations_dialog());
   };
 
   useEffect(() => {

@@ -23,9 +23,7 @@ const Toolbar: React.FC = () => {
   const { token, logged_in } = useUser();
   const { setCaroliciousStyles, setBackground } = useCartoliciousStyles();
 
-  const sidebarOpen = useSelector(
-    (state: ReduxStateConfigProps) => state.sidebar_open
-  );
+  const sidebarOpen = useSelector((state: any) => state.root.sidebar_open);
 
   const fetchStyles = async () => {
     setLoading(true);

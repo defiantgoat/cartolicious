@@ -1,19 +1,20 @@
 import React from "react";
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import store from "./store";
-import "@licious/web-components/dist/licious-js/licious-js.css";
-
 import App from "./components/App";
 import FirebaseProvider from "./components/Firebase/provider";
+import "@licious/web-components/dist/licious-js/licious-js.css";
 
-render(
+const domNode = document.getElementById("root") as HTMLElement;
+const root = createRoot(domNode);
+
+root.render(
   <FirebaseProvider>
     <Provider store={store}>
       <App />
     </Provider>
-  </FirebaseProvider>,
-  document.getElementById("root")
+  </FirebaseProvider>
 );
 
 // Needed for Hot Module Replacement

@@ -7,7 +7,7 @@ import { createXYZ, extentFromProjection } from "ol/tilegrid";
 // import { MAPBOX_TOKEN } from "../../keys";
 import MapContext from "../MapContext";
 import { useSelector } from "react-redux";
-import { ReduxStateConfigProps, CartoliciousStyles } from "../../interfaces";
+import { CartoliciousStyles } from "../../interfaces";
 export const MAPBOX_TOKEN =
   "pk.eyJ1IjoiZGVmaWFudGdvYXQiLCJhIjoiY200cHM2ampqMHk1YTJrb3N2MnlzOHJ1dyJ9.iU8b-PtlueSQuP3oq31O5A";
 const MAPBOX_FEATURE_TYPES = {
@@ -32,7 +32,7 @@ const MapboxLayer: React.FC = () => {
   const format = new MVT();
 
   const cartolicious = useSelector(
-    (state: ReduxStateConfigProps) => state.cartolicious_styles
+    (state: any) => state.root.cartolicious_styles
   );
 
   const mapboxStyleFunction = (

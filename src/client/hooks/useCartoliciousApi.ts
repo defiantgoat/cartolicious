@@ -3,9 +3,9 @@ import { useDispatch } from "react-redux";
 import MapContext from "../components/MapContext";
 import { ENDPOINTS } from "../config";
 import { mapFromObject } from "../lib/utils";
-import { setBusy } from "../actions";
 import useUser from "./useUser";
 import useCartoliciousStyles from "./useCartoliciousStyles";
+import { set_busy } from "../reducers/rootSlice";
 
 const useCartoliciousApi = () => {
   const map = useContext(MapContext);
@@ -16,7 +16,7 @@ const useCartoliciousApi = () => {
   const { token, user_id } = useUser();
 
   const loadNewStyle = async () => {
-    dispatch(setBusy(true));
+    dispatch(set_busy(true));
     try {
       const res = await fetch(ENDPOINTS.STYLES, {
         headers: {
@@ -38,7 +38,7 @@ const useCartoliciousApi = () => {
       }
     } catch (e) {
     } finally {
-      dispatch(setBusy(false));
+      dispatch(set_busy(false));
     }
   };
 
@@ -46,7 +46,7 @@ const useCartoliciousApi = () => {
     if (!styleId || styleId === "none") {
       return;
     }
-    dispatch(setBusy(true));
+    dispatch(set_busy(true));
     try {
       const loadedStyle = await fetch(`${ENDPOINTS.STYLES}/${styleId}`, {
         headers: {
@@ -62,7 +62,7 @@ const useCartoliciousApi = () => {
       setBackground(background || [0, 0, 0, 1]);
     } catch (e) {
     } finally {
-      dispatch(setBusy(false));
+      dispatch(set_busy(false));
     }
   };
 
@@ -118,7 +118,7 @@ const useCartoliciousApi = () => {
   };
 
   const getDailyCuration = async () => {
-    dispatch(setBusy(true));
+    dispatch(set_busy(true));
     try {
       const loadedCuration = await fetch(
         `${ENDPOINTS.CURATIONS}/daily/curation`
@@ -151,7 +151,7 @@ const useCartoliciousApi = () => {
     } catch (e) {
       console.log(e);
     } finally {
-      dispatch(setBusy(false));
+      dispatch(set_busy(false));
     }
   };
 
