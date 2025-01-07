@@ -6,6 +6,7 @@ import {
   Title,
   ButtonsContainer,
   ButtonContainer,
+  CurationInfo,
 } from "./styled-components";
 import { APP_NAME } from "../../config";
 import { ReduxStateConfigProps } from "../../interfaces";
@@ -21,7 +22,8 @@ const Toolbar: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const { token, logged_in } = useUser();
-  const { setCaroliciousStyles, setBackground } = useCartoliciousStyles();
+  const { setCaroliciousStyles, setBackground, curationInfo } =
+    useCartoliciousStyles();
 
   const sidebarOpen = useSelector((state: any) => state.root.sidebar_open);
 
@@ -64,6 +66,13 @@ const Toolbar: React.FC = () => {
     <ToolbarRoot>
       <TitleContainer>
         <Title>{APP_NAME}</Title>
+        {curationInfo ? (
+          <CurationInfo>
+            <span>
+              {curationInfo.name} by {curationInfo.user}
+            </span>
+          </CurationInfo>
+        ) : null}
       </TitleContainer>
       <ButtonsContainer>
         {loading && (

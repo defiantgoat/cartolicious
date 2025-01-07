@@ -10,6 +10,7 @@ const useCartoliciousStyles = () => {
 
   const styleId = useSelector((state: any) => state.root.style_id);
   const curationId = useSelector((state: any) => state.root.curation_id);
+  const curationInfo = useSelector((state: any) => state.root.curation_info);
 
   const currentBackground = useSelector((state: any) => state.root.background);
 
@@ -39,6 +40,7 @@ const useCartoliciousStyles = () => {
     currentStyles,
     styleId,
     curationId,
+    curationInfo,
     setCaroliciousStyles,
     setBackground,
     addStyle,

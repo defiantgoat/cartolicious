@@ -134,6 +134,7 @@ const useCartoliciousApi = () => {
           style: { json },
           zoom,
           name,
+          user,
         } = curation;
         const { background } = json;
 
@@ -145,6 +146,10 @@ const useCartoliciousApi = () => {
           styleMap,
           style_id: curation?.style?._id,
           curation_id: curation?._id,
+          curation_info: {
+            name,
+            user: user?.name || "Anonymous",
+          },
         });
         setBackground(background || [0, 0, 0, 1]);
       }

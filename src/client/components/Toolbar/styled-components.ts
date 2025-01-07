@@ -15,6 +15,7 @@ const TitleContainer = styled.div`
   flex-grow: 1;
   padding: 0 0.55rem;
   align-items: center;
+  gap: 1rem;
 `;
 
 const Title = styled.h2`
@@ -39,10 +40,23 @@ const ButtonContainer = styled.div<{ $backgroundColor?: string }>`
   background-color: ${(props) => props.$backgroundColor || "transparent"};
 `;
 
+const CurationInfo = styled.div`
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  & span {
+    background: ${palette.warm.accent.hex};
+    color: #fff;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+  }
+`;
+
 export {
   ButtonContainer,
   ButtonsContainer,
   ToolbarRoot,
   Title,
   TitleContainer,
+  CurationInfo,
 };

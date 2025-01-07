@@ -5,6 +5,7 @@ export const rootSlice = createSlice({
   initialState: {
     background: [0, 0, 0, 1],
     cartolicious_styles: null,
+    curation_info: null,
     busy: false,
     style_id: null,
     curation_id: null,
@@ -42,19 +43,25 @@ export const rootSlice = createSlice({
         curation_id = null,
         resetStyleId = false,
         resetCurationId = false,
+        curation_info,
       } = payload;
       state.cartolicious_styles = styleMap;
+
       if (style_id) {
         state.style_id = style_id;
       }
       if (curation_id) {
         state.curation_id = curation_id;
       }
+      if (curation_info) {
+        state.curation_info = curation_info;
+      }
       if (resetStyleId) {
         state.style_id = null;
       }
       if (resetCurationId) {
         state.curation_id = null;
+        state.curation_info = null;
       }
     },
     set_busy: (state, action) => {
