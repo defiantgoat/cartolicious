@@ -56,7 +56,7 @@ const StylesSection: React.FC = () => {
     setCurrentStyle(styleId || "none");
   }, [styleId]);
 
-  const { token, styles } = useSelector((state: any) => state.user);
+  const { styles } = useSelector((state: any) => state.user);
 
   const options = useMemo(() => {
     const options = [{ label: "Select a style", value: "none" }];
@@ -65,7 +65,7 @@ const StylesSection: React.FC = () => {
       options[0]["selected"] = true;
     }
 
-    styles.forEach(({ _id: id, name }, i) => {
+    styles.forEach(({ _id: id, name }, i: number) => {
       const opt = { value: id, label: name || `zStyle ${i}` };
       if (id === currentStyle) {
         opt["selected"] = true;
@@ -98,8 +98,11 @@ const StylesSection: React.FC = () => {
   };
 
   useEffect(() => {
+    const load = async () => {
+      await loadStyle(currentStyle);
+    };
     if (currentStyle !== "") {
-      loadStyle(currentStyle);
+      load();
     }
   }, [currentStyle]);
 

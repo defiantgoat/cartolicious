@@ -16,7 +16,6 @@
     "launch-development": "NODE_ENV=development PORT=8080 node ./dist_dev/server.js",
     "build-production": "rm -rf dist_prod && webpack --mode production --config webpack.server.config.js && webpack --mode production --config webpack.prod.config.js",
     "launch-production": "node ./dist_prod/server.js",
-    "build-docker-image": "docker build -t defiantgoat/cartolicious-client .",
     "view-coverage-report": "open coverage/lcov-report/index.html"
   },
   "dependencies": {

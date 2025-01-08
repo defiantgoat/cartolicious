@@ -32,6 +32,11 @@ const BusyIndicator = styled.div`
   font-weight: 700;
   font-style: normal;
   font-size: 3em;
+  flex-direction: column;
+  & span:nth-child(2) {
+    font-size: 1rem;
+    font-family: rig-shaded-bold-face, sans-serif;
+  }
 `;
 
 export { AppRoot, MainContent, BusyIndicator };
