@@ -10,17 +10,14 @@ import Toolbar from "../Toolbar";
 import Sidebar from "../Sidebar";
 import EditCurationsDialog from "../EditCurationsDialog";
 import { MAP_CONFIG, ENDPOINTS } from "../../config";
-import { ReduxStateConfigProps } from "../../interfaces";
 import useUser from "../../hooks/useUser";
 import { onAuthStateChanged, getAuth, User } from "firebase/auth";
 import FirebaseContext from "../Firebase/context";
 import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 
 const App: React.FC = () => {
-  const sidebarOpen = useSelector(
-    (state: ReduxStateConfigProps) => state.sidebar_open
-  );
-  const busy = useSelector((state: ReduxStateConfigProps) => state.busy);
+  const sidebarOpen = useSelector((state: any) => state.root.sidebar_open);
+  const busy = useSelector((state: any) => state.root.busy);
   const firebaseApp = useContext(FirebaseContext);
 
   const {
@@ -110,7 +107,7 @@ const App: React.FC = () => {
       setUser({
         uid: user?.uid,
         logged_in: true,
-        details: user,
+        details: user.toJSON(),
         token: accessToken,
         email: user?.email,
       });

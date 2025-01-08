@@ -1,4 +1,4 @@
-import React from "react";
+import React, { JSX } from "react";
 import palette from "../../lib/palette";
 import styled from "styled-components";
 

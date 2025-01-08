@@ -1,30 +1,36 @@
 import { useSelector, useDispatch } from "react-redux";
-import { ReduxStateConfigProps } from "../interfaces";
 import {
-  SET_USER_DATA,
-  SET_LOGGED_OUT,
-  SET_USER_ID,
-  SET_USER_CONTENT,
-} from "../constants";
+  set_user_id,
+  set_logged_out,
+  set_anonymous,
+  set_user_content,
+  set_user_data,
+} from "../reducers/userSlice";
 
 const useUser = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state: ReduxStateConfigProps) => state.user);
+  const user = useSelector((state: any) => state.user);
+  const token = useSelector((state: any) => state.user.token);
+  const logged_in = useSelector((state: any) => state.user.logged_in);
+  const user_id = useSelector((state: any) => state.user.user_id);
+  const details = useSelector((state: any) => state.user.details);
+  const anonymous = useSelector((state: any) => state.user.anonymous);
+  const uid = useSelector((state: any) => state.user.uid);
 
   const setUser = (payload: any): void => {
-    dispatch({ type: SET_USER_DATA, payload });
+    dispatch(set_user_data(payload));
   };
 
   const setUserId = (payload: any): void => {
-    dispatch({ type: SET_USER_ID, payload });
+    dispatch(set_user_id(payload));
   };
 
   const setUserLoggedOut = (): void => {
-    dispatch({ type: SET_LOGGED_OUT });
+    dispatch(set_logged_out());
   };
 
   const setAnonymousUser = (): void => {
-    dispatch({ type: "SET_ANONYMOUS" });
+    dispatch(set_anonymous());
   };
 
   const userIsOwner = user?.roles?.includes("owner");
@@ -33,7 +39,7 @@ const useUser = () => {
     styles: any[];
     curations: any[];
   }): any => {
-    dispatch({ type: SET_USER_CONTENT, payload });
+    dispatch(set_user_content(payload));
   };
 
   return {
@@ -43,7 +49,12 @@ const useUser = () => {
     setUserContent,
     setAnonymousUser,
     userIsOwner,
-    ...user,
+    token,
+    logged_in,
+    user_id,
+    details,
+    anonymous,
+    uid,
   };
 };
 

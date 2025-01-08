@@ -1,57 +1,50 @@
 import { useSelector, useDispatch } from "react-redux";
-import { ReduxStateConfigProps } from "../interfaces";
-import {
-  SET_CARTOLICIOUS_STYLES,
-  SET_BACKGROUND,
-  ADD_CURATION,
-  ADD_STYLE,
-} from "../constants";
+import { set_cartolicious_styles, set_background } from "../reducers/rootSlice";
+import { add_style } from "../reducers/userSlice";
 
 const useCartoliciousStyles = () => {
   const dispatch = useDispatch();
   const currentStyles = useSelector(
-    (state: ReduxStateConfigProps) => state.cartolicious_styles
+    (state: any) => state.root.cartolicious_styles
   );
 
-  const styleId = useSelector((state: ReduxStateConfigProps) => state.style_id);
-  const curationId = useSelector(
-    (state: ReduxStateConfigProps) => state.curation_id
-  );
+  const styleId = useSelector((state: any) => state.root.style_id);
+  const curationId = useSelector((state: any) => state.root.curation_id);
+  const curationInfo = useSelector((state: any) => state.root.curation_info);
 
-  const currentBackground = useSelector(
-    (state: ReduxStateConfigProps) => state.background
-  );
+  const currentBackground = useSelector((state: any) => state.root.background);
 
   const setCaroliciousStyles = (payload: any): any => {
-    dispatch({ type: SET_CARTOLICIOUS_STYLES, payload });
+    dispatch(set_cartolicious_styles(payload));
   };
 
   const setBackground = (payload: number[]): any => {
-    dispatch({ type: SET_BACKGROUND, payload });
+    dispatch(set_background(payload));
   };
 
   const addStyle = (payload: { _id: string; name: string }) => {
-    dispatch({ type: ADD_STYLE, payload });
+    dispatch(add_style(payload));
   };
 
-  const addCuration = (payload: {
-    _id: string;
-    name: string;
-    style_id: string;
-    style_name: string;
-  }) => {
-    dispatch({ type: ADD_CURATION, payload });
-  };
+  // const addCuration = (payload: {
+  //   _id: string;
+  //   name: string;
+  //   style_id: string;
+  //   style_name: string;
+  // }) => {
+  //   dispatch({ type: ADD_CURATION, payload });
+  // };
 
   return {
     currentBackground,
     currentStyles,
     styleId,
     curationId,
+    curationInfo,
     setCaroliciousStyles,
     setBackground,
     addStyle,
-    addCuration,
+    // addCuration,
   };
 };
 

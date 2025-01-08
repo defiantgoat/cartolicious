@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { ReduxStateConfigProps } from "../../interfaces";
 import MapContext from "../MapContext";
 import useQueryString from "../../hooks/useQueryString";
 import { MapContainerRoot } from "./styled-components";
@@ -14,9 +13,7 @@ interface MapContainerProps {
 
 const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
   const map = useContext(MapContext);
-  const [r, g, b, a] = useSelector(
-    (state: ReduxStateConfigProps) => state.background
-  );
+  const [r, g, b, a] = useSelector((state: any) => state.root.background);
 
   const { anonymous, logged_in } = useUser();
 
