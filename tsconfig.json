@@ -18,8 +18,9 @@
   },
   "include": [
     "src/**/*.ts",
-    "src/server/server-prod.ts"
-, "src/client/components/Firebase/provider.tsx"  ],
+    "src/server/server-prod.ts",
+    "src/client/components/Firebase/provider.tsx"
+  ],
   "exclude": [
       "node_modules",
       "**/*.spec.ts",

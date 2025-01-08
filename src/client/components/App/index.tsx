@@ -13,7 +13,6 @@ import { MAP_CONFIG, ENDPOINTS } from "../../config";
 import useUser from "../../hooks/useUser";
 import { onAuthStateChanged, getAuth, User } from "firebase/auth";
 import FirebaseContext from "../Firebase/context";
-import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 
 const App: React.FC = () => {
   const sidebarOpen = useSelector((state: any) => state.root.sidebar_open);
@@ -23,15 +22,13 @@ const App: React.FC = () => {
   const {
     token,
     user_id,
-    setUser,
     logged_in,
     uid,
+    setUser,
     setUserId,
     setUserContent,
     setAnonymousUser,
   } = useUser();
-
-  const { getDailyCuration } = useCartoliciousApi();
 
   const [olMap, setOlMap] = useState(null as OLMap | null);
 
@@ -159,7 +156,14 @@ const App: React.FC = () => {
         <Toolbar />
         <MainContent>
           <MapContainer>
-            {busy ? <BusyIndicator>Loading</BusyIndicator> : null}
+            {busy ? (
+              <BusyIndicator>
+                <span>Loading</span>
+                <span>
+                  We use free services, so sometimes it takes a while.
+                </span>
+              </BusyIndicator>
+            ) : null}
             <MapboxLayer />
           </MapContainer>
           {sidebarOpen ? <Sidebar /> : null}

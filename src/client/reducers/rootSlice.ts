@@ -41,9 +41,10 @@ export const rootSlice = createSlice({
         styleMap,
         style_id = null,
         curation_id = null,
+        curation_info,
         resetStyleId = false,
         resetCurationId = false,
-        curation_info,
+        resetCurationInfo = false,
       } = payload;
       state.cartolicious_styles = styleMap;
 
@@ -61,6 +62,9 @@ export const rootSlice = createSlice({
       }
       if (resetCurationId) {
         state.curation_id = null;
+        state.curation_info = null;
+      }
+      if (resetCurationInfo) {
         state.curation_info = null;
       }
     },

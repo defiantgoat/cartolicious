@@ -46,6 +46,7 @@ const Toolbar: React.FC = () => {
           styleMap: newStyleMap,
           resetStyleId: true,
           resetCurationId: true,
+          resetCurationInfo: true,
         });
         setBackground(background);
       }

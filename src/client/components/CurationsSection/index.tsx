@@ -38,7 +38,9 @@ const EditCurationsButton: React.FC<{
   );
 };
 
-const SaveCuration: React.FC = () => {
+const SaveCuration: React.FC<{ disabled?: boolean }> = ({
+  disabled = false,
+}) => {
   const map = useContext(MapContext);
   const { saveCuration } = useCartoliciousApi();
 
@@ -69,28 +71,49 @@ const SaveCuration: React.FC = () => {
     }
   };
 
-  return <LiciousIconButton size="sm" icon="save" onClick={handleSave} />;
+  return (
+    <LiciousIconButton
+      size="sm"
+      icon="save"
+      onClick={handleSave}
+      disabled={disabled}
+    />
+  );
 };
 
 const CurationsSection: React.FC = () => {
   const dispatch = useDispatch();
   const map = useContext(MapContext);
   const { loadCuration } = useCartoliciousApi();
+  const { curationId } = useCartoliciousStyles();
 
   const [currentCuration, setCurrentCuration] = useState("none");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setCurrentCuration(curationId || "none");
+  }, [curationId]);
 
   const { token, curations } = useSelector((state: any) => state.user);
 
   const options = useMemo(() => {
     const options = [{ label: "Select a curation", value: "none" }];
 
-    curations.forEach(({ _id: id, name }, i) => {
+    if (currentCuration === "none") {
+      options[0]["selected"] = true;
+    }
+
+    curations.forEach(({ _id: id, name }, i: number) => {
       const smallName = name.length > 15 ? `${name.substring(0, 15)}...` : name;
-      options.push({ value: id, label: smallName });
+      const opt = { value: id, label: smallName };
+      if (id === currentCuration) {
+        opt["selected"] = true;
+      }
+      options.push(opt);
     });
 
     return options;
-  }, [curations]);
+  }, [curations, currentCuration]);
 
   const handleSelectLicious = (e: any) => {
     const value =
@@ -103,8 +126,13 @@ const CurationsSection: React.FC = () => {
   };
 
   useEffect(() => {
+    const load = async () => {
+      setLoading(true);
+      await loadCuration(currentCuration);
+      setLoading(false);
+    };
     if (currentCuration !== "none") {
-      loadCuration(currentCuration);
+      load();
     }
   }, [currentCuration]);
 
@@ -112,10 +140,10 @@ const CurationsSection: React.FC = () => {
     <SidebarSection
       header="Your Curations"
       buttons={[
-        <SaveCuration key="save-curations-button" />,
+        <SaveCuration key="save-curations-button" disabled={loading} />,
         <EditCurationsButton
           key="edit-curations-button"
-          disabled={curations.length === 0}
+          disabled={curations.length === 0 || loading}
         />,
       ]}
     >
