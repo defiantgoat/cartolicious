@@ -75,7 +75,7 @@ const Toolbar: React.FC = () => {
           </CurationInfo>
         ) : null}
       </TitleContainer>
-      {false ? <ButtonsContainer>
+      <ButtonsContainer>
         {loading && (
           <ButtonContainer $backgroundColor="transparent">
             <span>Loading</span>
@@ -97,7 +97,7 @@ const Toolbar: React.FC = () => {
             <MenuButton />
           </ButtonContainer>
         ) : null}
-      </ButtonsContainer> : null}
+      </ButtonsContainer>
     </ToolbarRoot>
   );
 };
