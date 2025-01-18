@@ -75,29 +75,31 @@ const Toolbar: React.FC = () => {
           </CurationInfo>
         ) : null}
       </TitleContainer>
-      {false ? <ButtonsContainer>
-        {loading && (
-          <ButtonContainer $backgroundColor="transparent">
-            <span>Loading</span>
-          </ButtonContainer>
-        )}
-        {logged_in ? (
-          <ButtonContainer>
-            <LiciousToolbarButton
-              icon="paint"
-              size="md"
-              onClick={handleRecolor}
-            />
-          </ButtonContainer>
-        ) : null}
-        {firebaseApp ? (
-          <ButtonContainer
-            $backgroundColor={sidebarOpen ? "#222" : "transparent"}
-          >
-            <MenuButton />
-          </ButtonContainer>
-        ) : null}
-      </ButtonsContainer> : null}
+      {true ? (
+        <ButtonsContainer>
+          {loading && (
+            <ButtonContainer $backgroundColor="transparent">
+              <span>Loading</span>
+            </ButtonContainer>
+          )}
+          {logged_in ? (
+            <ButtonContainer>
+              <LiciousToolbarButton
+                icon="paint"
+                size="md"
+                onClick={handleRecolor}
+              />
+            </ButtonContainer>
+          ) : null}
+          {firebaseApp ? (
+            <ButtonContainer
+              $backgroundColor={sidebarOpen ? "#222" : "transparent"}
+            >
+              <MenuButton />
+            </ButtonContainer>
+          ) : null}
+        </ButtonsContainer>
+      ) : null}
     </ToolbarRoot>
   );
 };
