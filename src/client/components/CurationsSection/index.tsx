@@ -5,13 +5,19 @@ import SidebarSection from "../common/SidebarSection";
 import { objectFromMap } from "../../lib/utils";
 import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
-import { LiciousIconButton, LiciousSelect } from "@licious/react";
+import {
+  LiciousButton,
+  LiciousIconButton,
+  LiciousSelect,
+} from "@licious/react";
 // import { getThumbnail } from "../../lib/utils";
 
 import {
   open_curations_dialog,
   close_curations_dialog,
 } from "../../reducers/rootSlice";
+import { Map } from "ol";
+import VectorTileLayer from "ol/layer/VectorTile";
 
 const EditCurationsButton: React.FC<{
   disabled?: boolean;
@@ -83,7 +89,7 @@ const SaveCuration: React.FC<{ disabled?: boolean }> = ({
 
 const CurationsSection: React.FC = () => {
   const dispatch = useDispatch();
-  const map = useContext(MapContext);
+  const map = useContext(MapContext) as Map;
   const { loadCuration } = useCartoliciousApi();
   const { curationId } = useCartoliciousStyles();
 
@@ -136,6 +142,25 @@ const CurationsSection: React.FC = () => {
     }
   }, [currentCuration]);
 
+  const testTileGrid = () => {
+    if (map) {
+      const [vectorLayer] = map.getLayers().getArray() as VectorTileLayer[];
+      const view = map.getView();
+      const size = map.getSize();
+      const exent = view.calculateExtent(size);
+      const zoom = view.getZoom() || 0;
+      vectorLayer?.getSource()?.tileGrid?.forEachTileCoord(exent, zoom, (a) => {
+        //The order is z (zoom level), x (column), and y (row).
+        //   [
+        //     12,
+        //     1501,
+        //     2228
+        // ]
+        console.log(a);
+      });
+    }
+  };
+
   return (
     <SidebarSection
       header="Your Curations"
@@ -150,6 +175,7 @@ const CurationsSection: React.FC = () => {
       {curations.length > 0 && (
         <LiciousSelect options={options} onInput={handleSelectLicious} />
       )}
+      <LiciousButton label="Test Tile Grid" onClick={testTileGrid} />
     </SidebarSection>
   );
 };

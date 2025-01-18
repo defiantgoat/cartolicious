@@ -15,6 +15,26 @@ const useCartoliciousApi = () => {
 
   const { token, user_id } = useUser();
 
+  const testTransform = async (url?: string) => {
+    const u =
+      url ||
+      "https://d.tiles.mapbox.com/v4/mapbox.mapbox-streets-v8/15/9220/12887.mvt?access_token=pk.eyJ1IjoiZGVmaWFudGdvYXQiLCJhIjoiY200cHM2ampqMHk1YTJrb3N2MnlzOHJ1dyJ9.iU8b-PtlueSQuP3oq31O5A";
+    try {
+      const res = await fetch(`${ENDPOINTS.TRANSFORM}?url=${u}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      return data?.svg || null;
+      console.log(data);
+    } catch (e) {}
+  };
+
+  const onTileRequested = (url: string) => {
+    console.log(url);
+  };
+
   const loadNewStyle = async () => {
     dispatch(set_busy(true));
     try {
@@ -263,6 +283,8 @@ const useCartoliciousApi = () => {
     loadNewStyle,
     saveDailyCuration,
     getDailyCuration,
+    testTransform,
+    onTileRequested,
   };
 };
 

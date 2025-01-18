@@ -56,7 +56,6 @@ const EditStyleSection: React.FC = () => {
   const handleSelectLicious = (e: any) => {
     const value =
       e?.target?.shadowRoot?.querySelector("select").value || "none";
-    console.log(value);
     setCurrentStyle(value);
     if (cartolicious) {
       const [fill, stroke, visible] = cartolicious.get(value) || [[], [], 0];

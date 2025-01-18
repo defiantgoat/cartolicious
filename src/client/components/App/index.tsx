@@ -13,11 +13,16 @@ import { MAP_CONFIG, ENDPOINTS } from "../../config";
 import useUser from "../../hooks/useUser";
 import { onAuthStateChanged, getAuth, User } from "firebase/auth";
 import FirebaseContext from "../Firebase/context";
+import { LiciousButton, LiciousPanel } from "@licious/react";
+import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 
 const App: React.FC = () => {
   const sidebarOpen = useSelector((state: any) => state.root.sidebar_open);
   const busy = useSelector((state: any) => state.root.busy);
   const firebaseApp = useContext(FirebaseContext);
+  const { testTransform, onTileRequested } = useCartoliciousApi();
+
+  const [transformStuff, setTransformStuff] = useState(null as any);
 
   const {
     token,
@@ -152,6 +157,38 @@ const App: React.FC = () => {
   return (
     <MapContext.Provider value={olMap}>
       <AppRoot>
+        <LiciousPanel open={true}>
+          <div slot="content">
+            <LiciousButton
+              label="Load SVG"
+              onClick={async () => {
+                const data = await testTransform();
+                const p = new DOMParser();
+                if (typeof data === "string") {
+                  const html = p.parseFromString(data, "text/html");
+                  console.log(html.getElementsByTagName("svg"));
+                  const svg = html.getElementsByTagName("svg")[0];
+                  console.log(svg.innerHTML);
+                  //@ts-ignore
+                  setTransformStuff(svg);
+                }
+              }}
+            />
+            <div
+              style={{
+                width: 512,
+                height: 512,
+                background: "red",
+              }}
+            >
+              <svg
+                width={512}
+                height={512}
+                dangerouslySetInnerHTML={{ __html: transformStuff?.innerHTML }}
+              ></svg>
+            </div>
+          </div>
+        </LiciousPanel>
         <EditCurationsDialog />
         <Toolbar />
         <MainContent>
@@ -164,7 +201,7 @@ const App: React.FC = () => {
                 </span>
               </BusyIndicator>
             ) : null}
-            <MapboxLayer />
+            <MapboxLayer onTileSrcRequested={onTileRequested} />
           </MapContainer>
           {sidebarOpen ? <Sidebar /> : null}
         </MainContent>

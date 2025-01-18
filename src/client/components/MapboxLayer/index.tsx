@@ -8,6 +8,7 @@ import { createXYZ, extentFromProjection } from "ol/tilegrid";
 import MapContext from "../MapContext";
 import { useSelector } from "react-redux";
 import { CartoliciousStyles } from "../../interfaces";
+import { UrlFunction } from "ol/Tile";
 export const MAPBOX_TOKEN =
   "pk.eyJ1IjoiZGVmaWFudGdvYXQiLCJhIjoiY200cHM2ampqMHk1YTJrb3N2MnlzOHJ1dyJ9.iU8b-PtlueSQuP3oq31O5A";
 const MAPBOX_FEATURE_TYPES = {
@@ -16,7 +17,7 @@ const MAPBOX_FEATURE_TYPES = {
   LAYER: "layer",
 };
 
-const mapboxTileUrlFunction = ([z, x, y]) => {
+const mapboxTileUrlFunction: UrlFunction = ([z, x, y]) => {
   const domain = "abcd".substr(((x << z) + y) % 4, 1);
 
   const url = `https://${domain}.tiles.mapbox.com/v4/mapbox.mapbox-streets-v8/${z}/${x}/${y}.mvt?access_token=${MAPBOX_TOKEN}`;
@@ -24,12 +25,23 @@ const mapboxTileUrlFunction = ([z, x, y]) => {
   return url;
 };
 
-const MapboxLayer: React.FC = () => {
+const MapboxLayer: React.FC<{
+  onTileSrcRequested?: (url: string) => void;
+  forEachTileCoord?: (a: any, b: any, c: any) => void;
+}> = ({ onTileSrcRequested, forEachTileCoord }) => {
   const map = useContext(MapContext);
   const layer = useRef(null as OLVectorTileLayer | null);
   const source = useRef(null as OLVectorTile | null);
   const stylesRef = useRef({});
   const format = new MVT();
+
+  useEffect(() => {
+    if (source.current && source.current.tileGrid) {
+      if (forEachTileCoord) {
+        source.current.tileGrid.forEachTileCoord = forEachTileCoord;
+      }
+    }
+  }, [source, forEachTileCoord]);
 
   const cartolicious = useSelector(
     (state: any) => state.root.cartolicious_styles
@@ -109,7 +121,10 @@ const MapboxLayer: React.FC = () => {
     }
   }, [cartolicious]);
 
-  const mapboxTileLoadFunction = (tile, src) => {
+  const mapboxTileLoadFunction = (tile: any, src: string) => {
+    if (onTileSrcRequested) {
+      onTileSrcRequested(src);
+    }
     tile.setLoader(async (extent, resolution, projection) => {
       const data = await fetch(src);
       const array = await data.arrayBuffer();
