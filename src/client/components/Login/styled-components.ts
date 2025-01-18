@@ -6,7 +6,7 @@ const LoginRoot = styled.div`
   display: flex;
 `;
 const AboutContainer = styled.div`
-    font-weight: 200;
+    // font-weight: 200;
     color: ${palette.warm.primary.hex};
     padding: 1rem 0;
     margin-top: 1rem;
@@ -14,7 +14,7 @@ const AboutContainer = styled.div`
       padding-top: 1rem;
       & li {
         list-style-position: inside;
-        color: ${palette.warm.primary.hex};
+        color: ${palette.warm.secondary.hex};
         line-height: 1.4rem;
         font-size: .9rem;
       },

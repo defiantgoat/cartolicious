@@ -11,9 +11,8 @@ const Login: React.FC = () => {
         <AboutContainer>
           <h3>With a login you can:</h3>
           <ul>
-            <li>Recolor the map</li>
-            <li>Save styles and curations</li>
-            <li>Share curations with others</li>
+            <li>Recolor the map (3 per day)</li>
+            <li>Save styles and curations (3 each)</li>
           </ul>
         </AboutContainer>
       </LoginRoot>
