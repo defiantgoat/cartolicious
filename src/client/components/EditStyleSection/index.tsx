@@ -42,7 +42,7 @@ const EditStyleSection: React.FC = () => {
 
     if (cartolicious) {
       cartolicious.forEach((value, key) => {
-        console.log(key);
+        // console.log(key);
         options.push({
           value: key,
           label: key.replace("_", " ").toUpperCase(),
