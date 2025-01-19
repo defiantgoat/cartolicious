@@ -6,6 +6,8 @@ import { objectFromMap } from "../../lib/utils";
 import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
 import { LiciousIconButton, LiciousSelect } from "@licious/react";
+// import { Map } from "ol";
+// import VectorTileLayer from "ol/layer/VectorTile";
 // import { getThumbnail } from "../../lib/utils";
 
 import {
@@ -42,7 +44,7 @@ const SaveCuration: React.FC<{ disabled?: boolean }> = ({
   disabled = false,
 }) => {
   const map = useContext(MapContext);
-  const { saveCuration } = useCartoliciousApi();
+  const { saveCuration, getTileGridForView } = useCartoliciousApi();
 
   const { currentStyles, currentBackground } = useCartoliciousStyles();
 
@@ -56,6 +58,7 @@ const SaveCuration: React.FC<{ disabled?: boolean }> = ({
       //   },
       // });
       // console.log(thumbnail);
+      const tile_grid = await getTileGridForView();
       const styles = objectFromMap(currentStyles);
       const [long, lat] = map.getView().getCenter();
       const zoom = map.getView().getZoom();
@@ -66,6 +69,7 @@ const SaveCuration: React.FC<{ disabled?: boolean }> = ({
         long,
         lat,
         zoom,
+        tile_grid,
       });
       console.log(status, errors, data);
     }
@@ -82,8 +86,6 @@ const SaveCuration: React.FC<{ disabled?: boolean }> = ({
 };
 
 const CurationsSection: React.FC = () => {
-  const dispatch = useDispatch();
-  const map = useContext(MapContext);
   const { loadCuration } = useCartoliciousApi();
   const { curationId } = useCartoliciousStyles();
 

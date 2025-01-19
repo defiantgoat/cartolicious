@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import { useDispatch } from "react-redux";
 import MapContext from "../components/MapContext";
 import { ENDPOINTS } from "../config";
@@ -6,6 +6,7 @@ import { mapFromObject } from "../lib/utils";
 import useUser from "./useUser";
 import useCartoliciousStyles from "./useCartoliciousStyles";
 import { set_busy } from "../reducers/rootSlice";
+import VectorTileLayer from "ol/layer/VectorTile";
 
 const useCartoliciousApi = () => {
   const map = useContext(MapContext);
@@ -14,6 +15,41 @@ const useCartoliciousApi = () => {
     useCartoliciousStyles();
 
   const { token, user_id } = useUser();
+
+  const getTileGridForView = useCallback(async () => {
+    if (map) {
+      const tileCoordPromise = () =>
+        new Promise((resolve, reject) => {
+          const tileGrid = [] as any[];
+
+          let count = 0;
+          vectorLayer
+            ?.getSource()
+            ?.tileGrid?.forEachTileCoord(exent, zoom, (a) => {
+              count++;
+            });
+
+          vectorLayer
+            ?.getSource()
+            ?.tileGrid?.forEachTileCoord(exent, zoom, (a) => {
+              tileGrid.push(a);
+
+              if (tileGrid.length === count) {
+                resolve(tileGrid);
+              }
+            });
+        });
+
+      const [vectorLayer] = map.getLayers().getArray() as VectorTileLayer[];
+      const view = map.getView();
+      const size = map.getSize();
+      const exent = view.calculateExtent(size);
+      const zoom = view.getZoom() || 0;
+      const grid = await tileCoordPromise();
+      return grid;
+    }
+    return null;
+  }, [map]);
 
   const loadNewStyle = async () => {
     dispatch(set_busy(true));
@@ -160,7 +196,14 @@ const useCartoliciousApi = () => {
     }
   };
 
-  const saveCuration = async ({ styles, background, long, lat, zoom }) => {
+  const saveCuration = async ({
+    styles,
+    background,
+    long,
+    lat,
+    zoom,
+    tile_grid,
+  }) => {
     const saveCuration = await fetch(ENDPOINTS.CURATIONS, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -179,6 +222,7 @@ const useCartoliciousApi = () => {
           ...styles,
           background,
         },
+        tile_grid,
       }),
     });
 
@@ -263,6 +307,7 @@ const useCartoliciousApi = () => {
     loadNewStyle,
     saveDailyCuration,
     getDailyCuration,
+    getTileGridForView,
   };
 };
 
