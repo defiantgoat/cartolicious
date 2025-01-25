@@ -138,6 +138,12 @@ const App: React.FC = () => {
       target: "map",
     });
 
+    map.on(["click"], function (event) {
+      // @ts-ignore
+      const vals = map.getFeaturesAtPixel(event.pixel, { hitTolerance: 8 });
+      console.log(vals);
+    });
+
     setOlMap(map);
 
     return () => {

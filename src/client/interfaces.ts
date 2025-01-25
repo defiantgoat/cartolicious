@@ -19,6 +19,10 @@ export interface Curation {
   style: {
     _id: string;
   };
+  createdAt: string;
+  lat: string;
+  long: string;
+  zoom: string;
 }
 
 export interface ReduxStateConfigProps {

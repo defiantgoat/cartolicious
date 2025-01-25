@@ -1675,18 +1675,18 @@
   resolved "https://registry.yarnpkg.com/@jsonjoy.com/util/-/util-1.5.0.tgz#6008e35b9d9d8ee27bc4bfaa70c8cbf33a537b4c"
   integrity sha512-ojoNsrIuPI9g6o8UxhraZQSyF2ByJanAY4cTFbc8Mf2AXEF4aQRGY1dJxyJpuyav8r9FGflEt/Ff3u5Nt6YMPA==
 
-"@licious/react@^0.0.17":
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/@licious/react/-/react-0.0.17.tgz#df4e7bb51e25bf6f87ab0a4034375204c0fb76f6"
-  integrity sha512-urJ3QQFGuYXilIK/3Jybwq47RlZgx0+636fHE3XjcYSLc+4CUnvUJ9LmtrkMgkV+Nv2YmhEQaC046Wilf8hgfQ==
+"@licious/react@^0.0.24":
+  version "0.0.24"
+  resolved "https://registry.yarnpkg.com/@licious/react/-/react-0.0.24.tgz#ab31ec2099fb9d7c0ae37c4a759bc3dd68b9df3c"
+  integrity sha512-Xv5s6v+pdCF6odv9jgYRydnBCr8+sT4IX86fpFiYG93QFOgabs0ibNAf2FF572hWT+NmuIO9mlE5G/2qY4ccCg==
   dependencies:
-    "@licious/web-components" "^0.0.17"
+    "@licious/web-components" "^0.0.24"
     "@stencil/react-output-target" "^0.8.1"
 
-"@licious/web-components@^0.0.17":
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/@licious/web-components/-/web-components-0.0.17.tgz#ff215e0be9321e206e77e54374d402b8dd0c4164"
-  integrity sha512-UM8xd16EE7S3nZdzwx813k4rfi7G6EhXMKjexub7wrMe6y03LOuQc+92ivK1Y7B7LbgQDp/TwgCa0BHsYV4i7A==
+"@licious/web-components@^0.0.24":
+  version "0.0.24"
+  resolved "https://registry.yarnpkg.com/@licious/web-components/-/web-components-0.0.24.tgz#1ccd1e2d8d57d1bb6aa29a015fd63b4ef33edcd3"
+  integrity sha512-5AdXVI0Qc77ry0QbzEXARKL/oJzHJVRVCu8EaL1K5j83HqdGcHI3avhSDkd+C9kGEax8teKpKu4Cfrpx841ULQ==
   dependencies:
     "@stencil/core" "^4.23.0"
 

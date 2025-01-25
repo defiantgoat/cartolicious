@@ -3,7 +3,7 @@ export const VERSION = "1.1.0";
 
 export const MAP_CONFIG = {
   MIN_ZOOM: 2,
-  MAX_ZOOM: 16,
+  MAX_ZOOM: 18,
   DEFAULT_ZOOM: 0,
   DEFAULT_CENTER: [-8573959.232998796, 4705918.436640128],
 };
