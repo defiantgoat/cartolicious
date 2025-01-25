@@ -66,6 +66,14 @@ export const userSlice = createSlice({
       const { payload } = action;
       state.styles = [...state.styles, payload];
     },
+    remove_curation: (state, action) => {
+      const { payload } = action;
+      state.curations = state.curations.filter((c) => c._id !== payload);
+    },
+    add_curation: (state, action) => {
+      const { payload } = action;
+      state.curations = [...state.curations, payload];
+    },
   },
 });
 
@@ -77,6 +85,8 @@ export const {
   set_user_content,
   set_user_id,
   add_style,
+  remove_curation,
+  add_curation,
 } = userSlice.actions;
 
 export default userSlice.reducer;
