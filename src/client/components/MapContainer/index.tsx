@@ -34,6 +34,17 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
 
   useEffect(() => {
     if (map) {
+      const mapZoomControls = document.getElementsByClassName(
+        "ol-zoom ol-unselectable ol-control"
+      );
+      if (mapZoomControls.length > 0) {
+        mapZoomControls[0].setAttribute("data-html2canvas-ignore", "true");
+      }
+    }
+  }, [map]);
+
+  useEffect(() => {
+    if (map) {
       const { curation } = useQueryString();
       if (curation) {
         fetchCuration(curation);

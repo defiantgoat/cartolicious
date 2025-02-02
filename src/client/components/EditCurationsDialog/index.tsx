@@ -51,7 +51,6 @@ const CurationItem: React.FC<{ curation: Curation }> = ({ curation }) => {
 
   const handleDeleteCuration = async () => {
     const { status, data, errors } = await deleteCuration({ _id });
-    console.log(status, data, errors);
     if (status === 200) {
       setDeleted(true);
       dispatch(remove_curation(_id));
@@ -67,16 +66,9 @@ const CurationItem: React.FC<{ curation: Curation }> = ({ curation }) => {
     }
   };
 
-  const handleCurationName = (e: any) => {
-    setCurationName(
-      e?.target?.shadowRoot?.querySelector("input")?.value || "?"
-    );
-  };
-
   const handleCancel = () => {
     setEditName(false);
   };
-  const { token, curations } = useSelector((state: any) => state.user);
 
   const subheader = `${new Date(createdAt).toDateString()}`;
 
@@ -126,7 +118,6 @@ const CurationItem: React.FC<{ curation: Curation }> = ({ curation }) => {
               onClick={handleDeleteCuration}
               title="Delete"
             />
-
             {userIsOwner ? (
               <LiciousIconButton
                 icon="custom"
