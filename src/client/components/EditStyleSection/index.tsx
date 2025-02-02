@@ -41,8 +41,8 @@ const EditStyleSection: React.FC = () => {
     const options = [{ label: "Select an Attribute", value: "none" }];
 
     if (cartolicious) {
-      cartolicious.forEach((value, key) => {
-        // console.log(key);
+      const keySort = [...cartolicious.keys()].sort();
+      keySort.forEach((key) => {
         options.push({
           value: key,
           label: key.replace("_", " ").toUpperCase(),
