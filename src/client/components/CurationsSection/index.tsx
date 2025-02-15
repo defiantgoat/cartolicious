@@ -6,10 +6,7 @@ import { objectFromMap } from "../../lib/utils";
 import useCartoliciousApi from "../../hooks/useCartoliciousApi";
 import useCartoliciousStyles from "../../hooks/useCartoliciousStyles";
 import { LiciousIconButton, LiciousSelect } from "@licious/react";
-import CartoliciousPanel from "../common/CartoliciousPanel";
 import { getThumbnail, rgbaToHex } from "../../lib/utils";
-import useUser from "../../hooks/useUser";
-import palette from "../../lib/palette";
 
 import {
   open_curations_dialog,
@@ -95,67 +92,6 @@ const EditCurationsButton: React.FC<{
 //   );
 // };
 
-const SaveCurationImagePanel: React.FC<{
-  open: boolean;
-  onPanelClosed?: () => void;
-}> = ({ open = false, onPanelClosed }) => {
-  const map = useContext(MapContext);
-  const { currentStyles, currentBackground } = useCartoliciousStyles();
-  const [busy, setBusy] = useState(false);
-  const [thumbnailSource, setThumbnailSource] = useState<null | string>(null);
-
-  useEffect(() => {
-    const thumb = async () => {
-      setBusy(true);
-      const thumbnail = await getThumbnail({
-        map,
-        exportOptions: {
-          backgroundColor: rgbaToHex(currentBackground),
-        },
-      });
-      setThumbnailSource(thumbnail);
-      setBusy(false);
-    };
-    if (open && map && currentStyles && !thumbnailSource) {
-      setTimeout(() => thumb(), 500);
-    }
-  }, [open, map, currentStyles]);
-
-  const handleOnPanelClosed = () => {
-    if (onPanelClosed) {
-      onPanelClosed();
-    }
-    setThumbnailSource(null);
-  };
-
-  return (
-    <CartoliciousPanel
-      open={open}
-      header="Curation Details"
-      size="md"
-      onPanelClosed={handleOnPanelClosed}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        {thumbnailSource ? (
-          <img src={thumbnailSource} width={"70%"} />
-        ) : (
-          <div
-            style={{ width: "70%", height: "100%", backgroundColor: "gray" }}
-          >
-            Creating Thumbnail
-          </div>
-        )}
-      </div>
-    </CartoliciousPanel>
-  );
-};
-
 const SaveCuration: React.FC<{ disabled?: boolean }> = ({
   disabled = false,
 }) => {
@@ -210,15 +146,12 @@ const CurationsSection: React.FC = () => {
 
   const [currentCuration, setCurrentCuration] = useState("none");
   const [loading, setLoading] = useState(false);
-  const [saveCurationImagePanelOpen, setSaveCurationImagePanelOpen] =
-    useState(false);
-  const { userIsOwner } = useUser();
 
   useEffect(() => {
     setCurrentCuration(curationId || "none");
   }, [curationId]);
 
-  const { token, curations } = useSelector((state: any) => state.user);
+  const { curations } = useSelector((state: any) => state.user);
 
   const options = useMemo(() => {
     const options = [{ label: "Select a curation", value: "none" }];
@@ -267,36 +200,6 @@ const CurationsSection: React.FC = () => {
     />,
   ];
 
-  if (userIsOwner) {
-    buttons.unshift(
-      <LiciousIconButton
-        icon="custom"
-        onClick={() => setSaveCurationImagePanelOpen(true)}
-        size="sm"
-        disabled={loading}
-      >
-        <svg
-          /*
-          // @ts-ignore */
-          slot="custom-icon"
-          xmlns="http://www.w3.org/2000/svg"
-          height="20"
-          viewBox="0 -960 960 960"
-          width="20"
-        >
-          <path
-            d="M480-480ZM120-120v-720h400v80H200v560h560v-320h80v400H120Zm120-160h480L570-480 450-320l-90-120-120 160Zm440-320v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80Z"
-            fill={
-              loading
-                ? "var(--licious-disabled-foreground)"
-                : palette.warm.primary.hex
-            }
-          />
-        </svg>
-      </LiciousIconButton>
-    );
-  }
-
   return (
     <>
       <SidebarSection header="Your Curations" buttons={buttons}>
@@ -304,10 +207,6 @@ const CurationsSection: React.FC = () => {
           <LiciousSelect options={options} onInput={handleSelectLicious} />
         )}
       </SidebarSection>
-      <SaveCurationImagePanel
-        open={saveCurationImagePanelOpen}
-        onPanelClosed={() => setSaveCurationImagePanelOpen(false)}
-      />
     </>
   );
 };
