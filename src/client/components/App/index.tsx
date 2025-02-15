@@ -1,6 +1,11 @@
 import React, { useEffect, useLayoutEffect, useState, useContext } from "react";
-import { useSelector } from "react-redux";
-import { AppRoot, MainContent, BusyIndicator } from "./styled-components";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  AppRoot,
+  MainContent,
+  BusyIndicator,
+  ThubmnailButtonContainer,
+} from "./styled-components";
 import OLMap from "ol/Map";
 import OLView from "ol/View";
 import MapContainer from "../MapContainer";
@@ -13,8 +18,13 @@ import { MAP_CONFIG, ENDPOINTS } from "../../config";
 import useUser from "../../hooks/useUser";
 import { onAuthStateChanged, getAuth, User } from "firebase/auth";
 import FirebaseContext from "../Firebase/context";
+import { set_map_selections } from "../../reducers/rootSlice";
+import { LiciousIconButton } from "@licious/react";
+import palette from "../../lib/palette";
+import SaveCurationImagePanel from "../common/SaveCurationImagePanel";
 
 const App: React.FC = () => {
+  const dispatch = useDispatch();
   const sidebarOpen = useSelector((state: any) => state.root.sidebar_open);
   const busy = useSelector((state: any) => state.root.busy);
   const firebaseApp = useContext(FirebaseContext);
@@ -28,9 +38,12 @@ const App: React.FC = () => {
     setUserId,
     setUserContent,
     setAnonymousUser,
+    userIsOwner,
   } = useUser();
 
   const [olMap, setOlMap] = useState(null as OLMap | null);
+  const [saveCurationImagePanelOpen, setSaveCurationImagePanelOpen] =
+    useState(false);
 
   const getUserContent = async ({ user_id, token }) => {
     if (!user_id || !token) {
@@ -141,7 +154,7 @@ const App: React.FC = () => {
     map.on(["click"], function (event) {
       // @ts-ignore
       const vals = map.getFeaturesAtPixel(event.pixel, { hitTolerance: 8 });
-      console.log(vals);
+      dispatch(set_map_selections(vals));
     });
 
     setOlMap(map);
@@ -162,6 +175,29 @@ const App: React.FC = () => {
         <Toolbar />
         <MainContent>
           <MapContainer>
+            {userIsOwner ? (
+              <ThubmnailButtonContainer>
+                <LiciousIconButton
+                  icon="custom"
+                  onClick={() => setSaveCurationImagePanelOpen(true)}
+                >
+                  <svg
+                    /*
+                    // @ts-ignore */
+                    slot="custom-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="20"
+                    viewBox="0 -960 960 960"
+                    width="20"
+                  >
+                    <path
+                      d="M480-480ZM120-120v-720h400v80H200v560h560v-320h80v400H120Zm120-160h480L570-480 450-320l-90-120-120 160Zm440-320v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80Z"
+                      fill={palette.warm.primary.hex}
+                    />
+                  </svg>
+                </LiciousIconButton>
+              </ThubmnailButtonContainer>
+            ) : null}
             {busy ? (
               <BusyIndicator>
                 <span>Loading</span>
@@ -175,6 +211,10 @@ const App: React.FC = () => {
           {sidebarOpen ? <Sidebar /> : null}
         </MainContent>
       </AppRoot>
+      <SaveCurationImagePanel
+        open={saveCurationImagePanelOpen}
+        onPanelClosed={() => setSaveCurationImagePanelOpen(false)}
+      />
     </MapContext.Provider>
   );
 };

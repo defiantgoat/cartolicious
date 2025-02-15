@@ -9,7 +9,6 @@ import {
   CurationInfo,
 } from "./styled-components";
 import { APP_NAME } from "../../config";
-import { ReduxStateConfigProps } from "../../interfaces";
 import { ENDPOINTS } from "../../config";
 import MenuButton from "../MenuButton";
 import FirebaseContext from "../Firebase/context";

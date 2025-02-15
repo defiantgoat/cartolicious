@@ -12,8 +12,12 @@ export const rootSlice = createSlice({
     sidebar_open: false,
     styles_dialog_open: false,
     curations_dialog_open: false,
+    map_selections: [],
   },
   reducers: {
+    set_map_selections: (state, action) => {
+      state.map_selections = action.payload;
+    },
     set_background: (state, action) => {
       state.background = action.payload;
     },
@@ -83,6 +87,7 @@ export const {
   close_curations_dialog,
   set_cartolicious_styles,
   set_busy,
+  set_map_selections,
 } = rootSlice.actions;
 
 export default rootSlice.reducer;

@@ -53,7 +53,6 @@ const MapContainer: React.FC<MapContainerProps> = ({ children }) => {
   }, [map, window.location.search]);
 
   useEffect(() => {
-    console.log({ anonymous, logged_in, map });
     if (map && anonymous && !logged_in) {
       fetchDailyCuration();
       return;

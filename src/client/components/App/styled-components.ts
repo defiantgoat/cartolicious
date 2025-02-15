@@ -39,4 +39,13 @@ const BusyIndicator = styled.div`
   }
 `;
 
-export { AppRoot, MainContent, BusyIndicator };
+const ThubmnailButtonContainer = styled.div`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 44px;
+  height: 44px;
+  background-color: transparent;
+`;
+
+export { AppRoot, MainContent, BusyIndicator, ThubmnailButtonContainer };
